@@ -1,0 +1,26 @@
+# Logs
+message-system-fd/logs
+message-system-fd/*.log
+message-system-fd/npm-debug.log*
+message-system-fd/yarn-debug.log*
+message-system-fd/yarn-error.log*
+message-system-fd/pnpm-debug.log*
+message-system-fd/lerna-debug.log*
+
+message-system-fd/node_modules
+message-system-fd/dist
+message-system-fd/dist-ssr
+message-system-fd/*.local
+
+message-system-bd/node_modules
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
