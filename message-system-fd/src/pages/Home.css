@@ -1,0 +1,63 @@
+.app-margin{
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+    background-color: gray;
+  }
+  
+  .app-container{
+    height: 95%;
+    width: 100vw;
+    max-width: 1500px;
+    background-color: rebeccapurple;
+    display: flex;
+  }
+  
+  .chat-container{
+    background-color: goldenrod;
+    width: 35%;
+  }
+  
+  .messages-container{
+    background-color: white;
+    width: 65%;
+  }
+  
+  @media (max-width: 1545px) {
+    .app-container{
+      height: 100%;
+      max-width: none;
+      width: 100vw;
+    }
+  }
+
+
+  @media (max-width: 850px) {
+    .app-container{
+      height: 95%;
+      width: 70%;
+    }
+  
+    .chat-container{
+      width: 100%;
+    }
+    
+    .messages-container{
+      display: none;
+    }
+  }
+  
+  @media (max-width: 550px) {
+    .app-container{
+      width: 85%;
+    }
+  }
+  
+  @media (max-width: 450px) {
+    .app-container{
+      height: 100%;
+      width: 100%;
+    }
+  }

@@ -1,0 +1,19 @@
+.welcome-container{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.welcome-container img{
+    width: 12%;
+    margin: 0 0 10px 0;
+}
+
+.welcome-container p{
+    width: 40%;
+    margin-top: 5px;
+}

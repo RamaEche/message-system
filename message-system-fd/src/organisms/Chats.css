@@ -1,0 +1,47 @@
+.logo{
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFFFFF;
+}
+
+.TaskBar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.buttons-pair{
+    margin: 0 5px;
+    display: flex;
+}
+
+.button{
+    background-color: #bbb;
+    border-radius: 50%;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFFFFF;
+    width: 28px;
+    height: 28px;
+}
+
+.chats-box{
+    height: 100%;
+    border-right: solid 1px #aaa;
+}
+
+.bar{
+    background-color: #3B31AE;
+    width: 100%;
+    padding-bottom: 5px;
+}
+
+.chats{
+    background-color: #FFFFFF;
+    height: calc(100% - 98px);
+    width: 100%;
+}
