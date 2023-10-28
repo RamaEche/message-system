@@ -14,7 +14,7 @@ function App() {
     <Routes>
       <Route path="/" element={ <Home/> } />
       <Route path="AddUser" element={ <AddUser/> } />
-      <Route path="Chat" element={ <Chat/> } />
+      <Route path="/Chat" element={ <Chat/> } />
       <Route path="CreateGroup" element={ <CreateGroup/> } />
       <Route path="LogIn" element={ <LogIn/> } />
       <Route path="SingIn" element={ <SingIn/> } />

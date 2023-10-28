@@ -3,7 +3,7 @@ import {useState} from 'react'
 
 function Chat() {
   return (
-    <div className='chat-box'>
+    <a href="/Chat" className='chat-box'>
         <div className='chat-content'>
             <div className='chat-data'>
                 <div className="image"></div>
@@ -17,7 +17,7 @@ function Chat() {
                 <div className='gray-circle-notification'></div>
             </div>
         </div>
-    </div>
+    </a>
   )
 }
 

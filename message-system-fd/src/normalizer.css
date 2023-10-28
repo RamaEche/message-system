@@ -1,0 +1,19 @@
+* {
+  margin: 0;
+  text-decoration: none;
+}
+
+.link{
+  color: #1069EF;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  text-decoration: #1069EF 1px solid;
+}
+
+.input-text{
+  border: none;
+  padding: 7px;
+  height: 20px;
+  background-color: #D9D9D9;
+}

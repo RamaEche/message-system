@@ -3,6 +3,14 @@ import Chat from '../molecules/Chat'
 import {useState} from 'react'
 
 function Chats() {
+  const SearchChat = ()=>{
+    alert("Searching")
+  }
+
+  const OpenOptions = ()=>{
+    alert("Options")
+  }
+
   return (
     <div className='chats-box'>
       <div className="bar">
@@ -12,15 +20,15 @@ function Chats() {
         <div className='TaskBar'>
           <div className='buttons-pair'>
             <div className='new-group'>
-              <p className='button'>G</p>
+              <a href='/CreateGroup' className='button'>G</a>
             </div>
             <div className='new-contact'>
-              <p className='button'>C</p>
+              <a href='/AddUser' className='button'>C</a>
             </div>
           </div>
           <div className='buttons-pair'>
-            <p className='button'>S</p>
-            <p className='button'>O</p>
+            <button onClick={()=>SearchChat()} className='button'>S</button>
+            <button onClick={()=>OpenOptions()} className='button'>O</button>
           </div>
         </div>
       </div>
