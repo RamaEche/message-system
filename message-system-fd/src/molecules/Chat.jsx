@@ -1,9 +1,17 @@
 import './Chat.css'
-import {useState} from 'react'
+import {useState, useContext} from 'react'
+import {BoxesContext} from '../pages/Home'
 
 function Chat() {
+
+  const [boxes, setBoxes] = useContext(BoxesContext)
+
+  const OpenChat = ()=>{
+    setBoxes({box1:boxes.box1, box2:"MessageBox"})
+  }
+
   return (
-    <a href="/Chat" className='chat-box'>
+    <a onClick={()=>OpenChat()} className='chat-box'>
         <div className='chat-content'>
             <div className='chat-data'>
                 <div className="image"></div>

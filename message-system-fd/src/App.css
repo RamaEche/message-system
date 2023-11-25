@@ -24,6 +24,15 @@
   width: 65vw;
 }
 
+.hidden{
+  display: none;
+}
+
+.main-button{
+  background-color: #00AA25;
+  color: #fff;
+}
+
 @media (max-width: 850px) {
   .container{
     width: 70%;

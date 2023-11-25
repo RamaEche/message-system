@@ -1,0 +1,55 @@
+.user-image-selector{
+  width: 110px;
+  margin: 18px 0 0 0;
+}
+
+.image-selector-buttons{
+  margin: 10px auto;
+  width: 200px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.log-in-description{
+  width: 65%;
+  text-align: center;
+  margin: 5px 0 0 0;
+}
+
+.log-in-title{
+  margin-bottom: 15px;
+}
+
+.sing-in-link{
+  margin: 10px auto 0 auto;
+}
+
+.log-in-page{
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.log-in-account-data{
+  text-align: start;
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+}
+
+.log-in-account-data p:first-of-type{
+  margin: 0 0 8px 0;
+}
+
+.log-in-account-data p{
+  margin: 15px 0 8px 0;
+}
+
+.log-in-account-data input:last-of-type{
+  margin: 20px 0 10px 0;
+  padding: 10px 0;
+}

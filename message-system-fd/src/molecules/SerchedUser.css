@@ -1,0 +1,20 @@
+.searched-user{
+    display: flex;
+    align-items: center;
+    height: 90px;
+    width: 100%;
+    border-bottom: #aaa solid 1px;
+}
+
+.searched-user:first-of-type{
+    border: #aaa solid 1px;
+}
+
+.searched-user-img{
+    height: 70px;
+    margin: 0 5px;
+}
+
+.searched-user-user{
+
+}

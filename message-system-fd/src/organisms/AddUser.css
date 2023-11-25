@@ -1,0 +1,91 @@
+.add-user-container{
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    border-right: solid 1px #aaa;
+}
+
+.add-user-bar{
+    width: 100%;
+    min-height: 55px;
+    color: #fff;
+    background-color: #3B31AE;
+    display: flex;
+    align-items: center;
+}
+
+.add-user-outstanding-logo{
+    margin: auto;
+}
+
+.add-user-go-back-arrow{
+    width: 30px;
+    filter: invert();
+    display: flex;
+    align-items: center;
+    position: absolute;
+}
+
+.user-storage{
+    font-size: small;
+    color: #999;
+    margin: 10px 0 5px 0;
+}
+
+.add-users-form-container{
+    margin: auto;
+    width:  60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.add-users-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.add-users-form-changes-buttons{
+    display: flex;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+.add-users-form-changes-buttons input{
+    width: 120px;
+    height: 30px;
+    margin: 0 5px;
+}
+
+.add-users-link{
+    display: flex;
+    justify-content: center;
+}
+
+.add-user-go-back-arrow img{
+    width: 100%;
+    margin-left: 10px;
+}
+
+.add-user-user-name{
+    margin-bottom: 8px;
+    font-size: x-large;
+}
+
+.add-user-description{
+    text-align: center;
+}
+
+.add-users-profile-photo{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
+.add-users-container p{
+    margin: 20px 0 10px 0;
+}
