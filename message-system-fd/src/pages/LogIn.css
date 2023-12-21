@@ -41,11 +41,11 @@
   width: 250px;
 }
 
-.log-in-account-data p:first-of-type{
+.log-in-account-data label:first-of-type{
   margin: 0 0 8px 0;
 }
 
-.log-in-account-data p{
+.log-in-account-data label{
   margin: 15px 0 8px 0;
 }
 

@@ -1,28 +1,140 @@
 import './SingIn.css'
-import {useState} from 'react'
+import {useEffect, useState, useRef } from 'react'
+import { useForm } from 'react-hook-form'
+import Cookies from 'js-cookie'
 
 function SingIn() {
+
+  const { register, handleSubmit, formState, watch } = useForm()
+  const [profileImage, setProfileImage] = useState('');
+  let files = [];
+  let err = formState.errors;
+  const [formError, setFormError] = useState(false)
+
+  const onSubmit = (e)=>{
+    const formData = new FormData();
+    formData.append('ProfileImage', e.ProfileImage[0])
+    formData.append('Description', e.Description)
+    formData.append('UserName', e.UserName)
+    formData.append('Password', e.Password)
+    formData.append('ValidatePasword', e.ValidatePasword)
+
+    console.log(e)
+    fetch(`${import.meta.env.VITE_SERVER_API_URL}SingIn`, {
+    method: 'POST',
+    headers: {
+      
+    },
+    body: formData
+    })
+    .then((res)=>res.json())
+    .then((info)=>{
+      if(info.ok){
+        Cookies.set("JwtToken", info.token)
+        location.href = import.meta.env.VITE_FRONTEND_APP_URL;
+      }else{
+        console.error(info)
+        switch (info.err) {
+          case "invalidInputs":
+            setFormError("The format is invalid.")
+            break;
+          case "diferentPassword":
+            setFormError("The password and validation password are different from each other.")
+            break;
+          case "alreadyRegistered":
+            setFormError("This username is in use. try another.")
+            break;
+          default:
+            console.error("Unknown error")
+            break;
+        }
+      }
+    })
+    .catch((err)=>{console.error(err)})
+  }
+
+  useEffect(()=>{
+    files.push(watch('ProfileImage')[0])
+    if(watch('ProfileImage').length != 0){
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        setProfileImage(e.target.result);
+      };
+  
+      reader.readAsDataURL(watch('ProfileImage')[0]);
+    }
+  }, [watch('ProfileImage')])
+
+  useEffect(()=>{
+    files.push(watch('ProfileImage')[0])
+    if(watch('ProfileImage').length != 0){
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        setProfileImage(e.target.result);
+      };
+  
+      reader.readAsDataURL(watch('ProfileImage')[0]);
+    }
+  }, [watch('ProfileImage2')])
+
   return (
     <div className='sing-in-page'>
       <h1 className='outstanding-logo'>Text Message System</h1>
-      <form className='sing-in-container'>
+      <form className='sing-in-container' encType="multipart/form-data" onSubmit={handleSubmit((e)=>onSubmit(e))}>
         <div>
           <h2 className='sing-in-title'>Sing in</h2>
-          <img className='user-image-selector' src='https://cdn-icons-png.flaticon.com/512/5989/5989226.png'/>
+          {formError &&
+            <div className='form-err-aclaration sing-in-form-err-aclaration'>
+              <p>{formError}</p>
+            </div>
+          }
+          {err.ProfileImage &&
+          <div className='form-err-aclaration sing-in-form-err-aclaration'>
+              <p>Es obligatorio agregar una foto de perfil</p>
+            </div>
+          }
+          <img className='user-image-selector' src={profileImage || 'https://cdn-icons-png.flaticon.com/512/5989/5989226.png'}/>
           <div className='image-selector-buttons'>
-            <button className='link'>Change photo</button>
-            <button className='link'>Delete photo</button>
+            <input type='button' onClick={()=>DeletePhoto()} className='link' value='Delete photo'/>
+            <div className='sing-in-image-selector link'>
+              <input type='file' name='ProfileImage' {...register('ProfileImage', { required: true })}/>
+            </div>
           </div>
-          <input className='sing-in-description input-text' type='text' placeholder='Description'/>
+          <p className='image-selector-instructions'>Archivo menor a 25x25 px</p>
+          <div className='sing-in-description-container'>
+            <input className={err.Description ? "sing-in-description input-text input-err" : "sing-in-description input-text"} name='Description' type='text' placeholder='Description'  {...register('Description', { maxLength: 100, minLength: 1, required: true})}/>
+            {err.Description &&
+              <div className='input-err-aclaration'>
+                <p>Este campo es obligatorio, y deve contener entre 1 y 100 caracteres</p>
+              </div>
+            }
+          </div>
         </div>
         <div className='separator'></div>
         <div className='sing-in-account-data'>
-          <p>User</p>
-          <input className='input-text' type='text'/>
-          <p>Password</p>
-          <input className='input-text' type='text'/>
-          <p>Validate pasword</p>
-          <input className='input-text' type='text'/>
+          <label>UserName</label>
+          <input className={err.UserName ? "input-text input-err" : "input-text"} type='text' name='UserName'  {...register('UserName', { maxLength: 15, minLength: 4, required: true})}/>
+          {err.UserName &&
+            <div className='input-err-aclaration'>
+              <p>Este campo es obligatorio, y deve contener entre 4 y 15 caracteres</p>
+            </div>
+          }
+          <label>Password</label>
+          <input className={err.Password ? "input-text input-err" : "input-text"} type='text' name='Password'  {...register('Password', { maxLength: 20, minLength: 5, required: true})}/>
+          {err.Password &&
+            <div className='input-err-aclaration'>
+              <p>Este campo es obligatorio, y deve contener entre 5 y 20 caracteres</p>
+            </div>
+          }
+          <label>Validate pasword</label>
+          <input className={err.ValidatePasword ? "input-text input-err" : "input-text"} type='text' name='ValidatePasword'  {...register('ValidatePasword', { maxLength: 20, minLength: 5, required: true})}/>
+          {err.ValidatePasword &&
+            <div className='input-err-aclaration'>
+              <p>Este campo es obligatorio, y deve contener entre 5 y 20 caracteres</p>
+            </div>
+          }
           <input type='submit'/>
           <a className='log-in-link' href='/LogIn'>Log in</a>
         </div>

@@ -17,7 +17,7 @@ function CreateGroup() {
       <div className='create-group-container'>
         <div className='create-group-bar'>
           <a className='create-group-go-back-arrow' onClick={()=>Chats()}><img src='arrow.png'/></a>
-          <h1 className='create-group-outstanding-logo'>Buscar usuario</h1>
+          <h1 className='create-group-outstanding-logo'>Crear grupo</h1>
         </div>
         <div>
           <div className='create-group-files'>

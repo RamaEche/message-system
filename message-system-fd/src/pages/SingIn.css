@@ -1,5 +1,18 @@
+.sing-in-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sing-in-form-err-aclaration{
+  margin: 15px 0 0 0 !important;
+}
+
 .user-image-selector{
   width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 250px;
   margin: 18px 0 0 0;
 }
 
@@ -10,10 +23,37 @@
   justify-content: space-between;
 }
 
+.sing-in-image-selector{
+  height: 35px;
+  width: 90px;
+  display: block;
+}
+
+.sing-in-image-selector::before{
+  content: "Change file";
+  position: relative;
+  font-size: small;
+  top: 25%;
+}
+
+.sing-in-image-selector input{
+  position: relative;
+  top: -50%;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.image-selector-instructions{
+  font-size: small;
+  margin-bottom: 10px;
+  color: rgb(78, 78, 78);
+}
+
 .sing-in-description{
-  width: 65%;
+  width: 100%;
   text-align: center;
-  margin: 5px 0 0 0;
+  margin-top: 15px;
 }
 
 .sing-in-page{
@@ -33,11 +73,11 @@
   width: 250px;
 }
 
-.sing-in-account-data p:first-of-type{
+.sing-in-account-data label:first-of-type{
   margin: 0 0 8px 0;
 }
 
-.sing-in-account-data p{
+.sing-in-account-data label{
   margin: 15px 0 8px 0;
 }
 
@@ -62,4 +102,13 @@
   .separator{
     display: none;
   }
+}
+
+.sing-in-description-container{
+  width: 250px;
+  margin: auto;
+}
+
+.sing-in-description-container input{
+  width: calc(100% - 18px);
 }

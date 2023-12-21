@@ -6,6 +6,7 @@ message-system-fd/yarn-debug.log*
 message-system-fd/yarn-error.log*
 message-system-fd/pnpm-debug.log*
 message-system-fd/lerna-debug.log*
+message-system-fd/.env
 
 message-system-fd/node_modules
 message-system-fd/dist
@@ -13,6 +14,8 @@ message-system-fd/dist-ssr
 message-system-fd/*.local
 
 message-system-bd/node_modules
+message-system-bd/mediaFiles/*
+message-system-bd/.env
 
 # Editor directories and files
 .vscode/*

@@ -1,13 +1,22 @@
 import './MessageBox.css'
-import {useState, useContext} from 'react'
+import {useState, useContext, useEffect, useRef} from 'react'
 import {BoxesContext} from "../pages/Home"
 
 function MessageBox() {
-
+  const [messageInpuButton, setMessageInpuButton] = useState("file")
   const [boxes, setBoxes] = useContext(BoxesContext)
+  const messageInput = useRef(null)
 
   const ChatOption = ()=>{
     setBoxes({box1:boxes.box1, box2:"ChatOption"})
+  }
+
+  const messageInputChage = ()=>{
+    if(messageInput.current.value == ''){
+      setMessageInpuButton("file")
+    }else{
+      setMessageInpuButton("send")
+    }
   }
 
   return (
@@ -24,9 +33,12 @@ function MessageBox() {
       </div>
       <div className='message-box-messages'></div>
       <div className='message-box-input'>
-        <input type='text' className='message-box-input-text' placeholder='Send mensage...'/>
-        <div className='hidden message-box-input-file'></div>
-        <div className='message-box-input-send'></div>
+        <input type='text' className='message-box-input-text' onChange={()=>messageInputChage()} ref={messageInput} placeholder='Send mensage...'/>
+        {messageInpuButton == "file" ? (
+          <input type="file" className='message-box-input-file'/>
+        ):(
+          <div className='message-box-input-send'></div>
+        )}
       </div>
     </div>
   )
