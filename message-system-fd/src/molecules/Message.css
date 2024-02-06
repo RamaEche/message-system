@@ -1,0 +1,41 @@
+.message-container{
+    background-color: #fff;
+    padding: 12px 15px 12px 15px;
+    margin: 10px;
+    margin-bottom: 0;
+    border-radius: 8px 8px 0px 8px;
+    align-self: end;
+    display: flex;
+    flex-direction: column;
+    max-width: 85%;
+}
+
+.external-origin{
+    border-radius: 8px 8px 8px 0px;
+    align-self: start;
+    background-color: #eee;
+}
+
+.message-container-text-container{
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-end;
+    text-align: start;
+}
+
+.message-container-text-container p{
+    overflow-wrap: anywhere;
+}
+
+.message-container-name-container{
+    font-weight: 600;
+    font-size: small;
+    padding: 0 0 2px 0;
+}
+
+.message-container span{
+    color: #6D6D6D;
+    font-size: 11px;
+    text-align: center;
+    margin-left: 8px;
+}

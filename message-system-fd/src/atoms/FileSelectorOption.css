@@ -1,0 +1,21 @@
+.file-selector-option-container{
+    box-shadow: 0 0 5px .5px #555;
+    background-color: #fff;
+    width: 55px;
+    height: 55px;
+    margin-right: 10px;
+    border-radius: 100px;
+    margin: 15px 15px;
+    transition: all 100ms;
+}
+
+.file-selector-option-container img{
+    width: 70%;
+    position: relative;
+    top: 1px;
+}
+
+.file-selector-option-container:hover{
+    background-color: #f9f9f9;
+    box-shadow: 0 0 3px .5px #555;
+}

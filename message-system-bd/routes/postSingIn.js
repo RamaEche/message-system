@@ -40,8 +40,7 @@ const singIn = async(req, res)=>{
         UserName: req.body.UserName,
         Description: req.body.Description,
         ProfilePhotoPath: "",
-        ProfileState: "Active",
-        CurrentState: "ON"
+        ProfileState: "Active"
       },
       Chats: {
         Users: [],

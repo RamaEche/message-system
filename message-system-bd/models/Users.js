@@ -6,8 +6,7 @@ const UsersSchema = new mongoose.Schema({
     UserName: { type: String },
     Description: { type: String },
     ProfilePhotoPath: { type: String },
-    ProfileState: { type: String },
-    CurrentState: { type: String }
+    ProfileState: { type: String }
   },
   Chats: {
     Users: [{ type: String }],

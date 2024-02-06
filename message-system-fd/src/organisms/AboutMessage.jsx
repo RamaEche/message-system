@@ -1,0 +1,61 @@
+import './AboutMessage.css'
+import {useState, useContext, useEffect} from 'react'
+import {BoxesContext, CurrentChatContext, UserIdContext} from "../pages/Home"
+import Cookies from 'js-cookie'
+import AboutMessageUser from '../molecules/AboutMessageUser'
+
+function AboutMessage({ webSocket }) {
+  const [boxes, setBoxes] = useContext(BoxesContext)
+  const [currentChat, setCurrentChat] = useContext(CurrentChatContext)
+  const [focusedChat, setFocusedChat] = useState(currentChat.chatMessages[currentChat.chatFocusMessage])
+  const [photoSrc, setPhotoSrc] = useState('https://us.123rf.com/450wm/tuktukdesign/tuktukdesign1606/tuktukdesign160600119/59070200-icono-de-usuario-hombre-perfil-hombre-de-negocios-avatar-icono-persona-en-la-ilustraci%C3%B3n.jpg')
+  const [token] = useState(Cookies.get('JwtToken'))
+  const [userId] = useContext(UserIdContext)
+
+  const MessageBox = ()=>{
+    setBoxes({box1:boxes.box1, box2:"MessageBox"})
+  }
+
+  useEffect(()=>{
+    console.log(currentChat.chatMessages.slice().reverse()[currentChat.chatFocusMessage])
+    setFocusedChat(currentChat.chatMessages.slice().reverse()[currentChat.chatFocusMessage])
+
+    webSocket.on("deleteMessage", data=>{
+      console.log(data)
+    })
+  }, [])
+
+  const deleteMessage = ()=>{
+    if(focusedChat.id != undefined){
+      webSocket.emit("deleteMessage", {
+        authorization: `Barrer ${token}`,
+        chatId:currentChat.chatId,
+        messageId:focusedChat.id
+      })
+    }else{
+      console.log("The message is not on the server so it cannot be deleted.")
+    }
+  }
+
+  return (
+    <div className='chat-option-container'>
+      <div className='chat-option-bar'>
+        <a className='chat-option-go-back-arrow' onClick={()=>MessageBox()}><img src='arrow.png'/></a>
+        <h1 className='chat-option-outstanding-logo'>Text Message System</h1>
+      </div>
+      <div className='chat-option-bar-bg'>
+        <div className='chat-option-bar-people-container'>
+          {focusedChat.id != undefined ?
+            focusedChat.seenBy.map((id, index)=>(
+              <AboutMessageUser key={index} id={id} focusedChat={focusedChat}/>
+            ))
+          :
+          <AboutMessageUser id={userId} focusedChat={focusedChat}/>}
+        </div>
+        <button onClick={()=>deleteMessage()} className='chat-option-bar-delete-message'>Delete message</button>
+      </div>
+    </div>
+  )
+}
+
+export default AboutMessage

@@ -22,9 +22,6 @@ function SingIn() {
     console.log(e)
     fetch(`${import.meta.env.VITE_SERVER_API_URL}SingIn`, {
     method: 'POST',
-    headers: {
-      
-    },
     body: formData
     })
     .then((res)=>res.json())

@@ -6,7 +6,6 @@ const CommunicationChannelSchema = new mongoose.Schema({
   Description: { type: String },
   Type: { type: String },
   Messages: [{
-    _id: { type: mongoose.Schema.Types.ObjectId },
     MediaPath: { type: String },
     MediaType: { type: String },
     PublicationTime: { type: Date },

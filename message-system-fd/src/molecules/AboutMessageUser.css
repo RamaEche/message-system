@@ -1,0 +1,54 @@
+.about-message-user-box{
+    border-bottom: solid 1px #999999;
+    background-color: #fff;
+    margin: 1px 0;
+    padding: 0 20px;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.about-message-user-content{
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.about-message-user-data{
+    display: flex;
+}
+
+.about-message-user-image{
+    width: 60px;
+    height: 60px;
+    background-color: gray;
+    border-radius: 100%;
+    object-fit: cover;
+}
+
+.about-message-user-text{
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.about-message-user-name{
+    font-size: larger;
+}
+
+.about-message-user-states{
+    margin-right: 20px;
+    text-align: end;
+    color: #6E6E6E;
+}
+
+.about-message-user-state-message{
+
+}
+
+.about-message-user-state-file{
+    margin-top: 8px;
+}

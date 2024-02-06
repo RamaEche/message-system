@@ -1,14 +1,18 @@
 import './Chats.css'
 import Chat from '../molecules/Chat'
 import {useState, useContext, useEffect, useRef} from 'react'
-import {BoxesContext} from '../pages/Home'
+import {BoxesContext, UserIdContext, CurrentChatContext} from '../pages/Home'
 import Cookies from 'js-cookie'
+import socketIOClient from 'socket.io-client';
 
-function Chats() {
+function Chats({ webSocket, setWebSocket}) {
 
-  const mounted = useRef(false);
   const [chats, setChats] = useState(null)
   const [boxes, setBoxes] = useContext(BoxesContext)
+  const [currentChat, setCurrentChat] = useContext(CurrentChatContext)
+  const [userId, setUserId] = useContext(UserIdContext)
+
+  const socket = socketIOClient('http://localhost:3000');
 
   const SearchChat = ()=>{
     setBoxes({box1:'SearchUser', box2:boxes.box2});
@@ -26,28 +30,58 @@ function Chats() {
     setBoxes({box1:'SearchUser', box2:boxes.box2}); //The user is searched and then added
   }
 
-  const GetChats = ()=>{
-    const token = Cookies.get("JwtToken")
-    fetch(`${import.meta.env.VITE_SERVER_API_URL}UserChats`,{
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'authorization': `Barrer ${token}`
-      },
-    })
-    .then((res)=>res.json())
-    .then((info)=>{
-      if(info.err == 'Invalid token') location.href = `${import.meta.env.VITE_FRONTEND_APP_URL}login`
-      setChats(info)
-    })
-    .catch((err)=>{throw new Error(err)})
-  }
-
   useEffect(()=>{
-    if (!mounted.current) {
-    GetChats()
-    mounted.current = true;
-    }
+    const token = Cookies.get("JwtToken")
+    setWebSocket(socket)
+
+    socket.emit('authenticateUser', {authorization:`Barrer ${token}`})
+    socket.on('authenticateUser', data=>{
+      if(data.status == 401){
+        location.href = `${import.meta.env.VITE_FRONTEND_APP_URL}login`
+      }else if(data.status == 200){
+        setUserId(data.userId)
+      }else{
+        console.log(data)
+      }
+      socket.emit('getUserChats', {authorization:`Barrer ${token}`})
+    })
+
+    socket.on('getUserChats', data=>{
+        if(data.status == 401){
+        location.href = `${import.meta.env.VITE_FRONTEND_APP_URL}login`
+      }else if(data.status == 200){
+        setChats(data.chats)
+      }else{
+        console.log(data)
+      }
+    })
+
+    socket.on('fromServerNewMessage', data => {
+      if(data.chatId==currentChat.chatId){
+        return 0
+      }
+
+      setChats(prevChats =>{
+        let currentChats = prevChats;
+        let modificatedChat = currentChats.filter(chat => chat.id==data.chatId)
+        modificatedChat = modificatedChat[0]
+        let newChat = {
+          id: modificatedChat.id,
+          Name:modificatedChat.Name,
+          Type:modificatedChat.Type,
+          Description:data.TextMessage,
+          UserCurrentState:modificatedChat.UserCurrentState,
+          IgnoredMessageCounter:modificatedChat.IgnoredMessageCounter+1,
+        };
+        currentChats = currentChats.filter(chat => chat.id!=data.chatId)
+        currentChats.push(newChat)
+
+        return currentChats;
+      })
+    });
+
+    socket.on("disconnect", (reason) => {
+    });
   }, []);
 
   return (
@@ -73,8 +107,8 @@ function Chats() {
           <div>loading...</div>
         ):
         (
-          chats.chats.map((chat, i)=>{
-            return <Chat key={i} ChatID={chat.id} Type={chat.Type} Name={chat.Name} Description={chat.Description} UserCurrentState={chat.UserCurrentState}  IgnoredMessageCounter={chat.IgnoredMessageCounter}/>
+          chats.map((chat, i)=>{
+            return <Chat socket={webSocket} key={i} ChatID={chat.id} Type={chat.Type} Name={chat.Name} Description={chat.Description} UserCurrentState={chat.UserCurrentState}  IgnoredMessageCounter={chat.IgnoredMessageCounter}/>
           })
         )}
       </div>

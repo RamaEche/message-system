@@ -18,7 +18,7 @@ const getChatPhotoById = async(req, res)=>{
     let files;
     const currentChat = await Chats.findById(req.headers.chatid)
     if(currentChat.Type == "G"){
-      dir = path.join(process.env.MEDIA_FILES,'mediaFiles', 'chats', `chat-ID${req.headers.chatid}`)
+      dir = path.join(process.env.MEDIA_FILES, 'chats', `chat-ID${req.headers.chatid}`)
 
       try{
         files = await readdir(dir)
@@ -31,7 +31,7 @@ const getChatPhotoById = async(req, res)=>{
       });
     }else{
       currentChat.Users.forEach(c=>{
-        if(c.UserId != req.user.UserID) dir = path.join(process.env.MEDIA_FILES,'mediaFiles', 'users', `user-ID${c.UserId}`)
+        if(c.UserId != req.user.UserID) dir = path.join(process.env.MEDIA_FILES, 'users', `user-ID${c.UserId}`)
       })
 
       try{
@@ -55,11 +55,16 @@ const getChatPhotoById = async(req, res)=>{
           'x-sent': true
         }
     }
-    res.sendFile(fileName, options, function (err) {
+
+    try{
+      res.sendFile(fileName, options, function (err) {
         if (err) {
           console.log(err)
         }
     })
+    }catch (err){
+      res.status(400).json({err})
+    }
 }
 
 module.exports = getChatPhotoById;
