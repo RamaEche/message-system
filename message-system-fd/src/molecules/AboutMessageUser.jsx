@@ -8,7 +8,12 @@ function AboutMessageUser({id, focusedChat}) {
   const [photoSrc, setPhotoSrc] = useState('https://us.123rf.com/450wm/tuktukdesign/tuktukdesign1606/tuktukdesign160600119/59070200-icono-de-usuario-hombre-perfil-hombre-de-negocios-avatar-icono-persona-en-la-ilustraci%C3%B3n.jpg')
   const [messageStateText, setMessageStateText] = useState()
   const [fileStateText, setFileStateText] = useState()
+  const [name, setName] = useState("")
 
+  useEffect(()=>{
+    let currentUser = currentChat.chatData.users.filter(user => user.userId == id)[0]
+    setName(currentUser.name)
+  }, [id])
 
   const getChatPhotoById = ()=>{
     const token = Cookies.get("JwtToken")
@@ -89,12 +94,13 @@ function AboutMessageUser({id, focusedChat}) {
   }, []);
 
   return (
+    <>
     <a className='about-message-user-box'>
         <div className='about-message-user-content'>
             <div className='about-message-user-data'>
                 <img className="about-message-user-image" src={photoSrc}/>
                 <div className='about-message-user-text'>
-                    <p className="about-message-user-name">{id}</p>
+                    <p className="about-message-user-name">{name}</p>
                 </div>
             </div>
         </div>
@@ -104,7 +110,8 @@ function AboutMessageUser({id, focusedChat}) {
                 <p className="about-message-user-state-file">{fileStateText}</p>
             }
         </div>
-    </a>
+    </a>  
+    </>
   )
 }
 

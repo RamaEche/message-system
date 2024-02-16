@@ -10,6 +10,7 @@ function SingIn() {
   let files = [];
   let err = formState.errors;
   const [formError, setFormError] = useState(false)
+  const form = useRef(null)
 
   const onSubmit = (e)=>{
     const formData = new FormData();
@@ -63,23 +64,15 @@ function SingIn() {
     }
   }, [watch('ProfileImage')])
 
-  useEffect(()=>{
-    files.push(watch('ProfileImage')[0])
-    if(watch('ProfileImage').length != 0){
-      const reader = new FileReader();
-
-      reader.onload = function (e) {
-        setProfileImage(e.target.result);
-      };
-  
-      reader.readAsDataURL(watch('ProfileImage')[0]);
-    }
-  }, [watch('ProfileImage2')])
+  const DeletePhoto = ()=>{
+    form.current.reset();
+    setProfileImage('')
+  }
 
   return (
     <div className='sing-in-page'>
       <h1 className='outstanding-logo'>Text Message System</h1>
-      <form className='sing-in-container' encType="multipart/form-data" onSubmit={handleSubmit((e)=>onSubmit(e))}>
+      <form className='sing-in-container' ref={form} encType="multipart/form-data" onSubmit={handleSubmit((e)=>onSubmit(e))}>
         <div>
           <h2 className='sing-in-title'>Sing in</h2>
           {formError &&

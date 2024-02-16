@@ -25,7 +25,7 @@ function Home() {
   const [boxes, setBoxes] = useState({box1:'Chats', box2:'Welcome'})
   const [webSocket, setWebSocket] = useState(null)
   const [userId, setUserId] = useState(null)
-  const [currentChat, setCurrentChat] = useState({chatId:null, chatMessages:null, chatFocusMessage:null, removeNotifications: null})
+  const [currentChat, setCurrentChat] = useState({chatId:null, chatMessages:null, chatFocusMessage:null, removeNotifications: null, chatData: null})
   
   return (
     <CurrentChatContext.Provider value={[currentChat, setCurrentChat]}>

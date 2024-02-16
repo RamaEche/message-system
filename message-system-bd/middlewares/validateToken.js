@@ -19,24 +19,27 @@ function validateToken(req, res) {
       return res.status(403).json({ err: 'Auth null' });
     }
   
+    let ret = "next";
     jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
       if(req.authorization){
         if (err) {
-          return new Error("Error")
+          ret = new Error("Error")
         }
         req.user = decoded;
       }else{
         if (err) {
-          return res.status(403).json({ err: 'Invalid token' });
+          ret = res.status(403).json({ err: 'Invalid token' });
         }
         req.user = decoded;
       }
     });
+    return ret
 }
 
 function validateTokenMW(req, res, next){
-  validateToken(req, res);
-  next();
+  if(validateToken(req, res) == "next"){
+    next();
+  }
 }
 
 module.exports = {validateToken, validateTokenMW}

@@ -2,6 +2,7 @@ import './AboutMessage.css'
 import {useState, useContext, useEffect} from 'react'
 import {BoxesContext, CurrentChatContext, UserIdContext} from "../pages/Home"
 import Cookies from 'js-cookie'
+import Confirmation from '../molecules/Confirmation'
 import AboutMessageUser from '../molecules/AboutMessageUser'
 
 function AboutMessage({ webSocket }) {
@@ -11,6 +12,7 @@ function AboutMessage({ webSocket }) {
   const [photoSrc, setPhotoSrc] = useState('https://us.123rf.com/450wm/tuktukdesign/tuktukdesign1606/tuktukdesign160600119/59070200-icono-de-usuario-hombre-perfil-hombre-de-negocios-avatar-icono-persona-en-la-ilustraci%C3%B3n.jpg')
   const [token] = useState(Cookies.get('JwtToken'))
   const [userId] = useContext(UserIdContext)
+  const [openConfirmation, setOpenConfirmation] = useState(false)
 
   const MessageBox = ()=>{
     setBoxes({box1:boxes.box1, box2:"MessageBox"})
@@ -35,7 +37,11 @@ function AboutMessage({ webSocket }) {
     }else{
       console.log("The message is not on the server so it cannot be deleted.")
     }
+    setOpenConfirmation(false)
+    MessageBox()
   }
+
+
 
   return (
     <div className='chat-option-container'>
@@ -52,7 +58,10 @@ function AboutMessage({ webSocket }) {
           :
           <AboutMessageUser id={userId} focusedChat={focusedChat}/>}
         </div>
-        <button onClick={()=>deleteMessage()} className='chat-option-bar-delete-message'>Delete message</button>
+        <button onClick={()=>setOpenConfirmation(true)} className='chat-option-bar-delete-message'>Delete message</button>
+        {openConfirmation &&
+          <Confirmation cbFalse={()=>setOpenConfirmation(false)} cbTrue={()=>deleteMessage()} text="Are you sure you want to delete the message?"/>
+        }
       </div>
     </div>
   )

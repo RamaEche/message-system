@@ -10,6 +10,11 @@
   padding: 0;
   background-color: transparent;
   text-decoration: #1069EF 1px solid;
+  transition: .2s color;
+}
+
+.link:hover{
+  color: #0a2df3;
 }
 
 .input-text{

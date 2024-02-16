@@ -27,10 +27,10 @@ function MessageBox({ webSocket }) {
       return 0
     }
 
-    let name = globalChatData.users.filter(usr => userId == usr.userId)[0].name
+    let name = currentChat.chatData.users.filter(usr => userId == usr.userId)[0].name
     createMessage(
       undefined,
-      globalChatData.chatType,
+      currentChat.chatData.type,
       data.text,
       new Date(),
       name,
@@ -84,15 +84,18 @@ function MessageBox({ webSocket }) {
     let chatData;
     webSocket.on('getMessagesChunk', data=>{
       chatData = data.chatData;
-      setGlobalChatData(chatData)
+      setCurrentChat(currentChatData =>{
+        currentChatData.chatData = chatData;
+        return currentChatData
+      })
       for (let i = 0; i < data.messages.length; i++) {
         let date = new Date(data.messages[i].PublicationTime)
         let name = data.chatData.users.filter(usr => data.messages[i].SentById == usr.userId)[0].name
         let messageState = "seen"
-        if (chatData.chatType == 'G') messageState = "mixed"
+        if (chatData.type == 'G') messageState = "mixed"
         createMessage(
           data.messages[i].id,
-          chatData.chatType,
+          chatData.type,
           data.messages[i].TextMessage,
           date,
           name,
@@ -119,10 +122,10 @@ function MessageBox({ webSocket }) {
         let date = new Date(data.PublicationTime)
         let name = chatData.users.filter(usr => data.SentById == usr.userId)[0].name
         let messageState = "seen"
-        if (chatData.chatType == 'G') messageState = "mixed"
+        if (chatData.type == 'G') messageState = "mixed"
         createMessage(
           data.id,
-          chatData.chatType,
+          chatData.type,
           data.TextMessage,
           date,
           name,

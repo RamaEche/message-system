@@ -35,6 +35,8 @@ const getUserChats = require('./routes/getUserChats.js');
 const postLogIn = require('./routes/postLogIn.js');
 const postSingIn = require('./routes/postSingIn.js');
 const postRestorePassword = require('./routes/postRestorePassword.js');
+const postRemoveUser = require('./routes/postRemoveUser.js');
+const postUpdateProfile = require('./routes/postUpdateProfile.js');
 const getChatPhotoById = require('./routes/getChatPhotoById.js');
 const createComunicationChanel = require('./controllers/createComunicationChanel.js');
 const postNewMessage = require('./routes/postNewMessage.js');
@@ -53,7 +55,9 @@ app.get('/g', creategroup = (req, res)=>{
 app.get('/userChats', validateTokenMW, getUserChats)
 app.post('/logIn', postLogIn);
 app.post('/singIn', upload.single('ProfileImage'), postSingIn);
-app.post('/restorePassword', postRestorePassword);
+app.post('/restorePassword', validateTokenMW, postRestorePassword);
+app.post('/removeUser', postRemoveUser);
+app.post('/UpdateProfile', upload.single('ProfileImage'), validateTokenMW, postUpdateProfile);
 app.get('/getChatPhotoById', validateTokenMW, getChatPhotoById);
 app.post('/postNewMessage', validateTokenMW, postNewMessage);
 

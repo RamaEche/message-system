@@ -43,7 +43,20 @@ const getMessagesChunk = async (socket, data)=>{
                     name:userDB.PrivateData.UserName
                 })
             }
-            toEmit.chatData = {users:users, chatType:chat.Type}
+            if(chat.Type == "G"){
+                toEmit.chatData = {
+                    users:users,
+                    type:chat.Type,
+                    description:chat.Description,
+                    name:chat.Name
+                }
+            }else{
+                toEmit.chatData = {
+                    users:users,
+                    type:chat.Type,
+                }
+            }
+
         } 
         await socket.emit('getMessagesChunk', toEmit)      
     }catch(err){

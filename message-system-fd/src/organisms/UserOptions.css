@@ -3,6 +3,8 @@
     height: 100%;
     background-color: #fff;
     border-right: solid 1px #aaa;
+    display: flex;
+    flex-direction: column;
 }
 
 .user-option-bar{
@@ -33,7 +35,7 @@
 }
 
 .user-options-form-container{
-    margin: auto;
+    margin: 0 auto;
     width:  60%;
     display: flex;
     flex-direction: column;
@@ -63,6 +65,8 @@
 .user-options-link{
     display: flex;
     justify-content: center;
+    font-size: 16px;
+    margin-bottom: 5px;
 }
 
 .user-option-go-back-arrow img{
