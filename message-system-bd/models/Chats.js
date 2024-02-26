@@ -15,6 +15,7 @@ const CommunicationChannelSchema = new mongoose.Schema({
   }],
   Users: [{
     UserId: { type: String },
+    Name: { type: String },
     Roll: { type: String }
   }],
   MediaFolderPath: { type: String }

@@ -44,13 +44,13 @@ function AboutMessage({ webSocket }) {
 
 
   return (
-    <div className='chat-option-container'>
-      <div className='chat-option-bar'>
-        <a className='chat-option-go-back-arrow' onClick={()=>MessageBox()}><img src='arrow.png'/></a>
-        <h1 className='chat-option-outstanding-logo'>Text Message System</h1>
+    <div className='about-message-container'>
+      <div className='about-message-bar'>
+        <a className='about-message-go-back-arrow' onClick={()=>MessageBox()}><img src='arrow.png'/></a>
+        <h1 className='about-message-outstanding-logo'>Text Message System</h1>
       </div>
-      <div className='chat-option-bar-bg'>
-        <div className='chat-option-bar-people-container'>
+      <div className='about-message-bar-bg'>
+        <div className='about-message-bar-people-container'>
           {focusedChat.id != undefined ?
             focusedChat.seenBy.map((id, index)=>(
               <AboutMessageUser key={index} id={id} focusedChat={focusedChat}/>
@@ -58,7 +58,7 @@ function AboutMessage({ webSocket }) {
           :
           <AboutMessageUser id={userId} focusedChat={focusedChat}/>}
         </div>
-        <button onClick={()=>setOpenConfirmation(true)} className='chat-option-bar-delete-message'>Delete message</button>
+        <button onClick={()=>setOpenConfirmation(true)} className='about-message-bar-delete-message'>Delete message</button>
         {openConfirmation &&
           <Confirmation cbFalse={()=>setOpenConfirmation(false)} cbTrue={()=>deleteMessage()} text="Are you sure you want to delete the message?"/>
         }

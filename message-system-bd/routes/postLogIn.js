@@ -17,7 +17,6 @@ const logIn = async (req, res)=>{
       throw new Error('{ "ok":false, "status":401, "err":"invalidCredentials"}')
     }
   }catch(err){
-    console.error(err)
     try{
       err=JSON.parse(err.message)
       res.status(err.status || 400).json(err)

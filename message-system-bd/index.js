@@ -38,6 +38,8 @@ const postRestorePassword = require('./routes/postRestorePassword.js');
 const postRemoveUser = require('./routes/postRemoveUser.js');
 const postUpdateProfile = require('./routes/postUpdateProfile.js');
 const getChatPhotoById = require('./routes/getChatPhotoById.js');
+const getChatOptionData = require('./routes/getChatOptionData.js');
+const postChangeName = require('./routes/postChangeName.js');
 const createComunicationChanel = require('./controllers/createComunicationChanel.js');
 const postNewMessage = require('./routes/postNewMessage.js');
 
@@ -59,6 +61,8 @@ app.post('/restorePassword', validateTokenMW, postRestorePassword);
 app.post('/removeUser', postRemoveUser);
 app.post('/UpdateProfile', upload.single('ProfileImage'), validateTokenMW, postUpdateProfile);
 app.get('/getChatPhotoById', validateTokenMW, getChatPhotoById);
+app.get('/getChatOptionData', validateTokenMW, getChatOptionData);
+app.post('/postChangeName', validateTokenMW, postChangeName);
 app.post('/postNewMessage', validateTokenMW, postNewMessage);
 
 server.listen(process.env.PORT, () => {
