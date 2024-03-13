@@ -17,6 +17,7 @@ function Chat({socket, ChatID, Type, Name, Description, UserCurrentState, Ignore
     setBoxes({box1:boxes.box1, box2:"MessageBox"})
     setCurrentChat(currentChatData =>{
       currentChatData.chatId = ChatID
+      currentChatData.chatType = Type
       return currentChatData
     })
     setIgnoredMessages(0)

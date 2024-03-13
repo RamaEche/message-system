@@ -13,8 +13,22 @@
   transition: .2s color;
 }
 
+.link-red{
+  color: #d00;
+  padding: 0;
+  background-color: transparent;
+  text-decoration: #1069EF 1px solid;
+  transition: .2s color;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
 .link:hover{
   color: #0a2df3;
+}
+
+.link-red:hover{
+  color: rgb(179, 0, 0);
 }
 
 .input-text{

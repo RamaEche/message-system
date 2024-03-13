@@ -7,6 +7,7 @@ import CreateGroup from '../organisms/CreateGroup'
 import Welcome from '../organisms/Welcome'
 import MessageBox from '../organisms/MessageBox'
 import ChatOption from '../organisms/ChatOption'
+import GroupOption from '../organisms/GroupOption'
 import AboutMessage from '../organisms/AboutMessage'
 
 import Confirmation from '../molecules/Confirmation'
@@ -25,8 +26,8 @@ function Home() {
   const [boxes, setBoxes] = useState({box1:'Chats', box2:'Welcome'})
   const [webSocket, setWebSocket] = useState(null)
   const [userId, setUserId] = useState(null)
-  const [currentChat, setCurrentChat] = useState({chatId:null, chatMessages:null, chatFocusMessage:null, removeNotifications: null, chatData: null})
-  
+  const [currentChat, setCurrentChat] = useState({chatId:null, chatType:null, chatMessages:null, chatFocusMessage:null, removeNotifications: null, chatData: null})
+
   return (
     <CurrentChatContext.Provider value={[currentChat, setCurrentChat]}>
       <UserIdContext.Provider value={[userId, setUserId]}>
@@ -55,6 +56,8 @@ function Home() {
                     <Welcome/>
                   ) : boxes.box2 == 'MessageBox' ? (
                     <MessageBox webSocket={webSocket}/>
+                  ) : boxes.box2 == 'GroupOption' ? (
+                    <GroupOption/>
                   ) : boxes.box2 == 'ChatOption' ? (
                     <ChatOption/>
                   ) : boxes.box2 == 'aboutMessage' && (

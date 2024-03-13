@@ -13,6 +13,7 @@ function UserOptions() {
   let err = formState.errors;
   const [formError, setFormError] = useState(false)
   const form = useRef(null)
+  const [photoSrc, setPhotoSrc] = useState('https://us.123rf.com/450wm/tuktukdesign/tuktukdesign1606/tuktukdesign160600119/59070200-icono-de-usuario-hombre-perfil-hombre-de-negocios-avatar-icono-persona-en-la-ilustraci%C3%B3n.jpg')
   const [openConfirmation1, setOpenConfirmation1] = useState(false)
   const [openConfirmation2, setOpenConfirmation2] = useState(false)
 
@@ -135,7 +136,7 @@ function UserOptions() {
             <p>Error en la foto de perfil</p>
           </div>
         }
-        <img className='user-image-selector' src={profileImage || 'https://cdn-icons-png.flaticon.com/512/5989/5989226.png'}/>
+        <img className='user-image-selector' src={photoSrc}/>
         <div className='image-selector-buttons'>
           <input type='button' onClick={()=>DeletePhoto()} className='link' value='Delete photo'/>
           <div className='sing-in-image-selector link'>

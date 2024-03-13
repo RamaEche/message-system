@@ -18,7 +18,11 @@ function MessageBox({ webSocket }) {
   const { register, handleSubmit, formState, reset } = useForm()
 
   const ChatOption = ()=>{
-    setBoxes({box1:boxes.box1, box2:"ChatOption"})
+    if(currentChat.chatType == "U"){
+      setBoxes({box1:boxes.box1, box2:"ChatOption"})
+    }else{
+      setBoxes({box1:boxes.box1, box2:"GroupOption"})
+    }
   }
 
   const sendMessage = (data)=>{
