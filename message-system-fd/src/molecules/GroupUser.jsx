@@ -33,9 +33,6 @@ function GroupUser({name, roll, userId}) {
 
   useEffect(()=>{
     getUserPhotoById()
-    //ver quien esta conectado
-
-    //emit para ver quien se conecta y desconecta en tiempo real
   }, [])
 
   return (

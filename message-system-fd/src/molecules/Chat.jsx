@@ -11,6 +11,7 @@ function Chat({socket, ChatID, Type, Name, Description, UserCurrentState, Ignore
   const [userCurrentState, setUserCurrentState] = useState(UserCurrentState)
   const [currentChat, setCurrentChat] = useContext(CurrentChatContext)
   const [type, setType] = useState(Type)
+  const [lastOrdedChats, setLastOrdedChats] = useState(null)
   const [photoSrc, setPhotoSrc] = useState('https://us.123rf.com/450wm/tuktukdesign/tuktukdesign1606/tuktukdesign160600119/59070200-icono-de-usuario-hombre-perfil-hombre-de-negocios-avatar-icono-persona-en-la-ilustraci%C3%B3n.jpg')
 
   const OpenChat = ()=>{
@@ -63,13 +64,17 @@ function Chat({socket, ChatID, Type, Name, Description, UserCurrentState, Ignore
     })
   }, []);
 
+  useEffect(()=>{
+    getChatPhotoById()
+  }, [ChatID])
+
   return (
     <a onClick={()=>OpenChat()} className='chat-box'>
         <div className='chat-content'>
             <div className='chat-data'>
-                <img className="image" src={photoSrc}/>
+                <img className="chat-image" src={photoSrc}/>
                 <div className='chat-text'>
-                    <p className="name">{Name}</p>
+                    <p className="chat-name">{Name}</p>
                     <p className="last-message">{Description}</p>
                 </div>
             </div>

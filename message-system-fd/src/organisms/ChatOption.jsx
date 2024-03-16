@@ -150,7 +150,7 @@ function ChatOption() {
       <div className='chat-option-bar'>
         <a className='chat-option-go-back-arrow' onClick={()=>MessageBox()}><img src='arrow.png'/></a>
         <h1 className='chat-option-outstanding-logo'>Text Message System</h1>
-      </div>¨
+      </div>
       {serverDataGeted &&
         <form className='chat-options-form-container' ref={form} onSubmit={handleSubmit((data)=>submitForm(data))}>
           {formError &&

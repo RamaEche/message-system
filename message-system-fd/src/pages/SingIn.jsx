@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form'
 import Cookies from 'js-cookie'
 
 function SingIn() {
-
   const { register, handleSubmit, formState, watch } = useForm()
   const [profileImage, setProfileImage] = useState('');
   let files = [];
@@ -22,8 +21,8 @@ function SingIn() {
 
     console.log(e)
     fetch(`${import.meta.env.VITE_SERVER_API_URL}SingIn`, {
-    method: 'POST',
-    body: formData
+      method: 'POST',
+      body: formData
     })
     .then((res)=>res.json())
     .then((info)=>{

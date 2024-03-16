@@ -5,9 +5,8 @@ import {BoxesContext, UserIdContext, CurrentChatContext} from '../pages/Home'
 import Cookies from 'js-cookie'
 import socketIOClient from 'socket.io-client';
 
-function Chats({ webSocket, setWebSocket}) {
+function Chats({ webSocket, setWebSocket, setSearchType, chats, setChats}) {
 
-  const [chats, setChats] = useState(null)
   const [boxes, setBoxes] = useContext(BoxesContext)
   const [currentChat, setCurrentChat] = useContext(CurrentChatContext)
   const [userId, setUserId] = useContext(UserIdContext)
@@ -15,6 +14,7 @@ function Chats({ webSocket, setWebSocket}) {
   const socket = socketIOClient('http://localhost:3000');
 
   const SearchChat = ()=>{
+    setSearchType("knownUsers")
     setBoxes({box1:'SearchUser', box2:boxes.box2});
   }
 
@@ -27,6 +27,7 @@ function Chats({ webSocket, setWebSocket}) {
   }
 
   const AddUser = ()=>{
+    setSearchType("unknownUsers")
     setBoxes({box1:'SearchUser', box2:boxes.box2}); //The user is searched and then added
   }
 

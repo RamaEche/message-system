@@ -27,6 +27,9 @@ function Home() {
   const [webSocket, setWebSocket] = useState(null)
   const [userId, setUserId] = useState(null)
   const [currentChat, setCurrentChat] = useState({chatId:null, chatType:null, chatMessages:null, chatFocusMessage:null, removeNotifications: null, chatData: null})
+  const [newUserToAdd, setNewUserToAdd] = useState({id:null, userImage:null, userName:null, userDescription:null})
+  const [chats, setChats] = useState(null)
+  const [searchType, setSearchType] = useState("error")
 
   return (
     <CurrentChatContext.Provider value={[currentChat, setCurrentChat]}>
@@ -39,13 +42,13 @@ function Home() {
             <div className='app-container'>
               <div className='box1'>
                 {boxes.box1 == 'Chats' ? (
-                    <Chats webSocket={webSocket} setWebSocket={setWebSocket}/>
+                    <Chats webSocket={webSocket} setWebSocket={setWebSocket} setSearchType={setSearchType} chats={chats} setChats={setChats}/>
                   ) : boxes.box1 == 'UserOptions' ? (
                     <UserOptions/>
                   ) : boxes.box1 == 'SearchUser' ? (
-                    <SearchUser/>
+                    <SearchUser searchType={searchType} webSocket={webSocket} chats={chats} setNewUserToAdd={setNewUserToAdd}/>
                   ) : boxes.box1 == 'AddUser' ? (
-                    <AddUser/>
+                    <AddUser newUserToAdd={newUserToAdd}/>
                   ) : boxes.box1 == 'CreateGroup' && (
                     <CreateGroup />
                   )

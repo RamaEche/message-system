@@ -142,6 +142,7 @@ function GroupOption() {
             setFormError("Some problem on the server makes it impossible to update the image.")
             break;
           default:
+            setFormError("Unknown error, try later.")
             console.error("Unknown error")
             break;
         }

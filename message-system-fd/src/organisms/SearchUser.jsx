@@ -1,15 +1,112 @@
 import './SearchUser.css'
 import SerchedUser from "../molecules/SerchedUser"
-import {useState, useContext} from 'react'
+import { textToAscii } from 'ascii-text-converter';
+import Chat from "../molecules/Chat"
+import {useState, useContext, useEffect} from 'react'
 import {BoxesContext} from "../pages/Home"
+import * as JsSearch from 'js-search';
+import { useForm } from 'react-hook-form'
+import Cookies from 'js-cookie'
 
-function SearchUser() {
+function SearchUser({searchType, webSocket, chats, setNewUserToAdd}) {
 
+  const {onChange, watch, register } = useForm()
   const [boxes, setBoxes] = useContext(BoxesContext)
+  const [ordedChats, setOrdedChats] = useState(null)
+  const [lastSetTimeoutValue, setLastSetTimeoutValue] = useState(false)
 
   const Chats = ()=>{
     setBoxes({box1:"Chats", box2:boxes.box2})
   }
+
+  const postSearchKnownUsersByValue = (inputValue)=>{
+    let inputSearchText = ""
+
+    if(inputValue){
+      inputSearchText = inputValue
+    }
+
+    var search = new JsSearch.Search('isbn');
+    search.addIndex('Name');
+    search.addDocuments(chats);
+    let middleChat = search.search(inputSearchText.toLowerCase())[0];
+
+    let unOrdedChats = chats.sort(function (a, b) {
+      if(a.Name && b.Name){
+        a.Name = a.Name.toLowerCase()
+        b.Name = b.Name.toLowerCase()
+  
+        if (a.Name > b.Name) {
+          return 1;
+        }
+        if (a.Name < b.Name) {
+          return -1;
+        }
+      }
+      return 0;
+    })
+
+    let middleChatPos = 0
+    if(middleChat) middleChatPos = unOrdedChats.findIndex((element) => element.id == middleChat.id)
+
+    if(middleChatPos != 0){
+      let differentChats = unOrdedChats.slice(0, middleChatPos);
+      unOrdedChats = unOrdedChats.slice(middleChatPos, unOrdedChats.length);
+      setOrdedChats(unOrdedChats.concat(differentChats.reverse()))
+    }else{
+      setOrdedChats(unOrdedChats)
+    }
+  }
+
+  const searchByKnownUsers = (e)=>{
+    if(!e) return 0
+    if(lastSetTimeoutValue) clearTimeout(lastSetTimeoutValue)
+
+    const timeoutId = setTimeout((inputValue) => {
+      postSearchKnownUsersByValue(inputValue)
+    }, 800, e.target.value);
+
+    setLastSetTimeoutValue(timeoutId)
+  }
+
+  const postSearchUnknownUsersByValue = (inputValue) => {
+    const token = Cookies.get("JwtToken")
+    fetch(`${import.meta.env.VITE_SERVER_API_URL}postSearchUnknownUsers`,{
+      headers:{
+        "Content-Type":"application/json",
+        'authorization': `Barrer ${token}`
+      },
+      method:"POST",
+      body:JSON.stringify({inputValue})
+    })
+    .then(res=>res.json())
+    .then(info=>{
+      setOrdedChats(info)
+      console.log(info)
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  }
+
+  const searchByUnKnownUsers = (e)=>{
+    if(!e) return 0
+    if(lastSetTimeoutValue) clearTimeout(lastSetTimeoutValue)
+
+    const timeoutId = setTimeout((inputValue) => {
+      postSearchUnknownUsersByValue(inputValue)
+    }, 800, e.target.value);
+
+    setLastSetTimeoutValue(timeoutId)
+  }
+
+  useEffect(()=>{
+    if(searchType == "unknownUsers"){
+      postSearchUnknownUsersByValue("")
+    }else if(searchType == "knownUsers"){
+      postSearchKnownUsersByValue("")
+    }
+  },[])
 
   return (
     <div className='search-user-container'>
@@ -24,12 +121,27 @@ function SearchUser() {
               <img src="search.png" className="search-user-img" />
             </div>
           </div>
-          <input className='search-user-input' type='text'/>
+          <input className='search-user-input' type='text' name='searchInput' {...register('searchInput', {onChange:searchType == "knownUsers" ? ((e)=>searchByKnownUsers(e)) : searchType == "unknownUsers" && ((e)=>searchByUnKnownUsers(e))})}/>
         </div>
         <div className=''>
-          <SerchedUser user="@mati2000"/>
-          <SerchedUser user="@luis5"/>
-          <SerchedUser user="@xx_maria_xx"/>
+          {ordedChats == null ?
+            (
+              <div>loading...</div>
+            ): ordedChats.length == 0 ?
+            (
+              <div>No more users found.</div>
+            )
+            :(
+              searchType == "unknownUsers" ?
+                ordedChats.map(({id, userName, userDescription}, i)=>{
+                  return <SerchedUser id={id} userName={userName} userDescription={userDescription} setNewUserToAdd={setNewUserToAdd} key={i}/>
+                })
+                : searchType == "knownUsers" &&
+                ordedChats.map((chat, i)=>{
+                  return <Chat socket={webSocket} key={i} ChatID={chat.id} Type={chat.Type} Name={chat.Name} Description={chat.Description} UserCurrentState={chat.UserCurrentState}  IgnoredMessageCounter={chat.IgnoredMessageCounter}/>
+                })
+            )
+          }
         </div>
       </div>
     </div>

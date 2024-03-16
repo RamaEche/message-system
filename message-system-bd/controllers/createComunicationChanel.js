@@ -5,17 +5,17 @@ const Chats = require('../models/Chats.js');
 const fs = require('fs/promises');
 const path = require('path');
 
-const createComunicationChanel = async({name, description, type, usersID, chatGroupImagePath}, mainUserID)=>{  
+const createComunicationChanel = async({type, name, description, usersID, chatGroupImagePath, nameOfOtherUser}, mainUserID)=>{  
     let chatUsers = [];
-    usersID.forEach(userId => {
-      chatUsers.push({
-        UserId:userId,
-        Roll:"N"
-      })
-    });
-  
     let CCData;
     if(type == "G"){
+      usersID.forEach(userId => {
+        chatUsers.push({
+          UserId:userId,
+          Roll:"N"
+        })
+      });
+
       chatUsers.push({
         UserId:mainUserID,
         Roll:"A"
@@ -29,9 +29,19 @@ const createComunicationChanel = async({name, description, type, usersID, chatGr
         Users:chatUsers,
         MediaFolderPath: "MediaFolderPath..."
       }
-    }else{  
+    }else{
+      usersID.forEach(userId => {
+        chatUsers.push({
+          UserId:userId,
+          Name:nameOfOtherUser,
+          Roll:"N"
+        })
+      });
+
+      const mainUser = await Users.findById(mainUserID)
       chatUsers.push({
         UserId:mainUserID,
+        Name:mainUser.PrivateData.UserName,
         Roll:"N"
       })
       
