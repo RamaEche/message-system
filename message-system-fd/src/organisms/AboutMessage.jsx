@@ -7,9 +7,8 @@ import AboutMessageUser from '../molecules/AboutMessageUser'
 
 function AboutMessage({ webSocket }) {
   const [boxes, setBoxes] = useContext(BoxesContext)
-  const [currentChat, setCurrentChat] = useContext(CurrentChatContext)
+  const [currentChat] = useContext(CurrentChatContext)
   const [focusedChat, setFocusedChat] = useState(currentChat.chatMessages[currentChat.chatFocusMessage])
-  const [photoSrc, setPhotoSrc] = useState('https://us.123rf.com/450wm/tuktukdesign/tuktukdesign1606/tuktukdesign160600119/59070200-icono-de-usuario-hombre-perfil-hombre-de-negocios-avatar-icono-persona-en-la-ilustraci%C3%B3n.jpg')
   const [token] = useState(Cookies.get('JwtToken'))
   const [userId] = useContext(UserIdContext)
   const [openConfirmation, setOpenConfirmation] = useState(false)
@@ -19,7 +18,6 @@ function AboutMessage({ webSocket }) {
   }
 
   useEffect(()=>{
-    console.log(currentChat.chatMessages.slice().reverse()[currentChat.chatFocusMessage])
     setFocusedChat(currentChat.chatMessages.slice().reverse()[currentChat.chatFocusMessage])
 
     webSocket.on("deleteMessage", data=>{

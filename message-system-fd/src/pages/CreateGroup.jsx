@@ -1,7 +1,6 @@
 import Chats from '../organisms/Chats'
 import Welcome from '../organisms/Welcome'
 import './Home.css'
-import {useState} from 'react'
 
 function CreateGroup() {
   return (

@@ -1,5 +1,4 @@
 import './VideoPlayer.css'
-import {useState} from 'react'
 
 function VideoPlayer(){
     return (

@@ -1,7 +1,7 @@
 import './CreateGroup.css'
 import SerchedUser from "../molecules/SerchedUser"
 import AddedUser from "../molecules/AddedUser"
-import {useState, useContext} from 'react'
+import {useContext} from 'react'
 import {BoxesContext} from "../pages/Home"
 
 function CreateGroup() {

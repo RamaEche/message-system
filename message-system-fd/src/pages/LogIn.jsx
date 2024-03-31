@@ -2,8 +2,9 @@ import './LogIn.css'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Cookies from 'js-cookie'
+import errorManager from  '../controllers/errorManager.js'
 
-function logIn() {
+function LogIn() {
 
   const { register, handleSubmit, formState } = useForm()
 
@@ -24,18 +25,7 @@ function logIn() {
         Cookies.set("JwtToken", info.token)
         location.href = import.meta.env.VITE_FRONTEND_APP_URL;
       }else{
-        console.error(info)
-        switch (info.err) {
-          case "invalidInputs":
-            setFormError("The format is invalid.")
-            break;
-          case "invalidCredentials":
-            setFormError("The username or password is not correct.")
-            break;
-          default:
-            console.error("Unknown error")
-            break;
-        }
+        errorManager(info, setFormError)
       }
     })
     .catch((err)=>{console.error(err)})
@@ -74,4 +64,4 @@ function logIn() {
   )
 }
 
-export default logIn
+export default LogIn

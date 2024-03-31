@@ -2,6 +2,7 @@ import './RestorePassword.css'
 import {useState} from 'react'
 import { useForm } from 'react-hook-form'
 import Cookies from 'js-cookie'
+import errorManager from  '../controllers/errorManager.js'
 
 function RestorePassword() {
 
@@ -26,24 +27,7 @@ function RestorePassword() {
         Cookies.set("JwtToken", info.token)
         location.href = import.meta.env.VITE_FRONTEND_APP_URL;
       }else{
-        console.error(info)
-        switch (info.err) {
-          case "invalidInputs":
-            setFormError("The format is invalid.")
-            break;
-          case "samePassword":
-            setFormError("The last password and the new password are the same.")
-            break;
-          case "wasNotModified":
-            setFormError("The server could not modify the password, try again later.")
-            break;
-          case "invalidCredentials":
-            setFormError("The username, new password or last password are not correct.")
-            break;
-          default:
-            console.error("Unknown error")
-            break;
-        }
+        errorManager(info, setFormError)
       }
     })
     .catch((err)=>console.log(err))

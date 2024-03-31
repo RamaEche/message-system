@@ -1,6 +1,5 @@
 import './SearchUser.css'
 import SerchedUser from "../molecules/SerchedUser"
-import { textToAscii } from 'ascii-text-converter';
 import Chat from "../molecules/Chat"
 import {useState, useContext, useEffect} from 'react'
 import {BoxesContext} from "../pages/Home"
@@ -9,8 +8,8 @@ import { useForm } from 'react-hook-form'
 import Cookies from 'js-cookie'
 
 function SearchUser({searchType, webSocket, chats, setNewUserToAdd}) {
-
-  const {onChange, watch, register } = useForm()
+  const [token] = useState(Cookies.get('JwtToken'))
+  const { register } = useForm()
   const [boxes, setBoxes] = useContext(BoxesContext)
   const [ordedChats, setOrdedChats] = useState(null)
   const [lastSetTimeoutValue, setLastSetTimeoutValue] = useState(false)
@@ -70,22 +69,12 @@ function SearchUser({searchType, webSocket, chats, setNewUserToAdd}) {
   }
 
   const postSearchUnknownUsersByValue = (inputValue) => {
-    const token = Cookies.get("JwtToken")
-    fetch(`${import.meta.env.VITE_SERVER_API_URL}postSearchUnknownUsers`,{
-      headers:{
-        "Content-Type":"application/json",
-        'authorization': `Barrer ${token}`
-      },
-      method:"POST",
-      body:JSON.stringify({inputValue})
-    })
-    .then(res=>res.json())
-    .then(info=>{
-      setOrdedChats(info)
-      console.log(info)
-    })
-    .catch(err=>{
-      console.log(err)
+    webSocket.emit("postSearchUnknownUsers", {
+      authorization: `Barrer ${token}`,
+      inputValue
+    });
+    webSocket.on("postSearchUnknownUsers", info=>{
+      setOrdedChats(info.arrayToSend)
     })
   }
 

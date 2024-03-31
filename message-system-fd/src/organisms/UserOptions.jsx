@@ -4,19 +4,21 @@ import {BoxesContext} from "../pages/Home"
 import { useForm } from 'react-hook-form'
 import Confirmation from '../molecules/Confirmation'
 import Cookies from 'js-cookie'
+import errorManager from  '../controllers/errorManager.js'
 
 function UserOptions() {
   const [boxes, setBoxes] = useContext(BoxesContext)
   const { register, handleSubmit, formState, watch } = useForm()
-  const [profileImage, setProfileImage] = useState('');
+  const [setProfileImage] = useState('');
   let files = [];
   let err = formState.errors;
   const [formError, setFormError] = useState(false)
   const form = useRef(null)
-  const [photoSrc, setPhotoSrc] = useState('https://us.123rf.com/450wm/tuktukdesign/tuktukdesign1606/tuktukdesign160600119/59070200-icono-de-usuario-hombre-perfil-hombre-de-negocios-avatar-icono-persona-en-la-ilustraci%C3%B3n.jpg')
+  const [photoSrc] = useState('https://us.123rf.com/450wm/tuktukdesign/tuktukdesign1606/tuktukdesign160600119/59070200-icono-de-usuario-hombre-perfil-hombre-de-negocios-avatar-icono-persona-en-la-ilustraci%C3%B3n.jpg')
   const [openConfirmation1, setOpenConfirmation1] = useState(false)
   const [openConfirmation2, setOpenConfirmation2] = useState(false)
-
+  const [token] = useState(Cookies.get('JwtToken'))
+  
   const Chats = ()=>{
     setBoxes({box1:"Chats", box2:boxes.box2})
   }
@@ -26,7 +28,6 @@ function UserOptions() {
     formData.append('ProfileImage', e.ProfileImage[0])
     formData.append('UserName', e.UserName)
 
-    const token = Cookies.get("JwtToken")
     fetch(`${import.meta.env.VITE_SERVER_API_URL}UpdateProfile`, {
       method: 'POST',
       headers:{
@@ -39,27 +40,7 @@ function UserOptions() {
       if(info.ok){
         location.href = import.meta.env.VITE_FRONTEND_APP_URL;
       }else{
-        console.error(info)
-        switch (info.err) {
-          case "ValidTokenInvalidUser":
-            setFormError("Valid token but invalid user.")
-            break;
-          case "invalidInputs":
-            setFormError("The format is invalid.")
-            break;
-          case "diferentPassword":
-            setFormError("The password and validation password are different from each other.")
-            break;
-          case "alreadyRegistered":
-            setFormError("This username is in use. try another.")
-            break;
-          case "impossibleImageUpdate":
-            setFormError("Some problem on the server makes it impossible to update the image.")
-            break;
-          default:
-            console.error("Unknown error")
-            break;
-        }
+        errorManager(info, setFormError)
       }
     })
     .catch((err)=>{console.error(err)})
@@ -90,7 +71,6 @@ function UserOptions() {
   }
 
   const removeAccount = ()=>{
-    const token = Cookies.get("JwtToken")
     fetch(`${import.meta.env.VITE_SERVER_API_URL}removeUser`, {
       method: 'POST',
       headers:{
@@ -104,17 +84,7 @@ function UserOptions() {
         location.href = import.meta.env.VITE_FRONTEND_APP_URL;
         setOpenConfirmation1(false)
       }else{
-        console.error(info)
-        switch (info.err) {
-          case "ValidTokenInvalidUser":
-            setFormError("Valid token but invalid user.")
-            break;
-          case "impossibleRemoveAccount":
-            setFormError("Impossible remove account.")
-          default:
-            console.error("Unknown error")
-            break;
-        }
+        errorManager(info, setFormError)
         setOpenConfirmation1(false)
       }
     })

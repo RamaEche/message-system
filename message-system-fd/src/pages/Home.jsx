@@ -10,10 +10,6 @@ import ChatOption from '../organisms/ChatOption'
 import GroupOption from '../organisms/GroupOption'
 import AboutMessage from '../organisms/AboutMessage'
 
-import Confirmation from '../molecules/Confirmation'
-import ImagePlayer from '../molecules/ImagePlayer'
-import VideoPlayer from '../molecules/VideoPlayer'
-
 import './Home.css'
 import {useState, createContext} from 'react'
 
@@ -44,13 +40,13 @@ function Home() {
                 {boxes.box1 == 'Chats' ? (
                     <Chats webSocket={webSocket} setWebSocket={setWebSocket} setSearchType={setSearchType} chats={chats} setChats={setChats}/>
                   ) : boxes.box1 == 'UserOptions' ? (
-                    <UserOptions/>
+                    <UserOptions webSocket={webSocket}/>
                   ) : boxes.box1 == 'SearchUser' ? (
-                    <SearchUser searchType={searchType} webSocket={webSocket} chats={chats} setNewUserToAdd={setNewUserToAdd}/>
+                    <SearchUser webSocket={webSocket} searchType={searchType} chats={chats} setNewUserToAdd={setNewUserToAdd}/>
                   ) : boxes.box1 == 'AddUser' ? (
-                    <AddUser newUserToAdd={newUserToAdd}/>
+                    <AddUser webSocket={webSocket} newUserToAdd={newUserToAdd}/>
                   ) : boxes.box1 == 'CreateGroup' && (
-                    <CreateGroup />
+                    <CreateGroup webSocket={webSocket}/>
                   )
                 }
               </div>
@@ -60,9 +56,9 @@ function Home() {
                   ) : boxes.box2 == 'MessageBox' ? (
                     <MessageBox webSocket={webSocket}/>
                   ) : boxes.box2 == 'GroupOption' ? (
-                    <GroupOption/>
+                    <GroupOption webSocket={webSocket}/>
                   ) : boxes.box2 == 'ChatOption' ? (
-                    <ChatOption/>
+                    <ChatOption webSocket={webSocket}/>
                   ) : boxes.box2 == 'aboutMessage' && (
                     <AboutMessage webSocket={webSocket}/>
                   )

@@ -1,9 +1,8 @@
 import './MessageBox.css'
 import Cookies from "js-cookie";
-import {useState, useContext, useEffect, useRef} from 'react'
+import {useState, useContext, useEffect} from 'react'
 import {BoxesContext, UserIdContext, CurrentChatContext} from "../pages/Home"
 import Message from '../molecules/Message'
-import FileSelectorOption from "../atoms/FileSelectorOption"
 import { useForm } from 'react-hook-form'
 
 function MessageBox({ webSocket }) {
@@ -11,11 +10,10 @@ function MessageBox({ webSocket }) {
   const [boxes, setBoxes] = useContext(BoxesContext)
   const [currentChat, setCurrentChat] = useContext(CurrentChatContext)
   const [messages, setMessages] = useState([])
-  const [globalChatData, setGlobalChatData] = useState(null)
   const [token] = useState(Cookies.get('JwtToken'))
   const [userId] = useContext(UserIdContext)
 
-  const { register, handleSubmit, formState, reset } = useForm()
+  const { register, handleSubmit, reset } = useForm()
 
   const ChatOption = ()=>{
     if(currentChat.chatType == "U"){
@@ -78,7 +76,6 @@ function MessageBox({ webSocket }) {
   useEffect(()=>{
     if(currentChat){
       setMessages([])
-  
       webSocket.emit('getMessagesChunk', {authorization: `Barrer ${token}`, chatId:currentChat.chatId, chunk:0})
     }
 
@@ -171,7 +168,7 @@ function MessageBox({ webSocket }) {
       </form>
       {messageInputFileButton == "open" &&(
         <div className='message-box-input-file'>
-            <FileSelectorOption cb={UploadImage()}/>
+            {/* <FileSelectorOption cb={UploadImage()}/> */}
           <div className='message-box-input-file-detail'></div>
         </div>
       )}

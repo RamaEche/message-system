@@ -1,5 +1,4 @@
 import './ImagePlayer.css'
-import {useState} from 'react'
 
 function ImagePlayer(){
     return (

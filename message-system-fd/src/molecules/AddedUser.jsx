@@ -1,5 +1,4 @@
 import './AddedUser.css'
-import {useState} from 'react'
 
 function AddedUser( { Name } ){
     return (

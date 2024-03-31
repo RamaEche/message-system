@@ -1,15 +1,15 @@
 import './Chats.css'
 import Chat from '../molecules/Chat'
-import {useState, useContext, useEffect, useRef} from 'react'
+import {useContext, useEffect, useState} from 'react'
 import {BoxesContext, UserIdContext, CurrentChatContext} from '../pages/Home'
 import Cookies from 'js-cookie'
 import socketIOClient from 'socket.io-client';
 
 function Chats({ webSocket, setWebSocket, setSearchType, chats, setChats}) {
-
+  const [token] = useState(Cookies.get('JwtToken'))
   const [boxes, setBoxes] = useContext(BoxesContext)
-  const [currentChat, setCurrentChat] = useContext(CurrentChatContext)
-  const [userId, setUserId] = useContext(UserIdContext)
+  const [currentChat] = useContext(CurrentChatContext)
+  const [, setUserId] = useContext(UserIdContext)
 
   const socket = socketIOClient('http://localhost:3000');
 
@@ -32,10 +32,10 @@ function Chats({ webSocket, setWebSocket, setSearchType, chats, setChats}) {
   }
 
   useEffect(()=>{
-    const token = Cookies.get("JwtToken")
     setWebSocket(socket)
 
-    socket.emit('authenticateUser', {authorization:`Barrer ${token}`})
+    //socket.emit('authenticateUser', {authorization:`Barrer ${token}`})
+    socket.emit('getUserChats', {authorization:`Barrer ${token}`})
     socket.on('authenticateUser', data=>{
       if(data.status == 401){
         location.href = `${import.meta.env.VITE_FRONTEND_APP_URL}login`
@@ -80,9 +80,6 @@ function Chats({ webSocket, setWebSocket, setSearchType, chats, setChats}) {
         return currentChats;
       })
     });
-
-    socket.on("disconnect", (reason) => {
-    });
   }, []);
 
   return (
@@ -109,7 +106,7 @@ function Chats({ webSocket, setWebSocket, setSearchType, chats, setChats}) {
         ):
         (
           chats.map((chat, i)=>{
-            return <Chat socket={webSocket} key={i} ChatID={chat.id} Type={chat.Type} Name={chat.Name} Description={chat.Description} UserCurrentState={chat.UserCurrentState}  IgnoredMessageCounter={chat.IgnoredMessageCounter}/>
+            return <Chat socket={webSocket} key={i} ChatID={chat.id} Type={chat.Type} Name={chat.Name} Description={chat.Description} IgnoredMessageCounter={chat.IgnoredMessageCounter}/>
           })
         )}
       </div>

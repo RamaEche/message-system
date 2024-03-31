@@ -1,15 +1,13 @@
 import './GroupUser.css'
-import {useState, useContext, useEffect} from 'react'
-import {BoxesContext, CurrentChatContext} from "../pages/Home"
+import {useState, useEffect} from 'react'
 import Cookies from 'js-cookie'
 
 function GroupUser({name, roll, userId}) {
-  const [currentChat, setCurrentChat] = useContext(CurrentChatContext)
-  const [userCurrentState, setUserCurrentState] = useState(false)
+  const [userCurrentState] = useState(false)
   const [photoSrc, setPhotoSrc] = useState('https://us.123rf.com/450wm/tuktukdesign/tuktukdesign1606/tuktukdesign160600119/59070200-icono-de-usuario-hombre-perfil-hombre-de-negocios-avatar-icono-persona-en-la-ilustraci%C3%B3n.jpg')
-
+  const [token] = useState(Cookies.get('JwtToken'))
+  
   const getUserPhotoById = ()=>{
-    const token = Cookies.get("JwtToken")
     fetch(`${import.meta.env.VITE_SERVER_API_URL}getUserPhotoById`, {
       method: 'GET',
       headers: {

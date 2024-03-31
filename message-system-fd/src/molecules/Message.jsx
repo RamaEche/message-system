@@ -1,10 +1,10 @@
 import './Message.css';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { BoxesContext, CurrentChatContext } from '../pages/Home'
 
 function Message({ index, text, time, name=null, internalOrigin }){
     const [boxes, setBoxes] = useContext(BoxesContext)
-    const [currentChat, setCurrentChat] = useContext(CurrentChatContext)
+    const [setCurrentChat] = useContext(CurrentChatContext)
     const messageStatePanel = ()=>{
         setBoxes({box1:boxes.box1, box2:"aboutMessage"})
         setCurrentChat(currentChatData =>{

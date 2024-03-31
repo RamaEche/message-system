@@ -1,5 +1,4 @@
 import './Confirmation.css'
-import {useState} from 'react'
 
 function Confirmation({ cbFalse, cbTrue, text="Are you sure?" }){
     return (

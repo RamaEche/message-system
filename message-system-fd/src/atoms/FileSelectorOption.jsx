@@ -1,4 +1,4 @@
-import './FileSelectorOption.css'
+import './FileSelectorOption.css';
 
 function MessageBox({cb}) {
     return (

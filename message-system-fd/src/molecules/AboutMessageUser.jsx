@@ -1,22 +1,22 @@
 import './AboutMessageUser.css'
 import {useState, useContext, useEffect} from 'react'
-import {BoxesContext, CurrentChatContext} from "../pages/Home"
+import {CurrentChatContext} from "../pages/Home"
 import Cookies from 'js-cookie'
 
 function AboutMessageUser({id, focusedChat}) {
-  const [currentChat, setCurrentChat] = useContext(CurrentChatContext)
+  const [currentChat] = useContext(CurrentChatContext)
   const [photoSrc, setPhotoSrc] = useState('https://us.123rf.com/450wm/tuktukdesign/tuktukdesign1606/tuktukdesign160600119/59070200-icono-de-usuario-hombre-perfil-hombre-de-negocios-avatar-icono-persona-en-la-ilustraci%C3%B3n.jpg')
   const [messageStateText, setMessageStateText] = useState()
   const [fileStateText, setFileStateText] = useState()
   const [name, setName] = useState("")
-
+  const [token] = useState(Cookies.get('JwtToken'))
+  
   useEffect(()=>{
     let currentUser = currentChat.chatData.users.filter(user => user.userId == id)[0]
     setName(currentUser.name)
   }, [id])
 
   const getChatPhotoById = ()=>{
-    const token = Cookies.get("JwtToken")
     fetch(`${import.meta.env.VITE_SERVER_API_URL}getChatPhotoById`, {
       method: 'GET',
       headers: {

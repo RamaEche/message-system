@@ -4,7 +4,8 @@ import {BoxesContext} from "../pages/Home"
 import {useForm} from 'react-hook-form'
 import Cookies from 'js-cookie'
 
-function AddUser({ newUserToAdd }) {
+function AddUser({ webSocket, newUserToAdd }) {
+  const [token] = useState(Cookies.get('JwtToken'))
   const [boxes, setBoxes] = useContext(BoxesContext)
   const [formError, setFormError] = useState(false)
   const {handleSubmit, register, formState} = useForm()
@@ -15,20 +16,12 @@ function AddUser({ newUserToAdd }) {
   }
 
   const addUser = (e)=>{
-    const token = Cookies.get("JwtToken")
-    fetch(`${import.meta.env.VITE_SERVER_API_URL}postAddUser`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'authorization': `Barrer ${token}`
-      },
-      body: JSON.stringify({
-        id:newUserToAdd.id,
-        name:e.name
-      })
-    })
-    .then(res=>res.json())
-    .then((info)=>{
+    webSocket.emit("postAddUser", {
+      authorization: `Barrer ${token}`,
+      id:newUserToAdd.id,
+      name:e.name
+    });
+    webSocket.on("postAddUser", info=>{
       if(info.ok){
         location.href = import.meta.env.VITE_FRONTEND_APP_URL;
       }else{
@@ -42,9 +35,8 @@ function AddUser({ newUserToAdd }) {
             console.error("Unknown error")
             break;
         }
-      }
+      } 
     })
-    .catch((err)=>console.error(err))
   }
 
   return (

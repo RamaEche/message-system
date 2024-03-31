@@ -3,17 +3,17 @@ import {useState, useContext, useEffect, useRef} from 'react'
 import {BoxesContext, CurrentChatContext} from '../pages/Home'
 import Cookies from 'js-cookie'
 
-function Chat({socket, ChatID, Type, Name, Description, UserCurrentState, IgnoredMessageCounter}) {
+function Chat({socket, ChatID, Type, Name, Description, IgnoredMessageCounter}) {
 
   const mounted = useRef(false);
   const [boxes, setBoxes] = useContext(BoxesContext)
   const [ignoredMessages, setIgnoredMessages] = useState(IgnoredMessageCounter)
-  const [userCurrentState, setUserCurrentState] = useState(UserCurrentState)
-  const [currentChat, setCurrentChat] = useContext(CurrentChatContext)
-  const [type, setType] = useState(Type)
-  const [lastOrdedChats, setLastOrdedChats] = useState(null)
+  const [chatState, setChatState] = useState(false)
+  const [, setCurrentChat] = useContext(CurrentChatContext)
   const [photoSrc, setPhotoSrc] = useState('https://us.123rf.com/450wm/tuktukdesign/tuktukdesign1606/tuktukdesign160600119/59070200-icono-de-usuario-hombre-perfil-hombre-de-negocios-avatar-icono-persona-en-la-ilustraci%C3%B3n.jpg')
+  const [token] = useState(Cookies.get('JwtToken'))
 
+  
   const OpenChat = ()=>{
     setBoxes({box1:boxes.box1, box2:"MessageBox"})
     setCurrentChat(currentChatData =>{
@@ -29,7 +29,6 @@ function Chat({socket, ChatID, Type, Name, Description, UserCurrentState, Ignore
   },[IgnoredMessageCounter])
 
   const getChatPhotoById = ()=>{
-    const token = Cookies.get("JwtToken")
     fetch(`${import.meta.env.VITE_SERVER_API_URL}getChatPhotoById`, {
       method: 'GET',
       headers: {
@@ -58,8 +57,8 @@ function Chat({socket, ChatID, Type, Name, Description, UserCurrentState, Ignore
     }
 
     socket.on('updateUserChatCurrentStatus', data=>{
-      if(data.chatId == ChatID){
-        setUserCurrentState(data.state)
+      if(ChatID == data.chatId){
+        setChatState(data.state)
       }
     })
   }, []);
@@ -80,7 +79,7 @@ function Chat({socket, ChatID, Type, Name, Description, UserCurrentState, Ignore
             </div>
             <div className='notifications'>
                 {ignoredMessages >= 1 && <div className='green-circle-notification'>{ignoredMessages}</div>}
-                {Type == "U" && <div className={userCurrentState == true ? 'blue-circle-notification' : 'gray-circle-notification'}></div>}
+                {Type == "U" && <div className={chatState == true ? 'blue-circle-notification' : 'gray-circle-notification'}></div>}
             </div>
         </div>
     </a>

@@ -7,14 +7,14 @@ import {BoxesContext} from '../pages/Home'
 function SerchedUser( { id, userName, userDescription, setNewUserToAdd } ){
     const [boxes, setBoxes] = useContext(BoxesContext)
     const [photoSrc, setPhotoSrc] = useState('https://us.123rf.com/450wm/tuktukdesign/tuktukdesign1606/tuktukdesign160600119/59070200-icono-de-usuario-hombre-perfil-hombre-de-negocios-avatar-icono-persona-en-la-ilustraci%C3%B3n.jpg')
-
+    const [token] = useState(Cookies.get('JwtToken'))
+    
     const AddUser = ()=>{
       setNewUserToAdd({id:id, userImage:photoSrc, userName:userName, userDescription:userDescription})
       setBoxes({box1:"AddUser", box2:boxes.box2})
     }
 
     const getUserPhotoById = ()=>{
-        const token = Cookies.get("JwtToken")
         fetch(`${import.meta.env.VITE_SERVER_API_URL}getUserPhotoById`, {
           method: 'GET',
           headers: {

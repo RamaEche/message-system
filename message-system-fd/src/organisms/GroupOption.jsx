@@ -5,12 +5,13 @@ import { useForm } from 'react-hook-form'
 import Confirmation from '../molecules/Confirmation'
 import GroupUser from '../molecules/GroupUser'
 import Cookies from 'js-cookie'
+import errorManager from  '../controllers/errorManager.js'
 
-function GroupOption() {
+function GroupOption({ webSocket }) {
+  const [token] = useState(Cookies.get('JwtToken'))
   const { register, handleSubmit, formState, watch, setValue } = useForm()
   const [boxes, setBoxes] = useContext(BoxesContext)
-  const [currentChat, setCurrentChat] = useContext(CurrentChatContext)
-  const [openConfirmation, setOpenConfirmation] = useState(false)
+  const [currentChat] = useContext(CurrentChatContext)
   const [serverDataGeted, setServerDataGeted] = useState(null)
   let err = formState.errors;
   let files = [];
@@ -19,7 +20,6 @@ function GroupOption() {
   const [chatImage, setChatImage] = useState('');
   const [openConfirmation1, setOpenConfirmation1] = useState(false)
   const [openConfirmation2, setOpenConfirmation2] = useState(false)
-  const [token] = useState(Cookies.get("JwtToken"))
 
   const MessageBox = ()=>{
     setBoxes({box1:boxes.box1, box2:"MessageBox"})
@@ -29,7 +29,6 @@ function GroupOption() {
   watch('Description', '');
 
   const getChatPhotoById = ()=>{
-    const token = Cookies.get("JwtToken")
     fetch(`${import.meta.env.VITE_SERVER_API_URL}getChatPhotoById`, {
       method: 'GET',
       headers: {
@@ -39,10 +38,12 @@ function GroupOption() {
       }
     })
     .then((res)=>{
+      console.log(res)
       if(res.statusText == 'OK'){
         return res.blob()
       }else{
-        console.error("No image")
+        errorManager("", setFormError)
+        return 0;
       }
     })
     .then((info)=>{
@@ -52,27 +53,13 @@ function GroupOption() {
   }
 
   const getGroupOptionData = ()=>{
-    const token = Cookies.get("JwtToken")
-
-    fetch(`${import.meta.env.VITE_SERVER_API_URL}getGroupOptionData`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'authorization': `Barrer ${token}`,
-        'ChatId':currentChat.chatId
-      }
-    })
-    .then((res)=>{
-      if(res.statusText == 'OK'){
-        return res.json()
-      }else{
-        console.error("No image")
-      }
-    })
-    .then((info)=>{
+    webSocket.emit("getGroupOptionData", {
+      authorization: `Barrer ${token}`,
+      ChatId:currentChat.chatId
+    });
+    webSocket.on("getGroupOptionData", info=>{
       setServerDataGeted(info)
     })
-    .catch((err)=>console.error(err))
   }
 
   useEffect(()=>{
@@ -119,49 +106,25 @@ function GroupOption() {
       },
       body: formData
     })
-    .then((res)=>res.json())
-    .then((info)=>{
-      if(info.ok){
-        location.href = import.meta.env.VITE_FRONTEND_APP_URL;
+    .then((res)=>{
+      if(res.statusText == 'OK'){
+        return res.blob()
       }else{
-        console.error(info)
-        switch (info.err) {
-          case "ValidTokenInvalidUser":
-            setFormError("Valid token but invalid user.")
-            break;
-          case "invalidInputs":
-            setFormError("The format is invalid.")
-            break;
-          case "diferentPassword":
-            setFormError("The password and validation password are different from each other.")
-            break;
-          case "alreadyRegistered":
-            setFormError("This username is in use. try another.")
-            break;
-          case "impossibleImageUpdate":
-            setFormError("Some problem on the server makes it impossible to update the image.")
-            break;
-          default:
-            setFormError("Unknown error, try later.")
-            console.error("Unknown error")
-            break;
-        }
+        console.error(res.statusText)
       }
+    })
+    .then(()=>{
+      location.href = import.meta.env.VITE_FRONTEND_APP_URL;
     })
     .catch((err)=>{console.error(err)})
   }
 
   const leaveTheGroup = ()=>{
-    fetch(`${import.meta.env.VITE_SERVER_API_URL}postLeaveGroup`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'authorization': `Barrer ${token}`
-      },
-      body: JSON.stringify({chatId:currentChat.chatId})
-    })
-    .then((res)=>res.json())
-    .then((info)=>{
+    webSocket.emit("postLeaveGroup", {
+      authorization: `Barrer ${token}`,
+      chatId:currentChat.chatId
+    });
+    webSocket.on("postLeaveGroup", info=>{
       setOpenConfirmation1(false)
       if(info.ok){
         location.href = import.meta.env.VITE_FRONTEND_APP_URL;
@@ -172,16 +135,11 @@ function GroupOption() {
   }
 
   const deleteGroup = ()=>{
-    fetch(`${import.meta.env.VITE_SERVER_API_URL}postDeleteGroup`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'authorization': `Barrer ${token}`
-      },
-      body: JSON.stringify({chatId:currentChat.chatId})
-    })
-    .then((res)=>res.json())
-    .then((info)=>{
+    webSocket.emit("postDeleteGroup", {
+      authorization: `Barrer ${token}`,
+      chatId:currentChat.chatId
+    });
+    webSocket.on("postDeleteGroup", info=>{
       setOpenConfirmation1(false)
       if(info.ok){
         location.href = import.meta.env.VITE_FRONTEND_APP_URL;

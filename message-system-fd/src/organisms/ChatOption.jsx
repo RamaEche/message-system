@@ -2,18 +2,18 @@ import './ChatOption.css'
 import {useState, useContext, useEffect, useRef} from 'react'
 import {BoxesContext, CurrentChatContext} from "../pages/Home"
 import { useForm } from 'react-hook-form'
-import Confirmation from '../molecules/Confirmation'
 import Cookies from 'js-cookie'
 
-function ChatOption() {
+function ChatOption({ webSocket }) {
+  const [token] = useState(Cookies.get('JwtToken'))
   const { register, handleSubmit, formState, watch, setValue } = useForm()
   const [boxes, setBoxes] = useContext(BoxesContext)
-  const [currentChat, setCurrentChat] = useContext(CurrentChatContext)
-  const [openConfirmation, setOpenConfirmation] = useState(false)
+  const [currentChat] = useContext(CurrentChatContext)
+  //const [setOpenConfirmation] = useState(false)
   const [serverDataGeted, setServerDataGeted] = useState(null)
   let err = formState.errors;
   const form = useRef(null)
-  const [formError, setFormError] = useState(false)
+  const [formError] = useState(false)
   const [photoSrc, setPhotoSrc] = useState('https://us.123rf.com/450wm/tuktukdesign/tuktukdesign1606/tuktukdesign160600119/59070200-icono-de-usuario-hombre-perfil-hombre-de-negocios-avatar-icono-persona-en-la-ilustraci%C3%B3n.jpg')
 
   const MessageBox = ()=>{
@@ -23,7 +23,6 @@ function ChatOption() {
   watch('Name', '');
 
   const getChatPhotoById = ()=>{
-    const token = Cookies.get("JwtToken")
     fetch(`${import.meta.env.VITE_SERVER_API_URL}getChatPhotoById`, {
       method: 'GET',
       headers: {
@@ -36,7 +35,7 @@ function ChatOption() {
       if(res.statusText == 'OK'){
         return res.blob()
       }else{
-        console.error("No image")
+        console.error(res.statusText)
       }
     })
     .then((info)=>{
@@ -46,26 +45,13 @@ function ChatOption() {
   }
 
   const getChatOptionData = ()=>{
-    const token = Cookies.get("JwtToken")
-    fetch(`${import.meta.env.VITE_SERVER_API_URL}getChatOptionData`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'authorization': `Barrer ${token}`,
-        'ChatId':currentChat.chatId
-      }
-    })
-    .then((res)=>{
-      if(res.statusText == 'OK'){
-        return res.json()
-      }else{
-        console.error("No image")
-      }
-    })
-    .then((info)=>{
+    webSocket.emit("getChatOptionData", {
+      authorization: `Barrer ${token}`,
+      chatId:currentChat.chatId
+    });
+    webSocket.on("getChatOptionData", info=>{
       setServerDataGeted(info)
     })
-    .catch((err)=>console.error(err))
   }
 
   useEffect(()=>{
@@ -93,7 +79,14 @@ function ChatOption() {
 
   //Subir formulario
   const submitForm = (e)=>{
-    const token = Cookies.get("JwtToken")
+    webSocket.emit("postChangeName", {
+      authorization: `Barrer ${token}`,
+      chatId:currentChat.chatId,
+      name: e.Name
+    });
+    webSocket.on("postChangeName", ()=>{
+      location.href = import.meta.env.VITE_FRONTEND_APP_URL;
+    })
     fetch(`${import.meta.env.VITE_SERVER_API_URL}postChangeName`, {
       method: 'POST',
       headers: {
@@ -112,17 +105,16 @@ function ChatOption() {
        console.error(res)
      }
    })
-   .then((info)=>{
+   .then(()=>{
      location.href = import.meta.env.VITE_FRONTEND_APP_URL;
    })
    .catch((err)=>console.error(err))
   }
 
   //Bloquear usuario (solo el chat privado, no los grupos)
-  const blockUser = ()=>{
+/*   const blockUser = ()=>{
     setOpenConfirmation(false)
 
-    const token = Cookies.get("JwtToken")
     fetch(`${import.meta.env.VITE_SERVER_API_URL}getBlockUser`, {
       method: 'GET',
       headers: {
@@ -143,7 +135,7 @@ function ChatOption() {
       location.href = import.meta.env.VITE_FRONTEND_APP_URL;
     })
     .catch((err)=>console.error(err))
-  }
+  } */
 
   return (
     <div className='chat-option-container'>
