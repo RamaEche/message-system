@@ -6,6 +6,10 @@
   user-select: none;
 }
 
+.none{
+  display: none;
+}
+
 .link{
   color: #1069EF;
   padding: 0;

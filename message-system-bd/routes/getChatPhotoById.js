@@ -20,7 +20,9 @@ const getChatPhotoById = async(req, res)=>{
 			}
 
 			files.map((element, i) => {
-				if(element.startsWith("ChatImage-"))fileName = files[i];
+				if(element.startsWith("ChatImage-")){
+					fileName = files[i];
+				}
 			});
 		}else{
 			currentChat.Users.forEach(c=>{
@@ -38,8 +40,6 @@ const getChatPhotoById = async(req, res)=>{
 			});
 		}
 
-		if(!fileName) console.error("No chat image");
-
 		let options = {
 			root: dir,
 			dotfiles: "deny",
@@ -56,7 +56,7 @@ const getChatPhotoById = async(req, res)=>{
 				}
 			});
 		}catch (err){
-			throw new Error();
+			res.status(500).json({ok:false, state:500, msg:"noImage"});
 		}
 	}catch(err){
 		try{

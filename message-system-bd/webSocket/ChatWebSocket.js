@@ -8,6 +8,7 @@ const { WSclients } = require("./controllers/validateUserBySocket.js");
 const validateInWSSystem = require("./controllers/validateInWSSystem.js");
 
 const postAddUser = require("./postAddUser.js");
+const postCreateGroup = require("./postCreateGroup.js");
 const postSearchUnknownUsers = require("./postSearchUnknownUsers.js");
 const getGroupOptionData = require("./getGroupOptionData.js");
 const postLeaveGroup = require("./postLeaveGroup.js");
@@ -33,6 +34,7 @@ io.on("connection", socket=>{
 	socket.on("getMessagesChunk", data=>{validateWS(getMessagesChunk, socket, data, "getMessagesChunk");});
 	socket.on("postChatRead", data=>{validateWS(postChatRead, socket, data, "postChatRead");});
 	socket.on("postAddUser", data=>{validateWS(postAddUser, socket, data, "postAddUser");});
+	socket.on("postCreateGroup", data=>{validateWS(postCreateGroup, socket, data, "postCreateGroup");});
 	socket.on("postSearchUnknownUsers", data=>{validateWS(postSearchUnknownUsers, socket, data, "postSearchUnknownUsers");});
 	socket.on("getGroupOptionData", data=>{validateWS(getGroupOptionData, socket, data, "getGroupOptionData");});
 	socket.on("postLeaveGroup", data=>{validateWS(postLeaveGroup, socket, data, "postLeaveGroup");});

@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form'
 import Confirmation from '../molecules/Confirmation'
 import GroupUser from '../molecules/GroupUser'
 import Cookies from 'js-cookie'
-import errorManager from  '../controllers/errorManager.js'
 
 function GroupOption({ webSocket }) {
   const [token] = useState(Cookies.get('JwtToken'))
@@ -16,8 +15,8 @@ function GroupOption({ webSocket }) {
   let err = formState.errors;
   let files = [];
   const form = useRef(null)
-  const [formError, setFormError] = useState(false)
-  const [chatImage, setChatImage] = useState('');
+  const [formError] = useState(false)
+  const [chatImage, setChatImage] = useState('https://cdn-icons-png.flaticon.com/512/5989/5989226.png');
   const [openConfirmation1, setOpenConfirmation1] = useState(false)
   const [openConfirmation2, setOpenConfirmation2] = useState(false)
 
@@ -38,28 +37,18 @@ function GroupOption({ webSocket }) {
       }
     })
     .then((res)=>{
-      console.log(res)
       if(res.statusText == 'OK'){
         return res.blob()
       }else{
-        errorManager("", setFormError)
-        return 0;
+        return res.json()
       }
     })
     .then((info)=>{
-      setChatImage(URL.createObjectURL(info))
+      if(!info.msg){
+        setChatImage(URL.createObjectURL(info))
+      }
     })
     .catch((err)=>console.log(err))
-  }
-
-  const getGroupOptionData = ()=>{
-    webSocket.emit("getGroupOptionData", {
-      authorization: `Barrer ${token}`,
-      ChatId:currentChat.chatId
-    });
-    webSocket.on("getGroupOptionData", info=>{
-      setServerDataGeted(info)
-    })
   }
 
   useEffect(()=>{
@@ -69,7 +58,13 @@ function GroupOption({ webSocket }) {
     //cargar username del usuario
     //cargar descripcion del usuario
     //cargar nombre del usuario
-    getGroupOptionData()
+    webSocket.emit("getGroupOptionData", {
+      authorization: `Barrer ${token}`,
+      ChatId:currentChat.chatId
+    });
+    webSocket.on("getGroupOptionData", info=>{
+      setServerDataGeted(info)
+    })
   }, [])
 
   //Resetear formulario con el nombre ya existente
@@ -166,7 +161,7 @@ function GroupOption({ webSocket }) {
 
   const DeletePhoto = ()=>{
     form.current.reset();
-    setChatImage('')
+    setChatImage('https://cdn-icons-png.flaticon.com/512/5989/5989226.png')
   }
 
   return (
@@ -189,7 +184,7 @@ function GroupOption({ webSocket }) {
               </div>
             }
             <div className='group-options-profile'>
-              <img className='group-options-profile-photo' src={chatImage || 'https://cdn-icons-png.flaticon.com/512/5989/5989226.png'}/>
+              <img className='group-options-profile-photo' src={chatImage}/>
               <div className='group-options-profile-data'>
                 <input type='button' onClick={()=>DeletePhoto()} className='link' value='Delete photo'/>
                 <div className='sing-in-image-selector link'>

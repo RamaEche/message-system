@@ -29,11 +29,13 @@ function AboutMessageUser({id, focusedChat}) {
       if(res.statusText == 'OK'){
         return res.blob()
       }else{
-        console.error("No image")
+        return res.json()
       }
     })
     .then((info)=>{
-      setPhotoSrc(URL.createObjectURL(info))
+      if(!info.msg){
+        setPhotoSrc(URL.createObjectURL(info))
+      }
     })
     .catch((err)=>console.log(err))
   }

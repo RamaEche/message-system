@@ -46,7 +46,7 @@ function Home() {
                   ) : boxes.box1 == 'AddUser' ? (
                     <AddUser webSocket={webSocket} newUserToAdd={newUserToAdd}/>
                   ) : boxes.box1 == 'CreateGroup' && (
-                    <CreateGroup webSocket={webSocket}/>
+                    <CreateGroup webSocket={webSocket} chats={chats}/>
                   )
                 }
               </div>

@@ -5,7 +5,8 @@ const Chats = require("../models/Chats.js");
 const fs = require("fs/promises");
 const path = require("path");
 
-const createComunicationChanel = async({type, name, description, usersID, chatGroupImagePath, nameOfOtherUser}, mainUserID)=>{  
+//chatGroupImagePath is commented out because currently the client cannot select an image when creating the group.
+const createComunicationChanel = async({type, name, description, usersID, /* chatGroupImagePath,  */nameOfOtherUser}, mainUserID)=>{  
 	let chatUsers = [];
 	let CCData;
 	if(type == "G"){
@@ -60,14 +61,14 @@ const createComunicationChanel = async({type, name, description, usersID, chatGr
 	await fs.mkdir(mediaFilesChatsMedia, { recursive: true });
   
 	if(newCC.Type == "G"){
-		await Chats.updateOne({_id:newCC.id}, {$set:{"PhotoPath":path.join(process.env.MEDIA_FILES, "chats", `chat-ID${newCC.id}`, chatGroupImagePath), "MediaFolderPath":mediaFilesChats}});
+		await Chats.updateOne({_id:newCC.id}, {$set:{ "PhotoPath":null/*path.join(process.env.MEDIA_FILES, "chats", `chat-ID${newCC.id}`, chatGroupImagePath)*/, "MediaFolderPath":mediaFilesChats}});
 	}
 	else {
 		await Chats.updateOne({_id:newCC.id}, {$set:{"MediaFolderPath":mediaFilesChats}});
 	}
     
   
-	//Agregar a media time to remove en db
+	//Add to half time to remove in db
   
 	newCC.Users.forEach(async u=>{
 		const user = await Users.findById(u.UserId);

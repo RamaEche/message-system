@@ -17,6 +17,7 @@ const getGroupOptionData = async (socket, data, user) => {
 				socket.emit("getGroupOptionData", {status:200, ok:true, name:chat.Name, description:chat.Description, users:chat.Users});
 			}
 		});
+		socket.emit("getGroupOptionData", {status:200, ok:true, name:chat.Name, description:chat.Description});
 	} catch (err) {
 		socket.emit("getGroupOptionData", { status:500, error: "internalServerError" });
 		console.error(err);

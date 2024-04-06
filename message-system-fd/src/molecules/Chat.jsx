@@ -3,7 +3,7 @@ import {useState, useContext, useEffect, useRef} from 'react'
 import {BoxesContext, CurrentChatContext} from '../pages/Home'
 import Cookies from 'js-cookie'
 
-function Chat({socket, ChatID, Type, Name, Description, IgnoredMessageCounter}) {
+function Chat({onClick=false, socket, ChatID, Type, Name, Description, IgnoredMessageCounter}) {
 
   const mounted = useRef(false);
   const [boxes, setBoxes] = useContext(BoxesContext)
@@ -41,11 +41,13 @@ function Chat({socket, ChatID, Type, Name, Description, IgnoredMessageCounter}) 
       if(res.statusText == 'OK'){
         return res.blob()
       }else{
-        console.error("No image")
+        return res.json()
       }
     })
     .then((info)=>{
-      setPhotoSrc(URL.createObjectURL(info))
+      if(!info.msg){
+        setPhotoSrc(URL.createObjectURL(info))
+      }
     })
     .catch((err)=>console.log(err))
   }
@@ -68,7 +70,7 @@ function Chat({socket, ChatID, Type, Name, Description, IgnoredMessageCounter}) 
   }, [ChatID])
 
   return (
-    <a onClick={()=>OpenChat()} className='chat-box'>
+    <a onClick={onClick ? ()=>onClick(ChatID) : ()=>OpenChat()} className='chat-box'>
         <div className='chat-content'>
             <div className='chat-data'>
                 <img className="chat-image" src={photoSrc}/>

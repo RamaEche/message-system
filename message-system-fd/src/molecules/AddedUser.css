@@ -1,18 +1,43 @@
 .added-user-container{
-    width: 15%;
     transition: all .2s;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin: 2px;
+    padding: 8px;
 }
 
 .added-user-container:hover{
     background-color: #00000022;
 }
 
-.added-user-container img{
-    width: 100%;
+.added-user-close-continer{
+    height: 100%;
+    width: 100%; 
+}
+
+.added-user-close{
+    position: absolute;
+    opacity: 0;
+    height: 60px;
+    width: 60px;
+    margin: auto;
+    transition: all .2s;
+}
+
+.added-user-close:hover{
+    opacity: 100%;
 }
 
 .added-user-container p{
     text-align: center;
-    position: relative;
-    top: -10px;
+    margin-top: 5px;
+}
+
+.added-user-chat-image{
+    width: 60px;
+    height: 60px;
+    background-color: gray;
+    border-radius: 100%;
+    object-fit: cover;
 }
