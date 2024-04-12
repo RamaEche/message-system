@@ -3,10 +3,10 @@ const Chats = require("../models/Chats.js");
 
 const postNewMessage = async (socket, data, user) => {
 	try{
-		//Corroborar que el chat exista
+		//Verify that the chat exists.
 		const chat = await Chats.findById(data.chatId);
 
-		//corroborar que el usuario tenga los permisos para postear un mensaje en el chat
+		//Check that the user has the permissions to post a message in the chat.
 		for (let i = 0; i < chat.Users.length; i++) {
 			if(chat.Users[i].UserId == user.id){
 				if(chat.Users[i].Roll != "N" && chat.Users[i].Roll != "A"){
@@ -15,7 +15,7 @@ const postNewMessage = async (socket, data, user) => {
 			} 
 		}
         
-		//Guardar mensaje en la base de datos del chat
+		//Save message to chat database.
 		const postedTime = new Date();
 		let updatedChat;
 		try{
@@ -24,12 +24,12 @@ const postNewMessage = async (socket, data, user) => {
 				{
 					$push: {
 						"Messages": {
-							MediaPath: "", // falta
-							MediaType: "", // falta
+							MediaPath: "", // left
+							MediaType: "", // left
 							PublicationTime: postedTime,
 							TextMessage: data.text,
-							SeenById: [user.id], // falta
-							SentById: user.id // falta
+							SeenById: [user.id], // left
+							SentById: user.id // left
 						}
 					}
 				},
@@ -40,7 +40,7 @@ const postNewMessage = async (socket, data, user) => {
 			return 0;
 		}
 
-		//Enviar notificacion de recivido por el servidor al server sent event
+		//Send notification received by the server to the server sent event.
 		socket.emit("postNewMessage", { status:201, error: "Created resource." });
 
 		for (let i = 0; i < chat.Users.length; i++) {

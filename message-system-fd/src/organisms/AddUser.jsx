@@ -61,7 +61,7 @@ function AddUser({ webSocket, newUserToAdd }) {
             <input className='input-text' type='text' name="name" {...register("name", {required: true, maxLength: 15, minLength: 4})}/>
             {err.name &&
               <div className='input-err-aclaration'>
-                <p>Este campo deve contener entre 4 y 15 caracteres</p>
+                <p>This field must contain between 4 and 15 characters</p>
               </div>
             }
             <div className='add-users-form-changes-buttons'>

@@ -15,7 +15,7 @@ const restorePassword = async(req, res)=>{
 		if(!(req.body.NewPassword !== req.body.LastPassword)){ throw new Error("{ \"ok\":false, \"status\":400, \"err\":\"samePassword\"}");}
 
 		/*const validateUser = await ValidateUserRegistredByUserName(req.body.UserName, req.body.LastPassword);
-		//SISTEMA ROTO
+		//BROKEN SYSTEM
  		if(validateUser.state){
 
 			let isModified;

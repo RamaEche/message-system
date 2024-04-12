@@ -46,14 +46,14 @@ function LogIn() {
           <input className={err.UserName ? "input-text input-err" : "input-text"} type='text' {...register('UserName', { maxLength: 15, minLength: 4, required: true})}/>
           {err.UserName &&
             <div className='input-err-aclaration'>
-              <p>Este campo es obligatorio, y deve contener entre 4 y 15 caracteres</p>
+              <p>This field is required, and must contain between 4 and 15 characters.</p>
             </div>
           }
           <label>Password</label>
           <input className={err.Password ? "input-text input-err" : "input-text"} type='text' {...register('Password', { maxLength: 20, minLength: 5, required: true})}/>
           {err.Password &&
             <div className='input-err-aclaration'>
-              <p>Este campo es obligatorio, y deve contener entre 5 y 20 caracteres</p>
+              <p>This field is required, and must contain between 5 and 20 characters.</p>
             </div>
           }
           <input type='submit'/>

@@ -28,7 +28,7 @@ function Chats({ webSocket, setWebSocket, setSearchType, chats, setChats}) {
 
   const AddUser = ()=>{
     setSearchType("unknownUsers")
-    setBoxes({box1:'SearchUser', box2:boxes.box2}); //The user is searched and then added
+    setBoxes({box1:'SearchUser', box2:boxes.box2}); //The user is searched and then added.
   }
 
   useEffect(()=>{
@@ -90,12 +90,12 @@ function Chats({ webSocket, setWebSocket, setSearchType, chats, setChats}) {
         </div>
         <div className='TaskBar'>
           <div className='buttons-pair'>
-            <button onClick={()=>CreateGroup()} className='button'>G</button>
-            <button onClick={()=>AddUser()} className='button'>C</button>
+            <button onClick={()=>CreateGroup()} className='chats-button'><img className='chats-icon' src={`${import.meta.env.VITE_FRONTEND_APP_URL}addGroup.svg`}/></button>
+            <button onClick={()=>AddUser()} className='chats-button'><img className='chats-icon' src={`${import.meta.env.VITE_FRONTEND_APP_URL}addUser.svg`}/></button>
           </div>
           <div className='buttons-pair'>
-            <button onClick={()=>SearchChat()} className='button'>S</button>
-            <button onClick={()=>UserOptions()} className='button'>O</button>
+            <button onClick={()=>SearchChat()} className='chats-button'><img className='chats-icon' src={`${import.meta.env.VITE_FRONTEND_APP_URL}search.svg`}/></button>
+            <button onClick={()=>UserOptions()} className='chats-button'><img className='chats-icon' src={`${import.meta.env.VITE_FRONTEND_APP_URL}settings.svg`}/></button>
           </div>
         </div>
       </div>

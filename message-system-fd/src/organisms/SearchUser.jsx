@@ -153,7 +153,7 @@ function SearchUser({searchType, webSocket, chats, parentOrdedChats=[], setParen
     <div className='search-user-container'>
       <div className={header ? 'search-user-bar' : 'none'}>
         <a className='search-user-go-back-arrow' onClick={()=>Chats()}><img src='arrow.png'/></a>
-        <h1 className='search-user-outstanding-logo'>Buscar usuario</h1>
+        <h1 className='search-user-outstanding-logo'>Search user.</h1>
       </div>
       <div>
         <div className='search-user-input-container'>

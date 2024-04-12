@@ -10,7 +10,7 @@ function Chat({onClick=false, socket, ChatID, Type, Name, Description, IgnoredMe
   const [ignoredMessages, setIgnoredMessages] = useState(IgnoredMessageCounter)
   const [chatState, setChatState] = useState(false)
   const [, setCurrentChat] = useContext(CurrentChatContext)
-  const [photoSrc, setPhotoSrc] = useState('https://us.123rf.com/450wm/tuktukdesign/tuktukdesign1606/tuktukdesign160600119/59070200-icono-de-usuario-hombre-perfil-hombre-de-negocios-avatar-icono-persona-en-la-ilustraci%C3%B3n.jpg')
+  const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
   const [token] = useState(Cookies.get('JwtToken'))
 
   

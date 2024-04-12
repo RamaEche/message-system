@@ -74,7 +74,7 @@ function CreateGroup({ webSocket, chats }) {
       <div className='create-group-container'>
         <div className='create-group-bar'>
           <a className='create-group-go-back-arrow' onClick={()=>Chats()}><img src='arrow.png'/></a>
-          <h1 className='create-group-outstanding-logo'>Crear grupo</h1>
+          <h1 className='create-group-outstanding-logo'>Create group</h1>
         </div>
         <form onSubmit={handleSubmit((e)=>createGroup(e))}>
           {formError &&
@@ -87,14 +87,14 @@ function CreateGroup({ webSocket, chats }) {
             <input className='input-text' type='text' name="name" {...register("name", {required: true, maxLength: 20, minLength: 4})}/>
             {err.name &&
               <div className='input-err-aclaration'>
-                <p>Este campo deve contener entre 4 y 15 caracteres</p>
+                <p>This field must contain between 4 and 20 characters.</p>
               </div>
             }
             <p>Description</p>
             <input className='input-text' type='text' name="description" {...register("description", { required: true, maxLength: 80, minLength: 1})}/>
             {err.name &&
               <div className='input-err-aclaration'>
-                <p>Este campo deve contener entre 4 y 15 caracteres</p>
+                <p>This field must contain between 1 and 80 characters</p>
               </div>
             }
             <input className='main-button create-group-files-button' type='submit' value="Create group"/>

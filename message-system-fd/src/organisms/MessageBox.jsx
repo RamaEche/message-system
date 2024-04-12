@@ -4,6 +4,7 @@ import {useState, useContext, useEffect} from 'react'
 import {BoxesContext, UserIdContext, CurrentChatContext} from "../pages/Home"
 import Message from '../molecules/Message'
 import { useForm } from 'react-hook-form'
+import FileSelectorOption from '../atoms/FileSelectorOption'
 
 function MessageBox({ webSocket }) {
   const [messageInputFileButton, setMessageInputFileButton] = useState('close')
@@ -39,7 +40,7 @@ function MessageBox({ webSocket }) {
       true,
       "",
       "",
-      "none", //falta
+      "none", //Fail.
       "sending"
     )
 
@@ -103,7 +104,7 @@ function MessageBox({ webSocket }) {
           data.messages[i].internalOrigin,
           data.messages[i].SentById,
           data.messages[i].SeenById,
-          "none", //falta
+          "none", //Fail.
           messageState
           )
       }
@@ -112,9 +113,9 @@ function MessageBox({ webSocket }) {
 
     webSocket.on('postNewMessage', data=>{
       if(data.status != 201){
-        //actualizar mensaje ya creado
+        //Update already created message.
       }else{
-        //actualizar mensaje ya creado
+        //Update already created message.
       }
     })
 
@@ -133,7 +134,7 @@ function MessageBox({ webSocket }) {
           data.internalOrigin,
           data.SentById,
           data.SeenById,
-          "none", //falta
+          "none", //Fail.
           messageState
         )
         webSocket.emit('postChatRead', {authorization: `Barrer ${token}`, chatId:currentChat.chatId})
@@ -162,7 +163,7 @@ function MessageBox({ webSocket }) {
       </div>
       <form className='message-box-input' onSubmit={handleSubmit((data)=>sendMessage(data))}>
         <input type='text' className='message-box-input-text' placeholder='Send mensage...' {...register('text', {required: true})}/>
-        <input type='button' onClick={()=>{if(messageInputFileButton == "open"){setMessageInputFileButton("closed")}else{setMessageInputFileButton("open")}}} className='message-input-file'/>
+        <FileSelectorOption className='message-input-file' onClick={()=>{if(messageInputFileButton == "open"){setMessageInputFileButton("closed")}else{setMessageInputFileButton("open")}}}></FileSelectorOption>
         <input type="submit" className='message-input-send'/>
         {/* <img src="./sendArrow.png"/> */}
       </form>

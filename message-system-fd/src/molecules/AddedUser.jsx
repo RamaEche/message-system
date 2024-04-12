@@ -4,7 +4,7 @@ import Cookies from 'js-cookie'
 
 function AddedUser( { Name, id, onClick } ){
   const [token] = useState(Cookies.get('JwtToken'))
-  const [photoSrc, setPhotoSrc] = useState('https://us.123rf.com/450wm/tuktukdesign/tuktukdesign1606/tuktukdesign160600119/59070200-icono-de-usuario-hombre-perfil-hombre-de-negocios-avatar-icono-persona-en-la-ilustraci%C3%B3n.jpg')
+  const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
 
   const getChatPhotoById = ()=>{
     fetch(`${import.meta.env.VITE_SERVER_API_URL}getChatPhotoById`, {
@@ -35,11 +35,15 @@ function AddedUser( { Name, id, onClick } ){
   }, []);
 
   return (
-      <div className='added-user-container' onClick={()=>onClick(id)}>
+    <>
+      <div className='added-user-container-curtain-remove' onClick={()=>onClick(id)}>
+        <img className="added-user-close" src={`${import.meta.env.VITE_FRONTEND_APP_URL}close.png`}/>
+      </div>
+      <div className='added-user-container'>
         <img className="added-user-chat-image" src={photoSrc}/>
-        <img className="added-user-close" src='https://cdn-icons-png.flaticon.com/512/463/463612.png'/>
         <p>{Name}</p>
       </div>
+    </>
   )
 }
 

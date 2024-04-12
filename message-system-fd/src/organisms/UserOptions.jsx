@@ -14,7 +14,7 @@ function UserOptions() {
   let err = formState.errors;
   const [formError, setFormError] = useState(false)
   const form = useRef(null)
-  const [photoSrc] = useState('https://us.123rf.com/450wm/tuktukdesign/tuktukdesign1606/tuktukdesign160600119/59070200-icono-de-usuario-hombre-perfil-hombre-de-negocios-avatar-icono-persona-en-la-ilustraci%C3%B3n.jpg')
+  const [photoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}user.png`)
   const [openConfirmation1, setOpenConfirmation1] = useState(false)
   const [openConfirmation2, setOpenConfirmation2] = useState(false)
   const [token] = useState(Cookies.get('JwtToken'))
@@ -103,7 +103,7 @@ function UserOptions() {
         }
         {err.ProfileImage &&
         <div className='form-err-aclaration sing-in-form-err-aclaration'>
-            <p>Error en la foto de perfil</p>
+            <p>Profile photo error.</p>
           </div>
         }
         <img className='user-image-selector' src={photoSrc}/>
@@ -118,7 +118,7 @@ function UserOptions() {
             <input className='input-text' type='text' name='UserName' {...register('UserName', { maxLength: 15, minLength: 4})}/>
             {err.UserName &&
               <div className='input-err-aclaration'>
-                <p>Este campo deve contener entre 4 y 15 caracteres</p>
+                <p>This field must contain between 4 and 15 characters.</p>
               </div>
             }
             <div className='user-options-form-changes-buttons'>

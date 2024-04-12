@@ -5,7 +5,7 @@ function VideoPlayer(){
       <div className='video-player-bg'>
         <a className='video-player-go-back-arrow' href=''><img src='arrow.png'/></a>
         <video className='video-reproductor' src="video2.mp4" controls></video>
-        <p className='video-player-message'>Si, es esta no???</p>
+        <p className='video-player-message'>Yes, this is it, right???</p>
       </div>
   )
 }

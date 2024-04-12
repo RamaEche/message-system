@@ -23,7 +23,7 @@
 .chat-image{
     width: 60px;
     height: 60px;
-    background-color: gray;
+    background-color: #fff;
     border-radius: 100%;
     object-fit: cover;
 }

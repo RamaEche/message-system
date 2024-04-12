@@ -4,7 +4,7 @@ require("dotenv").config();
 //const fs = require("fs/promises");
 
 const postRemoveUser = async(req, res)=>{
-	console.log("cuenta borrada");
+	console.log("Deleted account.");
 	res.status(500).json({ok:true});
 
 /* 	let Imgbuffer;
@@ -18,10 +18,6 @@ const postRemoveUser = async(req, res)=>{
 				throw new Error("{ \"ok\":false, \"status\":500, \"err\":\"impossibleRemoveAccount\"}");
 			}
 		}
-
-		//recorrer chats de grupos y usuarios
-		//usar metodo de controller para eliminar chats usuario
-		//usar metodo de controller para salir chats de grupo
 
 		await Users.findByIdAndDelete(req.user.id);
 	}catch(err){

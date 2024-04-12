@@ -1,8 +1,13 @@
 import './FileSelectorOption.css';
 
-function MessageBox({cb}) {
+function MessageBox({className, onClick}) {
     return (
-        <button onClick={()=>{cb()}} className='file-selector-option-container'><img src="https://cdn.icon-icons.com/icons2/2645/PNG/512/vector_pen_icon_159770.png" alt="sfadsd" /></button>
+        <button onClick={()=>{onClick()}} className={className}>
+            <div className='FileSelector-emojis'>
+                <img className="FileSelector-emoji1 FileSelector-emoji" src={`${import.meta.env.VITE_FRONTEND_APP_URL}emoji1.svg`} />
+                <img className="FileSelector-emoji2 FileSelector-emoji" src={`${import.meta.env.VITE_FRONTEND_APP_URL}emoji2.svg`} />
+            </div>
+        </button>
     )
 }
 

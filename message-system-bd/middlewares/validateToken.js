@@ -12,18 +12,18 @@ async function validateToken(req, res){
 			token = req.headers["authorization"].split(" ")[1];
 
 			if (!token) {
-				return res.status(401).json({ err: "Undefined token" });
+				return res.status(401).json({ err: "Undefined token." });
 			}
 		}else if (req.cookies){
 			token = req.cookies.Authorization;
 			console.log(token);
 		}else{
-			return res.status(403).json({ err: "Auth null" });
+			return res.status(403).json({ err: "Auth null." });
 		}
 	
 		let ret = "next";
 		await jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, decoded) => {
-			if(req.authorization){ //webSocket
+			if(req.authorization){ //WebSocket.
 				if (err) {
 					ret = new Error("Error");
 				}
@@ -33,9 +33,9 @@ async function validateToken(req, res){
 				catch(err){
 					ret = new Error("Error");
 				}
-			}else if(req.headers["authorization"]){ //json y formData
+			}else if(req.headers["authorization"]){ //Json y formData.
 				if (err) {
-					ret = res.status(403).json({ err: "Invalid token" });
+					ret = res.status(403).json({ err: "Invalid token." });
 				}
 				try{req.user = await Users.findById(decoded.UserID).exec();}
 				catch(err){
@@ -43,15 +43,15 @@ async function validateToken(req, res){
 				}
 			}else if (req.cookies){ //
 				if (err) {
-					ret = res.status(403).json({ err: "Invalid token" });
+					ret = res.status(403).json({ err: "Invalid token." });
 				}
 				try{req.user = await Users.findById(decoded.UserID).exec();}
 				catch(err){
 					ret = res.status(403).json({ error: "Valid Token But invalid user." });
 				}
-			}else{ //no auth
+			}else{ //No auth.
 				if (err) {
-					ret = res.status(403).json({ err: "Invalid token" });
+					ret = res.status(403).json({ err: "Invalid token." });
 				}
 				try{req.user = await Users.findById(decoded.UserID).exec();}
 				catch(err){

@@ -7,7 +7,7 @@ function CreateGroup() {
     <div className='app-margin'>
       <div className='app-container'>
         <div className='chat-container'><Chats/></div>
-        <div className='messages-container'><Welcome/></div> {/* Welcome o message si hay almacenado el chat de alguien*/}
+        <div className='messages-container'><Welcome/></div> {/* Welcome or message if someone's chat is stored. */}
       </div>
     </div>
   )

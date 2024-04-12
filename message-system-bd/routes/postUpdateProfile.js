@@ -10,7 +10,7 @@ const updateProfile = async(req, res)=>{
 	let Imgbuffer;
 	try{
 		if(req.body){      
-			if(req.body.UserName != req.user.PrivateData.UserName && req.body.UserName.length >= 4 && req.body.UserName.length <= 15){ //username cambio
+			if(req.body.UserName != req.user.PrivateData.UserName && req.body.UserName.length >= 4 && req.body.UserName.length <= 15){ //Username change.
 				try{
 					await Users.updateOne({_id:req.user.id}, {$set:{"PrivateData.UserName":req.body.UserName}});
 				}catch(err){
@@ -22,7 +22,7 @@ const updateProfile = async(req, res)=>{
 		}
 
 		if(req.file){
-			const changeImage = async()=>{ //imagen cambio
+			const changeImage = async()=>{ //Image change.
 				const mediaFiles = path.join(process.env.MEDIA_FILES, "users", `user-ID${req.user.id}`);  
 				fs.rename(path.join(process.env.UPLOADS_FILES, req.file.filename), path.join(mediaFiles, req.file.filename));
     

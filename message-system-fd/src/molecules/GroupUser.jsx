@@ -4,7 +4,7 @@ import Cookies from 'js-cookie'
 
 function GroupUser({name, roll, userId}) {
   const [userCurrentState] = useState(false)
-  const [photoSrc, setPhotoSrc] = useState('https://us.123rf.com/450wm/tuktukdesign/tuktukdesign1606/tuktukdesign160600119/59070200-icono-de-usuario-hombre-perfil-hombre-de-negocios-avatar-icono-persona-en-la-ilustraci%C3%B3n.jpg')
+  const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}user.png`)
   const [token] = useState(Cookies.get('JwtToken'))
   
   const getUserPhotoById = ()=>{

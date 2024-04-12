@@ -16,7 +16,7 @@ function GroupOption({ webSocket }) {
   let files = [];
   const form = useRef(null)
   const [formError] = useState(false)
-  const [chatImage, setChatImage] = useState('https://cdn-icons-png.flaticon.com/512/5989/5989226.png');
+  const [chatImage, setChatImage] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`);
   const [openConfirmation1, setOpenConfirmation1] = useState(false)
   const [openConfirmation2, setOpenConfirmation2] = useState(false)
 
@@ -52,12 +52,12 @@ function GroupOption({ webSocket }) {
   }
 
   useEffect(()=>{
-    //cargar imagen de usuario
+    //Upload user image.
     getChatPhotoById()
 
-    //cargar username del usuario
-    //cargar descripcion del usuario
-    //cargar nombre del usuario
+    //Load username of the user.
+    //Upload user description.
+    //Load username.
     webSocket.emit("getGroupOptionData", {
       authorization: `Barrer ${token}`,
       ChatId:currentChat.chatId
@@ -67,13 +67,13 @@ function GroupOption({ webSocket }) {
     })
   }, [])
 
-  //Resetear formulario con el nombre ya existente
+  //Reset form with the existing name.
   const resetForm = ()=>{
     form.current.reset();
     setValue('Name', serverDataGeted.name);
     setValue('Description', serverDataGeted.description);
     getChatPhotoById()
-    //Poner a input de name el nombre puesto por el main user a ese user
+    //Set name input to the name given by the main user to that user.
   }
 
   useEffect(()=>{
@@ -86,7 +86,7 @@ function GroupOption({ webSocket }) {
     }
   }, [serverDataGeted])
 
-  //Subir formulario
+  //Upload form.
   const submitForm = (e)=>{
     const formData = new FormData();
     formData.append('Name', e.Name)
@@ -161,7 +161,7 @@ function GroupOption({ webSocket }) {
 
   const DeletePhoto = ()=>{
     form.current.reset();
-    setChatImage('https://cdn-icons-png.flaticon.com/512/5989/5989226.png')
+    setChatImage(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
   }
 
   return (
@@ -180,7 +180,7 @@ function GroupOption({ webSocket }) {
             }
             {err.ProfileImage &&
             <div className='form-err-aclaration sing-in-form-err-aclaration'>
-                <p>Error en la foto de perfil</p>
+                <p>Profile photo error</p>
               </div>
             }
             <div className='group-options-profile'>
@@ -197,14 +197,14 @@ function GroupOption({ webSocket }) {
                 <input className='input-text group-input-text' type='text' name='Name' {...register('Name', { maxLength: 20, minLength: 4})}/>
                 {err.Name &&
                   <div className='input-err-aclaration'>
-                    <p>Este campo deve contener entre 4 y 15 caracteres</p>
+                    <p>This field must contain between 4 and 20 characters</p>
                   </div>
                 }
                 <p>Description</p>
                 <input className='input-text' type='text' name='Description' {...register('Description', { maxLength: 80, minLength: 1})}/>
                 {err.Description &&
                   <div className='input-err-aclaration'>
-                    <p>Este campo deve contener entre 1 y 80 caracteres</p>
+                    <p>This field must contain between 1 and 80 characters</p>
                   </div>
                 }
                 <div className='group-options-form-changes-buttons'>

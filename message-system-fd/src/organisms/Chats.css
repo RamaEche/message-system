@@ -17,7 +17,27 @@
     display: flex;
 }
 
+.buttons-pair{
+    margin: 0 5px;
+    display: flex;
+}
 
+.chats-button{
+    height: 32px;
+    width: 32px;
+    
+    background-color: #fff;
+    border-radius: 50%;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chats-icon{
+    width: 100%;
+    height: 100%;
+}
 
 .button{
     background-color: #bbb;
@@ -44,6 +64,6 @@
 
 .chats{
     background-color: #FFFFFF;
-    height: calc(100% - 98px);
+    height: calc(100% - 102px);
     width: 100%;
 }

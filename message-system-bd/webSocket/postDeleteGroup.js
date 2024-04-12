@@ -21,7 +21,7 @@ const postDeleteGroup = async (socket, data) => {
 
 		await Chats.deleteOne({_id: data.chatId});
 
-		//eliminar carpeta de chat
+		//Delete chat folder.
 		const mediaFiles = path.join(process.env.MEDIA_FILES, "chats", `chat-ID${data.chatId}`);
 		await fs.rm(mediaFiles, { recursive: true });
 

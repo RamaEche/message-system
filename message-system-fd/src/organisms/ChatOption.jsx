@@ -9,12 +9,11 @@ function ChatOption({ webSocket }) {
   const { register, handleSubmit, formState, watch, setValue } = useForm()
   const [boxes, setBoxes] = useContext(BoxesContext)
   const [currentChat] = useContext(CurrentChatContext)
-  //const [setOpenConfirmation] = useState(false)
   const [serverDataGeted, setServerDataGeted] = useState(null)
   let err = formState.errors;
   const form = useRef(null)
   const [formError] = useState(false)
-  const [photoSrc, setPhotoSrc] = useState('https://us.123rf.com/450wm/tuktukdesign/tuktukdesign1606/tuktukdesign160600119/59070200-icono-de-usuario-hombre-perfil-hombre-de-negocios-avatar-icono-persona-en-la-ilustraci%C3%B3n.jpg')
+  const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
 
   const MessageBox = ()=>{
     setBoxes({box1:boxes.box1, box2:"MessageBox"})
@@ -55,20 +54,20 @@ function ChatOption({ webSocket }) {
   }
 
   useEffect(()=>{
-    //cargar imagen de usuario
+    //Upload user image.
     getChatPhotoById()
 
-    //cargar username del usuario
-    //cargar descripcion del usuario
-    //cargar nombre del usuario
+    //Load username of the user.
+    //Upload user description.
+    //Load username.
     getChatOptionData()
   }, [])
 
-  //Resetear formulario con el nombre ya existente
+  //Reset form with the existing name.
   const resetForm = ()=>{
     form.current.reset();
     setValue('Name', serverDataGeted.name);
-    //Poner a input de name el nombre puesto por el main user a ese user
+    //Set name input to the name given by the main user to that user.
   }
 
   useEffect(()=>{
@@ -111,7 +110,7 @@ function ChatOption({ webSocket }) {
    .catch((err)=>console.error(err))
   }
 
-  //Bloquear usuario (solo el chat privado, no los grupos)
+  //Block user (private chat only, not groups)
 /*   const blockUser = ()=>{
     setOpenConfirmation(false)
 
@@ -152,7 +151,7 @@ function ChatOption({ webSocket }) {
           }
           {err.ProfileImage &&
           <div className='form-err-aclaration sing-in-form-err-aclaration'>
-              <p>Error en la foto de perfil</p>
+              <p>Profile photo error.</p>
             </div>
           }
           <div className='chat-options-profile'>
@@ -168,7 +167,7 @@ function ChatOption({ webSocket }) {
               <input className='input-text' type='text' name='Name' {...register('Name', { maxLength: 15, minLength: 4})}/>
               {err.Name &&
                 <div className='input-err-aclaration'>
-                  <p>Este campo deve contener entre 4 y 15 caracteres</p>
+                  <p>This field must contain between 4 and 15 characters.</p>
                 </div>
               }
               <div className='chat-options-form-changes-buttons'>

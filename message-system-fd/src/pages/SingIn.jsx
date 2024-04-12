@@ -6,7 +6,7 @@ import errorManager from  '../controllers/errorManager.js'
 
 function SingIn() {
   const { register, handleSubmit, formState, watch } = useForm()
-  const [profileImage, setProfileImage] = useState('');
+  const [profileImage, setProfileImage] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`);
   let files = [];
   let err = formState.errors;
   const [formError, setFormError] = useState(false)
@@ -68,22 +68,22 @@ function SingIn() {
           }
           {err.ProfileImage &&
           <div className='form-err-aclaration sing-in-form-err-aclaration'>
-              <p>Es obligatorio agregar una foto de perfil</p>
+              <p>It is mandatory to add a profile photo.</p>
             </div>
           }
-          <img className='user-image-selector' src={profileImage || 'https://cdn-icons-png.flaticon.com/512/5989/5989226.png'}/>
+          <img className='user-image-selector' src={profileImage}/>
           <div className='image-selector-buttons'>
             <input type='button' onClick={()=>DeletePhoto()} className='link' value='Delete photo'/>
             <div className='sing-in-image-selector link'>
               <input type='file' name='ProfileImage' {...register('ProfileImage', { required: true })}/>
             </div>
           </div>
-          <p className='image-selector-instructions'>Archivo menor a 25x25 px</p>
+          <p className='image-selector-instructions'>File smaller than 25x25px.</p>
           <div className='sing-in-description-container'>
             <input className={err.Description ? "sing-in-description input-text input-err" : "sing-in-description input-text"} name='Description' type='text' placeholder='Description'  {...register('Description', { maxLength: 100, minLength: 1, required: true})}/>
             {err.Description &&
               <div className='input-err-aclaration'>
-                <p>Este campo es obligatorio, y deve contener entre 1 y 100 caracteres</p>
+                <p>This field is required, and must contain between 1 and 100 characters.</p>
               </div>
             }
           </div>
@@ -94,21 +94,21 @@ function SingIn() {
           <input className={err.UserName ? "input-text input-err" : "input-text"} type='text' name='UserName'  {...register('UserName', { maxLength: 15, minLength: 4, required: true})}/>
           {err.UserName &&
             <div className='input-err-aclaration'>
-              <p>Este campo es obligatorio, y deve contener entre 4 y 15 caracteres</p>
+              <p>This field is required, and must contain between 4 and 15 characters.</p>
             </div>
           }
           <label>Password</label>
           <input className={err.Password ? "input-text input-err" : "input-text"} type='text' name='Password'  {...register('Password', { maxLength: 20, minLength: 5, required: true})}/>
           {err.Password &&
             <div className='input-err-aclaration'>
-              <p>Este campo es obligatorio, y deve contener entre 5 y 20 caracteres</p>
+              <p>This field is required, and must contain between 5 and 20 characters.</p>
             </div>
           }
           <label>Validate pasword</label>
           <input className={err.ValidatePasword ? "input-text input-err" : "input-text"} type='text' name='ValidatePasword'  {...register('ValidatePasword', { maxLength: 20, minLength: 5, required: true})}/>
           {err.ValidatePasword &&
             <div className='input-err-aclaration'>
-              <p>Este campo es obligatorio, y deve contener entre 5 y 20 caracteres</p>
+              <p>This field is required, and must contain between 5 and 20 characters.</p>
             </div>
           }
           <input type='submit'/>

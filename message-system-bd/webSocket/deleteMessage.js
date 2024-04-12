@@ -3,7 +3,7 @@ const Chats = require("../models/Chats.js");
 const deleteMessage = async (socket, data, user) => {
 	let chat;
 	try{
-		//Corroborar que el chat exista
+		//Verify that the chat exists.
 		chat = await Chats.findById(data.chatId);
 
 	}catch (err){
@@ -13,13 +13,13 @@ const deleteMessage = async (socket, data, user) => {
 	}
 
 	try{
-		//corroborar que el usuario tenga los permisos para borrar un mensaje en el chat
+		//Verify that the user has the permissions to delete a message in the chat.
 		for (let i = 0; i < chat.Users.length; i++) {
 			if(chat.Users[i].UserId == user.id){
 				if(chat.Users[i].Roll != "N" && chat.Users[i].Roll != "A"){
 					throw new Error("Unprivileged user.");
 				}else{
-					//comprueba que el mensaje a borrar lo haya posteado ese usuario
+					//Check that the message to be deleted was posted by that user.
 					if(user.id != chat.Messages.filter(msg => msg.id == data.messageId)[0].SentById){
 						throw new Error("Unprivileged user.");
 					}

@@ -5,7 +5,7 @@ import Cookies from 'js-cookie'
 
 function AboutMessageUser({id, focusedChat}) {
   const [currentChat] = useContext(CurrentChatContext)
-  const [photoSrc, setPhotoSrc] = useState('https://us.123rf.com/450wm/tuktukdesign/tuktukdesign1606/tuktukdesign160600119/59070200-icono-de-usuario-hombre-perfil-hombre-de-negocios-avatar-icono-persona-en-la-ilustraci%C3%B3n.jpg')
+  const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
   const [messageStateText, setMessageStateText] = useState()
   const [fileStateText, setFileStateText] = useState()
   const [name, setName] = useState("")
@@ -45,7 +45,7 @@ function AboutMessageUser({id, focusedChat}) {
     let fullMessageState = focusedChat.messageState
     let fullFileState = focusedChat.fileState
 
-    if(fullMessageState == "mixed"){ //Si focusedChat.messageState es mixed
+    if(fullMessageState == "mixed"){ //If focusedChat.messageState is mixed.
         fullMessageState = "onServer";
         if(fullFileState != "none"){
             fullFileState = "onServer"

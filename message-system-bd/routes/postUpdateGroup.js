@@ -12,7 +12,7 @@ const postUpdateGroup = async(req, res)=>{
 	let Imgbuffer;
 	try{
 		if(req.body){      
-			if(req.body.Name != chat.Name && req.body.Name.length >= 4 && req.body.Name.length <= 20){ //name cambio
+			if(req.body.Name != chat.Name && req.body.Name.length >= 4 && req.body.Name.length <= 20){ //Username change.
 				try{
 					await Chats.updateOne({_id:req.headers["chatid"]}, {$set:{"Name":req.body.Name}});
 				}catch(err){
@@ -22,7 +22,7 @@ const postUpdateGroup = async(req, res)=>{
 				throw new Error("{ \"ok\":false, \"status\":400, \"err\":\"invalidInputs\"}");
 			}
 
-			if(req.body.Description != chat.Description && req.body.Description.length >= 1 && req.body.Description.length <= 80){ //name cambio
+			if(req.body.Description != chat.Description && req.body.Description.length >= 1 && req.body.Description.length <= 80){ //Username change.
 				try{
 					await Chats.updateOne({_id:req.headers["chatid"]}, {$set:{"Description":req.body.Description}});
 				}catch(err){
@@ -36,7 +36,7 @@ const postUpdateGroup = async(req, res)=>{
 
 		console.log(req.file);
 		if(req.file){
-			const changeImage = async()=>{ //imagen cambio
+			const changeImage = async()=>{ //Image change.
 				const mediaFiles = path.join(process.env.MEDIA_FILES, "chats", `chat-ID${req.headers["chatid"]}`);  
 				fs.rename(path.join(process.env.UPLOADS_FILES, req.file.filename), path.join(mediaFiles, req.file.filename));
     
