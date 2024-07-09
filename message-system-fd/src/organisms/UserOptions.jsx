@@ -20,7 +20,7 @@ function UserOptions() {
   const [token] = useState(Cookies.get('JwtToken'))
   
   const Chats = ()=>{
-    setBoxes({box1:"Chats", box2:boxes.box2})
+    setBoxes({box1:"Chats", box2:boxes.box2, currentBox:1})
   }
 
   const onSubmit = (e)=>{
@@ -122,8 +122,8 @@ function UserOptions() {
               </div>
             }
             <div className='user-options-form-changes-buttons'>
-              <input onClick={()=>DeletePhoto()} type='reset'/>
-              <input className='user-options-submit' type='submit'/>
+              <input onClick={()=>DeletePhoto()} type='reset' className='reset-button' value="Reset"/>
+              <input className='user-options-submit reset-button' type='submit' value="Send"/>
             </div>
         </div>
       </form>

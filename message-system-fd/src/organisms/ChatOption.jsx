@@ -16,7 +16,7 @@ function ChatOption({ webSocket }) {
   const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
 
   const MessageBox = ()=>{
-    setBoxes({box1:boxes.box1, box2:"MessageBox"})
+    setBoxes({box1:boxes.box1, box2:"MessageBox", currentBox:2})
   }
 
   watch('Name', '');
@@ -171,8 +171,8 @@ function ChatOption({ webSocket }) {
                 </div>
               }
               <div className='chat-options-form-changes-buttons'>
-                <input onClick={handleSubmit(data=>resetForm(data))} type='reset'/>
-                <input className='main-button' type='submit'/>
+                <input className='reset-button' onClick={handleSubmit(data=>resetForm(data))} type='reset' value="Reset"/>
+                <input className='main-button send-button' type='submit' value="Send"/>
               </div>
           </div>
         </form>

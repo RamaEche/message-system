@@ -59,6 +59,7 @@
     width: 120px;
     height: 30px;
     margin: 0 5px;
+    transition: .5s;
 }
 
 .chat-options-link{
@@ -70,6 +71,10 @@
 .chat-option-go-back-arrow img{
     width: 100%;
     margin-left: 10px;
+}
+
+.chat-option-go-back-arrow img:hover{
+    filter: invert(0.16);
 }
 
 .chat-options-profile{
@@ -89,8 +94,12 @@
 }
 
 .chat-options-profile-data{
-    max-width: 250px;
+    max-width: 360px;
     margin-left: 15px;
+}
+
+.chat-options-profile-data p{
+    margin-top: 5px;
 }
 
 .chat-options-container p{

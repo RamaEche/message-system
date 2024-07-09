@@ -27,6 +27,10 @@
     margin-left: 10px;
 }
 
+.search-user-go-back-arrow img:hover{
+    filter: invert(0.16);
+}
+
 .search-user-outstanding-logo{
     margin: auto;
 }

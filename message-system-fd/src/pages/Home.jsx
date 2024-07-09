@@ -11,7 +11,7 @@ import GroupOption from '../organisms/GroupOption'
 import AboutMessage from '../organisms/AboutMessage'
 
 import './Home.css'
-import {useState, createContext} from 'react'
+import {useState, createContext, useEffect, useRef} from 'react'
 
 const BoxesContext = createContext()
 const UserIdContext = createContext()
@@ -19,13 +19,55 @@ const CurrentChatContext = createContext()
 export { BoxesContext, UserIdContext, CurrentChatContext }
 
 function Home() {
-  const [boxes, setBoxes] = useState({box1:'Chats', box2:'Welcome'})
+  const [boxes, setBoxes] = useState({box1:'Chats', box2:'Welcome', currentBox:1})
+  const [oneBoxeMode, setOneBoxeMode] = useState(null)
   const [webSocket, setWebSocket] = useState(null)
   const [userId, setUserId] = useState(null)
   const [currentChat, setCurrentChat] = useState({chatId:null, chatType:null, chatMessages:null, chatFocusMessage:null, removeNotifications: null, chatData: null})
   const [newUserToAdd, setNewUserToAdd] = useState({id:null, userImage:null, userName:null, userDescription:null})
   const [chats, setChats] = useState(null)
   const [searchType, setSearchType] = useState("error")
+  const box1 = useRef(null)
+  const box2 = useRef(null)
+
+  const handleResize = () => {
+    console.log(window.innerWidth)
+    if(window.innerWidth <= 850){
+      setOneBoxeMode(true)
+      setBoxes(boxes)
+      box1.current.classList.remove("none")
+      box2.current.classList.add("none")
+      console.log(boxes)
+    }else{
+      setOneBoxeMode(false)
+      box1.current.classList.remove("none")
+      box2.current.classList.remove("none")
+    }
+  }
+
+  useEffect(()=>{
+    window.addEventListener("resize", handleResize, false);
+  }, [])
+
+  useEffect(()=>{
+    oneBoxeMode == null && handleResize()
+  }, [oneBoxeMode])
+
+  useEffect(()=>{
+    if(oneBoxeMode){
+      console.log(2)
+      if(boxes.currentBox == 1){
+        box2.current.classList.add("none")
+        box1.current.classList.remove("none")
+      }
+  
+      if(boxes.currentBox == 2){
+        box1.current.classList.add("none")
+        box2.current.classList.remove("none")
+      }
+    }
+    console.log(boxes)
+  }, [boxes])
 
   return (
     <CurrentChatContext.Provider value={[currentChat, setCurrentChat]}>
@@ -36,7 +78,7 @@ function Home() {
             {/* <ImagePlayer/> */}
             {/* <VideoPlayer/> */}
             <div className='app-container'>
-              <div className='box1'>
+              <div ref={box1} className='box1'>
                 {boxes.box1 == 'Chats' ? (
                     <Chats webSocket={webSocket} setWebSocket={setWebSocket} setSearchType={setSearchType} chats={chats} setChats={setChats}/>
                   ) : boxes.box1 == 'UserOptions' ? (
@@ -50,7 +92,7 @@ function Home() {
                   )
                 }
               </div>
-              <div className='box2'>
+              <div ref={box2} className='box2'>
                 {boxes.box2 == 'Welcome' ? (
                     <Welcome/>
                   ) : boxes.box2 == 'MessageBox' ? (

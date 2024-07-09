@@ -17,7 +17,7 @@ function CreateGroup({ webSocket, chats }) {
   let err = formState.errors;
 
   const Chats = ()=>{
-    setBoxes({box1:"Chats", box2:boxes.box2})
+    setBoxes({box1:"Chats", box2:boxes.box2, currentBox:1})
   }
 
   useEffect(()=>{
@@ -97,7 +97,7 @@ function CreateGroup({ webSocket, chats }) {
                 <p>This field must contain between 1 and 80 characters</p>
               </div>
             }
-            <input className='main-button create-group-files-button' type='submit' value="Create group"/>
+            <input className='main-button create-group-files-button send-button' type='submit' value="Create group"/>
           </div>
           <h2 className='add-user-added-users-title'>Add user:</h2>
           <div className='create-group-added-users'>

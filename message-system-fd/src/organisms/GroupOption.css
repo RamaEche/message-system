@@ -60,6 +60,7 @@
     width: 120px;
     height: 30px;
     margin: 0 5px;
+    transition: .2s;
 }
 
 .group-options-link{
@@ -71,6 +72,10 @@
 .group-option-go-back-arrow img{
     width: 100%;
     margin-left: 10px;
+}
+
+.group-option-go-back-arrow img:hover{
+    filter: invert(0.16);
 }
 
 .group-options-profile{

@@ -1,3 +1,12 @@
+.fileSelector-close-panel{
+    background-color: #0000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
 .file-selector-option-container{
     box-shadow: 0 0 5px .5px #555;
     background-color: #fff;
@@ -10,7 +19,7 @@
 }
 
 .file-selector-option-container img{
-    width: 70%;
+    width: 80%;
     position: relative;
     top: 1px;
 }
@@ -62,11 +71,11 @@
 
 .FileSelector-emojis{
     display: flex;
-    transform:translateX(-3px) translateY(-2px);
+    transform:translateX(-11px) translateY(-2px);
 }
 
 .FileSelector-emoji{
-    width: 55%;
+    width: 70%;
     margin: auto;
     padding-top: 4px;
 }
@@ -74,14 +83,14 @@
 .FileSelector-emoji1{
     animation-name: emoji1;
     animation-iteration-count: infinite;
-    animation-duration: 5s;
+    animation-duration: 7s;
     position: relative;
-    left: calc(27.5%);
+    left: calc(35%);
 }
 .FileSelector-emoji2{
     animation-name: emoji2;
     animation-iteration-count: infinite;
-    animation-duration: 5s;
+    animation-duration: 7s;
     position: relative;
-    left: calc(-27.5%);
+    left: calc(-35%);
 }

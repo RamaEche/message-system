@@ -1,29 +1,3 @@
-.app-margin{
-  display: flex;
-  height: 100vh;
-  justify-content: center;
-  background-color: gray;
-}
-
-.container{
-  height: max-content;
-  height: 100%;
-  width: 100vw;
-  max-width: 1500px;
-  background-color: rebeccapurple;
-  display: flex;
-}
-
-.box1{
-  background-color: goldenrod;
-  width: 35vw;
-}
-
-.box2{
-  background-color: white;
-  width: 65vw;
-}
-
 .hidden{
   display: none;
 }
@@ -31,30 +5,4 @@
 .main-button{
   background-color: #00AA25;
   color: #fff;
-}
-
-@media (max-width: 850px) {
-  .container{
-    width: 70%;
-  }
-
-  .box1{
-    width: 100%;
-  }
-  
-  .box2{
-    display: none;
-  }
-}
-
-@media (max-width: 550px) {
-  .container{
-    width: 85%;
-  }
-}
-
-@media (max-width: 450px) {
-  .container{
-    width: 100%;
-  }
 }

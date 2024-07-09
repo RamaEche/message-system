@@ -11,18 +11,15 @@
     height: 95%;
     width: 100vw;
     max-width: 1500px;
-    background-color: rebeccapurple;
     display: flex;
   }
   
   .box1{
     border-right: solid 1px #aaa;
-    background-color: goldenrod;
     width: 35%;
   }
   
   .box2{
-    background-color: white;
     width: 65%;
   }
   
@@ -46,7 +43,7 @@
     }
     
     .box2{
-      display: none;
+      width: 100%;
     }
   }
   

@@ -6,6 +6,8 @@ import {BoxesContext} from "../pages/Home"
 import * as JsSearch from 'js-search';
 import { useForm } from 'react-hook-form'
 import Cookies from 'js-cookie'
+import NoMoreUsers from '../atoms/NoMoreUsers'
+import Loading from '../atoms/Loading'
 
 function SearchUser({searchType, webSocket, chats, parentOrdedChats=[], setParentOrdedChats, setNewUserToAdd, header=true, setReturnCurrentSearchKnownUsers}) {
   const [token] = useState(Cookies.get('JwtToken'))
@@ -15,7 +17,7 @@ function SearchUser({searchType, webSocket, chats, parentOrdedChats=[], setParen
   const [lastSetTimeoutValue, setLastSetTimeoutValue] = useState(false)
 
   const Chats = ()=>{
-    setBoxes({box1:"Chats", box2:boxes.box2})
+    setBoxes({box1:"Chats", box2:boxes.box2, currentBox:1})
   }
 
   const postSearchKnownUsersByValue = (inputValue)=>{
@@ -171,10 +173,10 @@ function SearchUser({searchType, webSocket, chats, parentOrdedChats=[], setParen
         <div className=''>
           {ordedChats == null && parentOrdedChats == null ?
             (
-              <div>loading...</div>
+              <Loading/>
             ): ordedChats.length == 0 && parentOrdedChats.length == 0 ?
             (
-              <div>No more users found.</div>
+              <NoMoreUsers/>
             )
             :(
               searchType == "unknownUsers" ?

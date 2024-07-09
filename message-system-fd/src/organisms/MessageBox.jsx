@@ -1,12 +1,12 @@
 import './MessageBox.css'
 import Cookies from "js-cookie";
-import {useState, useContext, useEffect} from 'react'
+import {useState, useContext, useEffect, lazy, Suspense} from 'react'
 import {BoxesContext, UserIdContext, CurrentChatContext} from "../pages/Home"
 import Message from '../molecules/Message'
 import { useForm } from 'react-hook-form'
 import FileSelectorOption from '../atoms/FileSelectorOption'
 
-function MessageBox({ webSocket }) {
+  function MessageBox({ webSocket }) {
   const [messageInputFileButton, setMessageInputFileButton] = useState('close')
   const [boxes, setBoxes] = useContext(BoxesContext)
   const [currentChat, setCurrentChat] = useContext(CurrentChatContext)
@@ -14,7 +14,13 @@ function MessageBox({ webSocket }) {
   const [token] = useState(Cookies.get('JwtToken'))
   const [userId] = useContext(UserIdContext)
 
-  const { register, handleSubmit, reset } = useForm()
+  const LazyLoadedComponent = lazy(() => import('emoji-picker-react')); // The import: import EmojiPicker from 'emoji-picker-react';
+
+  const { register, handleSubmit, reset, setValue, watch } = useForm()
+
+  const Chats = ()=>{
+    setBoxes({box1:"Chats", box2:boxes.box2, currentBox:1})
+  }
 
   const ChatOption = ()=>{
     if(currentChat.chatType == "U"){
@@ -25,7 +31,7 @@ function MessageBox({ webSocket }) {
   }
 
   const sendMessage = (data)=>{
-    if(data.text.replaceAll(' ', '') == '') {
+    if(data.replaceAll(' ', '') == '') {
       reset();
       return 0
     }
@@ -34,7 +40,7 @@ function MessageBox({ webSocket }) {
     createMessage(
       undefined,
       currentChat.chatData.type,
-      data.text,
+      data,
       new Date(),
       name,
       true,
@@ -47,7 +53,7 @@ function MessageBox({ webSocket }) {
     webSocket.emit("postNewMessage", {
       authorization: `Barrer ${token}`,
       chatId:currentChat.chatId,
-      text:data.text
+      text:data
     });
     reset();
   }
@@ -79,7 +85,6 @@ function MessageBox({ webSocket }) {
       setMessages([])
       webSocket.emit('getMessagesChunk', {authorization: `Barrer ${token}`, chatId:currentChat.chatId, chunk:0})
     }
-
   }, [currentChat])
 
   useEffect(()=>{
@@ -142,17 +147,31 @@ function MessageBox({ webSocket }) {
     });
   }, [])
 
+  const prueba = (emojiData)=>{
+    setValue('text', watch("text")+String.fromCodePoint(parseInt(emojiData.unified, 16)), { shouldValidate: true })
+  }
+
+  const manejarKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      sendMessage(event.target.value);
+    }
+  };
+
   return (
     <div className='message-box'>
-      <div className="message-box-bar" onClick={()=>ChatOption()}>
-        <div className='message-box-profile-data'>
-          <div className='message-box-profile-photo'></div>
-          <div>
-              <h3>Matias</h3>
-              <div>Online</div>
+      <div className="message-box-bar-container">
+        <div className='message-box-go-back-arrow' onClick={()=>Chats()}><a className='go-back-arrow'><img src='arrow.png'/></a></div>
+        <div className="message-box-bar" onClick={()=>ChatOption()}>
+          <div className='message-box-profile-data'>
+            <div className='message-box-profile-photo'></div>
+            <div>
+                <h3>Matias</h3>
+                <div>Online</div>
+            </div>
           </div>
+          <img src='options.png' className='message-box-profile-options'/>
         </div>
-        <img src='options.png' className='message-box-profile-options'/>
       </div>
       <div className='message-box-messages'>
         <div className='message-box-messages-container'>
@@ -161,15 +180,20 @@ function MessageBox({ webSocket }) {
           ))}
         </div>
       </div>
-      <form className='message-box-input' onSubmit={handleSubmit((data)=>sendMessage(data))}>
-        <input type='text' className='message-box-input-text' placeholder='Send mensage...' {...register('text', {required: true})}/>
-        <FileSelectorOption className='message-input-file' onClick={()=>{if(messageInputFileButton == "open"){setMessageInputFileButton("closed")}else{setMessageInputFileButton("open")}}}></FileSelectorOption>
-        <input type="submit" className='message-input-send'/>
-        {/* <img src="./sendArrow.png"/> */}
+      <form className='message-box-input' onSubmit={handleSubmit((data)=>sendMessage(data.text))}>
+        <input type='text' className='message-box-input-text' placeholder='Send mensage...' onKeyDown={manejarKeyPress} {...register('text', {required: true})}/>
+        <FileSelectorOption className='message-input-file' messageInputFileButton={messageInputFileButton} setMessageInputFileButton={setMessageInputFileButton} onClick={()=>{setMessageInputFileButton("open")}}></FileSelectorOption>
+        <div className='message-input-send-container'>
+          <input type="submit" className='message-input-send' value=""/>
+        </div>
       </form>
       {messageInputFileButton == "open" &&(
         <div className='message-box-input-file'>
-            {/* <FileSelectorOption cb={UploadImage()}/> */}
+              <div>
+                <Suspense fallback={<><br/><br/>Loading...</>}>
+                  <LazyLoadedComponent onEmojiClick={(Emoji)=>prueba(Emoji)} emojiStyle={"google"} skinTonesDisabled={true} lazyLoadEmojis={true}/>
+                </Suspense>
+              </div>
           <div className='message-box-input-file-detail'></div>
         </div>
       )}

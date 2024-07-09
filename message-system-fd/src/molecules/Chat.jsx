@@ -15,15 +15,15 @@ function Chat({onClick=false, socket, ChatID, Type, Name, Description, IgnoredMe
 
   
   const OpenChat = ()=>{
-    setBoxes({box1:boxes.box1, box2:"MessageBox"})
-    setCurrentChat(currentChatData =>{
-      currentChatData.chatId = ChatID
-      currentChatData.chatType = Type
-      return currentChatData
-    })
+    setCurrentChat(currentChatData =>({
+      ...currentChatData,
+      chatId: ChatID,
+      chatType: Type,
+    }))
+    setBoxes({box1:boxes.box1, box2:"MessageBox", currentBox:2})
     setIgnoredMessages(0)
   }
-
+  
   useEffect(()=>{
     setIgnoredMessages(IgnoredMessageCounter)
   },[IgnoredMessageCounter])

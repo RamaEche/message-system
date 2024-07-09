@@ -7,6 +7,10 @@
     align-items: center;
 }
 
+.chat-box:hover{
+    background-color: #f0f0f0;
+}
+
 .chat-content{
     height: 100%;
     width: calc(100% - 20px);

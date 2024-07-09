@@ -14,7 +14,7 @@ function AboutMessage({ webSocket }) {
   const [openConfirmation, setOpenConfirmation] = useState(false)
 
   const MessageBox = ()=>{
-    setBoxes({box1:boxes.box1, box2:"MessageBox"})
+    setBoxes({box1:boxes.box1, box2:"MessageBox", currentBox:2})
   }
 
   useEffect(()=>{

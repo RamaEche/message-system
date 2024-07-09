@@ -4,6 +4,7 @@ import {useContext, useEffect, useState} from 'react'
 import {BoxesContext, UserIdContext, CurrentChatContext} from '../pages/Home'
 import Cookies from 'js-cookie'
 import socketIOClient from 'socket.io-client';
+import Loading from "../atoms/Loading.jsx"
 
 function Chats({ webSocket, setWebSocket, setSearchType, chats, setChats}) {
   const [token] = useState(Cookies.get('JwtToken'))
@@ -15,20 +16,20 @@ function Chats({ webSocket, setWebSocket, setSearchType, chats, setChats}) {
 
   const SearchChat = ()=>{
     setSearchType("knownUsers")
-    setBoxes({box1:'SearchUser', box2:boxes.box2});
+    setBoxes({box1:'SearchUser', box2:boxes.box2, currentBox:1});
   }
 
   const UserOptions = ()=>{
-    setBoxes({box1:'UserOptions', box2:boxes.box2});
+    setBoxes({box1:'UserOptions', box2:boxes.box2, currentBox:1});
   }
 
   const CreateGroup = ()=>{
-    setBoxes({box1:'CreateGroup', box2:boxes.box2});
+    setBoxes({box1:'CreateGroup', box2:boxes.box2, currentBox:1});
   }
 
   const AddUser = ()=>{
     setSearchType("unknownUsers")
-    setBoxes({box1:'SearchUser', box2:boxes.box2}); //The user is searched and then added.
+    setBoxes({box1:'SearchUser', box2:boxes.box2, currentBox:1}); //The user is searched and then added.
   }
 
   useEffect(()=>{
@@ -102,7 +103,7 @@ function Chats({ webSocket, setWebSocket, setSearchType, chats, setChats}) {
       <div className="chats">
         {chats == null ?
         (
-          <div>loading...</div>
+          <Loading/>
         ):
         (
           chats.map((chat, i)=>{

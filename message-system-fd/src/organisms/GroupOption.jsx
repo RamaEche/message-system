@@ -21,7 +21,7 @@ function GroupOption({ webSocket }) {
   const [openConfirmation2, setOpenConfirmation2] = useState(false)
 
   const MessageBox = ()=>{
-    setBoxes({box1:boxes.box1, box2:"MessageBox"})
+    setBoxes({box1:boxes.box1, box2:"MessageBox", currentBox:2})
   }
 
   watch('Name', '');
@@ -208,8 +208,8 @@ function GroupOption({ webSocket }) {
                   </div>
                 }
                 <div className='group-options-form-changes-buttons'>
-                  <input onClick={data=>resetForm(data)} type='reset'/>
-                  <input className='main-button' type='submit'/>
+                  <input className='reset-button' onClick={data=>resetForm(data)} type='reset' value='Reset'/>
+                  <input className='main-button send-button' type='submit' value='Send'/>
                 </div>
             </div>
           </form>

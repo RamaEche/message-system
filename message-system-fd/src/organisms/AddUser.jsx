@@ -12,7 +12,7 @@ function AddUser({ webSocket, newUserToAdd }) {
   let err = formState.errors;
 
   const Chats = ()=>{
-    setBoxes({box1:"Chats", box2:boxes.box2})
+    setBoxes({box1:"Chats", box2:boxes.box2, currentBox:1})
   }
 
   const addUser = (e)=>{
