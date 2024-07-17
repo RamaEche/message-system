@@ -16,7 +16,13 @@ const updateProfile = async(req, res)=>{
 				}catch(err){
 					throw new Error("{ \"ok\":false, \"status\":400, \"err\":\"alreadyRegistered\"}");
 				}
-			}else if(req.body.UserName != 0){
+			}else if(req.body.UserName != req.user.PrivateData.UserName){
+				throw new Error("{ \"ok\":false, \"status\":400, \"err\":\"invalidInputs\"}");
+			}
+
+			if(req.body.Description != req.user.PrivateData.Description && req.body.Description.length >= 1 && req.body.Description.length <= 100){ //Description change.
+				await Users.updateOne({_id:req.user.id}, {$set:{"PrivateData.Description":req.body.Description}});
+			}else if(req.body.Description != req.user.PrivateData.Description){
 				throw new Error("{ \"ok\":false, \"status\":400, \"err\":\"invalidInputs\"}");
 			}
 		}

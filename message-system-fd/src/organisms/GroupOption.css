@@ -2,10 +2,24 @@
     width: 100%;
     height: 100%;
     background-color: #fff;
+}
+
+.group-option-content{
+    width: 100%;
+    height: calc(100% - 55px);
     border-right: solid 1px #aaa;
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+.group-option-content-scroll{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: inherit;
 }
 
 .group-option-bar{
@@ -104,11 +118,22 @@
 }
 
 .group-options-bar-people-container{
-    width: 75%;
+    max-width: 751px;
+    width: 100%;
     margin-top: 20px;
-    padding: 10px;
-    background-color: #999;
     margin-bottom: 30px;
+}
+
+.group-options-bar-people{
+    border-top: solid 1px #aaa;
+    border-left: solid 1px #aaa;
+    border-right: solid 1px #aaa;
+}
+
+.group-options-bar-people-title{
+    font-weight: 600;
+    margin-bottom: 5px;
+    padding-left: 5px;
 }
 
 .group-input-text{

@@ -53,3 +53,17 @@
   margin: 20px 0 10px 0;
   padding: 10px 0;
 }
+
+@media (max-height: 700px){
+  .log-in-title {
+    margin-top: 100px;
+  }
+
+  .log-in-page {
+    justify-content: flex-start;
+  }
+
+  .log-in-account-data{
+    margin-bottom: 100px;
+  }
+}

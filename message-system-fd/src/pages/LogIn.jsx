@@ -56,7 +56,7 @@ function LogIn() {
               <p>This field is required, and must contain between 5 and 20 characters.</p>
             </div>
           }
-          <input type='submit'/>
+          <input type='submit' value="Send"/>
           <a className='sing-in-link' href='/SingIn'>Sing in</a>
         </div>
       </form>

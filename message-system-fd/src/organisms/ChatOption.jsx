@@ -1,23 +1,19 @@
 import './ChatOption.css'
 import {useState, useContext, useEffect, useRef} from 'react'
-import {BoxesContext, CurrentChatContext} from "../pages/Home"
+import {CurrentChatContext} from "../pages/Home"
 import { useForm } from 'react-hook-form'
 import Cookies from 'js-cookie'
+import GoBackArrow from '../atoms/GoBackArrow'
 
 function ChatOption({ webSocket }) {
   const [token] = useState(Cookies.get('JwtToken'))
   const { register, handleSubmit, formState, watch, setValue } = useForm()
-  const [boxes, setBoxes] = useContext(BoxesContext)
   const [currentChat] = useContext(CurrentChatContext)
   const [serverDataGeted, setServerDataGeted] = useState(null)
   let err = formState.errors;
   const form = useRef(null)
   const [formError] = useState(false)
   const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
-
-  const MessageBox = ()=>{
-    setBoxes({box1:boxes.box1, box2:"MessageBox", currentBox:2})
-  }
 
   watch('Name', '');
 
@@ -139,7 +135,7 @@ function ChatOption({ webSocket }) {
   return (
     <div className='chat-option-container'>
       <div className='chat-option-bar'>
-        <a className='chat-option-go-back-arrow' onClick={()=>MessageBox()}><img src='arrow.png'/></a>
+        <GoBackArrow changeTo="MessageBox" boxNumber={2}/>
         <h1 className='chat-option-outstanding-logo'>Text Message System</h1>
       </div>
       {serverDataGeted &&

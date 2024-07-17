@@ -167,68 +167,75 @@ function GroupOption({ webSocket }) {
   return (
     <div className='group-option-container'>
       <div className='group-option-bar'>
-        <a className='group-option-go-back-arrow' onClick={()=>MessageBox()}><img src='arrow.png'/></a>
+          <a className='group-option-go-back-arrow' onClick={()=>MessageBox()}><img src='arrow.png'/></a>
         <h1 className='group-option-outstanding-logo'>Text Message System</h1>
       </div>
-      {serverDataGeted &&
-        <>
-          <form className='group-options-form-container' ref={form} onSubmit={handleSubmit((data)=>submitForm(data))}>
-            {formError &&
-              <div className='form-err-aclaration'>
-                <p>{formError}</p>
-              </div>
-            }
-            {err.ProfileImage &&
-            <div className='form-err-aclaration sing-in-form-err-aclaration'>
-                <p>Profile photo error</p>
-              </div>
-            }
-            <div className='group-options-profile'>
-              <img className='group-options-profile-photo' src={chatImage}/>
-              <div className='group-options-profile-data'>
-                <input type='button' onClick={()=>DeletePhoto()} className='link' value='Delete photo'/>
-                <div className='sing-in-image-selector link'>
-                  <input type='file' name='ChatImage' {...register('ChatImage')}/>
-                </div>
-              </div>
-            </div>
-            <div className='group-options-container'>
-                <p>Name</p>
-                <input className='input-text group-input-text' type='text' name='Name' {...register('Name', { maxLength: 20, minLength: 4})}/>
-                {err.Name &&
-                  <div className='input-err-aclaration'>
-                    <p>This field must contain between 4 and 20 characters</p>
+      <div className='group-option-content'>
+        <div className='group-option-content-scroll'>
+          {serverDataGeted &&
+            <>
+                <form className='group-options-form-container' ref={form} onSubmit={handleSubmit((data)=>submitForm(data))}>
+                  {formError &&
+                    <div className='form-err-aclaration'>
+                      <p>{formError}</p>
+                    </div>
+                  }
+                  {err.ProfileImage &&
+                  <div className='form-err-aclaration sing-in-form-err-aclaration'>
+                      <p>Profile photo error</p>
+                    </div>
+                  }
+                  <div className='group-options-profile'>
+                    <img className='group-options-profile-photo' src={chatImage}/>
+                    <div className='group-options-profile-data'>
+                      <input type='button' onClick={()=>DeletePhoto()} className='link' value='Delete photo'/>
+                      <div className='sing-in-image-selector link'>
+                        <input type='file' name='ChatImage' {...register('ChatImage')}/>
+                      </div>
+                    </div>
                   </div>
-                }
-                <p>Description</p>
-                <input className='input-text' type='text' name='Description' {...register('Description', { maxLength: 80, minLength: 1})}/>
-                {err.Description &&
-                  <div className='input-err-aclaration'>
-                    <p>This field must contain between 1 and 80 characters</p>
+                  <div className='group-options-container'>
+                      <p>Name</p>
+                      <input className='input-text group-input-text' type='text' name='Name' {...register('Name', { maxLength: 20, minLength: 4})}/>
+                      {err.Name &&
+                        <div className='input-err-aclaration'>
+                          <p>This field must contain between 4 and 20 characters</p>
+                        </div>
+                      }
+                      <p>Description</p>
+                      <input className='input-text' type='text' name='Description' {...register('Description', { maxLength: 80, minLength: 1})}/>
+                      {err.Description &&
+                        <div className='input-err-aclaration'>
+                          <p>This field must contain between 1 and 80 characters</p>
+                        </div>
+                      }
+                      <div className='group-options-form-changes-buttons'>
+                        <input className='reset-button' onClick={data=>resetForm(data)} type='reset' value='Reset'/>
+                        <input className='main-button send-button' type='submit' value='Send'/>
+                      </div>
                   </div>
-                }
-                <div className='group-options-form-changes-buttons'>
-                  <input className='reset-button' onClick={data=>resetForm(data)} type='reset' value='Reset'/>
-                  <input className='main-button send-button' type='submit' value='Send'/>
+                </form>
+                <div className='group-options-bar-people-container'>
+                  <p className='group-options-bar-people-title'>Group users:</p>
+                  <div className='group-options-bar-people'>
+                    { currentChat.chatData.users.map(({name, roll, userId})=>(
+                        <GroupUser key={userId} name={name} roll={roll} userId={userId}/>
+                      ))
+                    }
+                  </div>
                 </div>
-            </div>
-          </form>
-          <div className='group-options-bar-people-container'>
-            { currentChat.chatData.users.map(({name, roll, userId})=>(
-                <GroupUser key={userId} name={name} roll={roll} userId={userId}/>
-              ))
-            }
-          </div>
-          <button className='user-options-link link-red' onClick={()=>setOpenConfirmation1(true)}>Leave the group</button>
-          <button className='user-options-link link-red' onClick={()=>setOpenConfirmation2(true)}>Delete group</button>
-          {openConfirmation1 &&
-            <Confirmation cbFalse={()=>setOpenConfirmation1(false)} cbTrue={()=>leaveTheGroup()} text="Are you sure you want to leave the group?"/>
+                <button className='user-options-link link-red' onClick={()=>setOpenConfirmation1(true)}>Leave the group</button>
+                <button className='user-options-link link-red' onClick={()=>setOpenConfirmation2(true)}>Delete group</button>
+                {openConfirmation1 &&
+                  <Confirmation cbFalse={()=>setOpenConfirmation1(false)} cbTrue={()=>leaveTheGroup()} text="Are you sure you want to leave the group?"/>
+                }
+                {openConfirmation2 &&
+                  <Confirmation cbFalse={()=>setOpenConfirmation2(false)} cbTrue={()=>deleteGroup()} text="Are you sure you want to delete the group?"/>
+                }
+            </>
           }
-          {openConfirmation2 &&
-            <Confirmation cbFalse={()=>setOpenConfirmation2(false)} cbTrue={()=>deleteGroup()} text="Are you sure you want to delete the group?"/>
-          }
-        </>
-      }
+        </div>
+      </div>
     </div>
   )
 }

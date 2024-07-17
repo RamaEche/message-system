@@ -6,6 +6,10 @@
   user-select: none;
 }
 
+h1{
+  font-size: clamp(20px, 1.8vw, 30px);
+}
+
 .none{
   display: none;
 }
@@ -52,7 +56,8 @@
 .outstanding-logo{
   position: absolute;
   top: 0;
-  margin-top: 10px;
+  padding-top: 10px;
+  background-color: #fff;
 }
 
 .input-err{
@@ -151,21 +156,4 @@
 .user-option-go-back-arrow img{
   width: 100%;
   margin-left: 10px;
-}
-
-.go-back-arrow{
-  width: 30px;
-  filter: invert();
-  display: flex;
-  align-items: center;
-  position: absolute;
-  padding-left: 10px;
-}
-
-.go-back-arrow img:hover{
-  filter: invert(0.16);
-}
-
-.go-back-arrow img{
-  width: 100%;
 }

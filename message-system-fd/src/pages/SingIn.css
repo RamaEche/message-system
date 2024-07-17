@@ -95,12 +95,16 @@
     display: flex;
   }
 
-  .sing-in-account-data{
-    margin-left: 60px;
+  .sing-in-title {
+    margin-top: 100px;
   }
 
-  .separator{
-    display: none;
+  .sing-in-page {
+    justify-content: flex-start;
+  }
+
+  .sing-in-account-data{
+    margin-bottom: 100px;
   }
 }
 

@@ -25,12 +25,29 @@
     background-color: #342b99;
 }
 
-.message-box-go-back-arrow{
+.message-box-go-back-arrow-container{
     height: 100%;
     width: 60px;
     padding-left: 5px;
     display: flex;
     align-items: center;
+}
+
+.message-box-go-back-arrow{
+    width: 30px;
+    filter: invert();
+    display: flex;
+    align-items: center;
+    position: absolute;
+    padding-left: 10px;
+}
+  
+.message-box-go-back-arrow img:hover{
+    filter: invert(0.16);
+}
+  
+.message-box-go-back-arrow img{
+    width: 100%;
 }
 
 .message-box-profile-data{

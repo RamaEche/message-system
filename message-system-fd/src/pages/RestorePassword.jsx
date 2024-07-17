@@ -5,12 +5,10 @@ import Cookies from 'js-cookie'
 import errorManager from  '../controllers/errorManager.js'
 
 function RestorePassword() {
-
   const { register, handleSubmit, formState } = useForm()
-
-  let err = formState.errors;
-
   const [formError, setFormError] = useState(false)
+  const [token] = useState(Cookies.get('JwtToken'))
+  let err = formState.errors;
 
   const onSubmit = (data)=>{
     console.log(JSON.stringify({UserName:data.UserName, Password:data.Password, LastPassword:data.LastPassword}))
@@ -18,6 +16,7 @@ function RestorePassword() {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'authorization': `Barrer ${token}`
     },
     body: JSON.stringify({UserName:data.UserName, NewPassword:data.NewPassword, LastPassword:data.LastPassword})
     })
@@ -53,20 +52,20 @@ function RestorePassword() {
             </div>
           }
           <p>Last password</p>
-          <input className={err.LastPassword ? " input-text input-err" : " input-text"} type='text' {...register('LastPassword', { maxLength: 20, minLength: 4, required: true})}/>
+          <input className={err.LastPassword ? " input-text input-err" : " input-text"} type='text' {...register('LastPassword', { maxLength: 20, minLength: 5, required: true})}/>
           {err.LastPassword &&
             <div className='input-err-aclaration'>
               <p>This field is required, and must contain between 4 and 20 characters.</p>
             </div>
           }
           <p>New password</p>
-          <input className={err.NewPassword ? " input-text input-err" : " input-text"} type='text' {...register('NewPassword', { maxLength: 20, minLength: 4, required: true})}/>
+          <input className={err.NewPassword ? " input-text input-err" : " input-text"} type='text' {...register('NewPassword', { maxLength: 20, minLength: 5, required: true})}/>
           {err.NewPassword &&
             <div className='input-err-aclaration'>
               <p>This field is required, and must contain between 4 and 20 characters.</p>
             </div>
           }
-          <input type='submit'/>
+          <input type='submit' value="Send"/>
         </div>
       </form>
     </div>

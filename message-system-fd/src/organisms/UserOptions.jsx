@@ -1,32 +1,60 @@
 import './UserOptions.css'
-import {useState, useContext, useRef, useEffect} from 'react'
-import {BoxesContext} from "../pages/Home"
+import {useState, useRef, useEffect} from 'react'
 import { useForm } from 'react-hook-form'
 import Confirmation from '../molecules/Confirmation'
 import Cookies from 'js-cookie'
 import errorManager from  '../controllers/errorManager.js'
+import socketIOClient from 'socket.io-client';
+import GoBackArrow from '../atoms/GoBackArrow.jsx'
 
-function UserOptions() {
-  const [boxes, setBoxes] = useContext(BoxesContext)
-  const { register, handleSubmit, formState, watch } = useForm()
-  const [setProfileImage] = useState('');
+function UserOptions({ setWebSocket }) {
+  const { register, handleSubmit, formState, watch, setValue } = useForm()
   let files = [];
   let err = formState.errors;
   const [formError, setFormError] = useState(false)
   const form = useRef(null)
-  const [photoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}user.png`)
+  const [originalData, setOriginalData] = useState({photoSrc:null, userName:null, description:null})
+  const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}user.png`)
   const [openConfirmation1, setOpenConfirmation1] = useState(false)
   const [openConfirmation2, setOpenConfirmation2] = useState(false)
   const [token] = useState(Cookies.get('JwtToken'))
-  
-  const Chats = ()=>{
-    setBoxes({box1:"Chats", box2:boxes.box2, currentBox:1})
+
+  watch("UserName", "")
+  watch("Description", "")
+
+  const socket = socketIOClient('http://localhost:3000');
+
+  const getUserPhotoById = id=>{
+    fetch(`${import.meta.env.VITE_SERVER_API_URL}getUserPhotoById`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': `Barrer ${token}`,
+        'UserId':id
+      }
+    })
+    .then((res)=>{
+      if(res.statusText == 'OK'){
+        return res.blob()
+      }else{
+        console.error("No image")
+      }
+    })
+    .then((info)=>{
+      setPhotoSrc(URL.createObjectURL(info))
+      setOriginalData(infoSrc=>{
+        infoSrc.photoSrc = URL.createObjectURL(info)
+        return infoSrc
+      })
+    })
+    .catch((err)=>console.log(err))
   }
 
   const onSubmit = (e)=>{
     const formData = new FormData();
     formData.append('ProfileImage', e.ProfileImage[0])
     formData.append('UserName', e.UserName)
+    formData.append('Description', e.Description)
 
     fetch(`${import.meta.env.VITE_SERVER_API_URL}UpdateProfile`, {
       method: 'POST',
@@ -52,16 +80,22 @@ function UserOptions() {
       const reader = new FileReader();
 
       reader.onload = function (e) {
-        setProfileImage(e.target.result);
+        setPhotoSrc(e.target.result);
       };
   
       reader.readAsDataURL(watch('ProfileImage')[0]);
     }
   }, [watch('ProfileImage')])
 
-  const DeletePhoto = ()=>{
-    form.current.reset();
-    setProfileImage('')
+  const deletePhoto = ()=>{
+    setPhotoSrc(originalData.photoSrc)
+  }
+
+  const resetForm = event=>{
+    event.preventDefault()
+    setPhotoSrc(originalData.photoSrc)
+    setValue('UserName', originalData.userName);
+    setValue('Description', originalData.description);
   }
 
   const closeAccount = ()=>{
@@ -89,10 +123,27 @@ function UserOptions() {
       }
     })
   }
+
+  useEffect(()=>{
+    setWebSocket(socket)
+
+    socket.emit('getUserOptions', {authorization:`Barrer ${token}`})
+    socket.on('getUserOptions', data => {
+      setValue('UserName', data.info.userName);
+      setValue('Description', data.info.description);
+      getUserPhotoById(data.info.id)
+      setOriginalData(infoSrc=>{
+        infoSrc.userName = data.info.userName
+        infoSrc.description = data.info.description
+        return infoSrc
+      })
+    });
+  }, [])
+
   return (
     <div className='user-option-container'>
       <div className='user-option-bar'>
-        <a className='user-option-go-back-arrow' onClick={()=>Chats()}><img src='arrow.png'/></a>
+        <GoBackArrow changeTo="Chats" boxNumber={1}/>
         <h1 className='user-option-outstanding-logo'>Text Message System</h1>
       </div>
       <form className='user-options-form-container' ref={form} onSubmit={handleSubmit((data)=>onSubmit(data))}>
@@ -108,7 +159,7 @@ function UserOptions() {
         }
         <img className='user-image-selector' src={photoSrc}/>
         <div className='image-selector-buttons'>
-          <input type='button' onClick={()=>DeletePhoto()} className='link' value='Delete photo'/>
+          <input type='button' onClick={()=>deletePhoto()} className='link' value='Delete photo'/>
           <div className='sing-in-image-selector link'>
             <input type='file' name='ProfileImage' {...register('ProfileImage')}/>
           </div>
@@ -121,8 +172,15 @@ function UserOptions() {
                 <p>This field must contain between 4 and 15 characters.</p>
               </div>
             }
+            <p>Description</p>
+            <input className='input-text' type='text' name='Description' {...register('Description', { maxLength: 100, minLength: 1})}/>
+            {err.Description &&
+              <div className='input-err-aclaration'>
+                <p>This field is required, and must contain between 1 and 100 characters.</p>
+              </div>
+            }
             <div className='user-options-form-changes-buttons'>
-              <input onClick={()=>DeletePhoto()} type='reset' className='reset-button' value="Reset"/>
+              <input onClick={event=>resetForm(event)} type='reset' className='reset-button' value="Reset"/>
               <input className='user-options-submit reset-button' type='submit' value="Send"/>
             </div>
         </div>

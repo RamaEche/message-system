@@ -31,13 +31,11 @@ function Home() {
   const box2 = useRef(null)
 
   const handleResize = () => {
-    console.log(window.innerWidth)
     if(window.innerWidth <= 850){
       setOneBoxeMode(true)
       setBoxes(boxes)
       box1.current.classList.remove("none")
       box2.current.classList.add("none")
-      console.log(boxes)
     }else{
       setOneBoxeMode(false)
       box1.current.classList.remove("none")
@@ -55,7 +53,6 @@ function Home() {
 
   useEffect(()=>{
     if(oneBoxeMode){
-      console.log(2)
       if(boxes.currentBox == 1){
         box2.current.classList.add("none")
         box1.current.classList.remove("none")
@@ -66,7 +63,6 @@ function Home() {
         box2.current.classList.remove("none")
       }
     }
-    console.log(boxes)
   }, [boxes])
 
   return (
@@ -82,7 +78,7 @@ function Home() {
                 {boxes.box1 == 'Chats' ? (
                     <Chats webSocket={webSocket} setWebSocket={setWebSocket} setSearchType={setSearchType} chats={chats} setChats={setChats}/>
                   ) : boxes.box1 == 'UserOptions' ? (
-                    <UserOptions webSocket={webSocket}/>
+                    <UserOptions webSocket={webSocket} setWebSocket={setWebSocket}/>
                   ) : boxes.box1 == 'SearchUser' ? (
                     <SearchUser webSocket={webSocket} searchType={searchType} chats={chats} setNewUserToAdd={setNewUserToAdd}/>
                   ) : boxes.box1 == 'AddUser' ? (

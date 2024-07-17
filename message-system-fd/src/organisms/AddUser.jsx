@@ -1,19 +1,14 @@
 import './AddUser.css'
-import {useState, useContext} from 'react'
-import {BoxesContext} from "../pages/Home"
+import {useState} from 'react'
 import {useForm} from 'react-hook-form'
 import Cookies from 'js-cookie'
+import GoBackArrow from '../atoms/GoBackArrow'
 
 function AddUser({ webSocket, newUserToAdd }) {
   const [token] = useState(Cookies.get('JwtToken'))
-  const [boxes, setBoxes] = useContext(BoxesContext)
   const [formError, setFormError] = useState(false)
   const {handleSubmit, register, formState} = useForm()
   let err = formState.errors;
-
-  const Chats = ()=>{
-    setBoxes({box1:"Chats", box2:boxes.box2, currentBox:1})
-  }
 
   const addUser = (e)=>{
     webSocket.emit("postAddUser", {
@@ -42,7 +37,7 @@ function AddUser({ webSocket, newUserToAdd }) {
   return (
     <div className='add-user-container'>
       <div className='add-user-bar'>
-        <a className='add-user-go-back-arrow' onClick={()=>Chats()}><img src='arrow.png'/></a>
+        <GoBackArrow changeTo="Chats" boxNumber={1}/>
         <h1 className='add-user-outstanding-logo'>Text Message System</h1>
       </div>
       <form className='add-users-form-container' onSubmit={handleSubmit((e)=>addUser(e))}>

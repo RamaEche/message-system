@@ -1,7 +1,8 @@
 //const ValidateUserRegistredByUserName = require("../controllers/ValidateUserRegistredByUserName.js");
-//const Users = require("../models/Users.js");
-//const createToken = require("../controllers/createToken.js");
-//const bcrypt = require("bcryptjs");
+const Users = require("../models/Users.js");
+const createToken = require("../controllers/createToken.js");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const restorePassword = async(req, res)=>{
 	try {
@@ -13,29 +14,26 @@ const restorePassword = async(req, res)=>{
 		}
 
 		if(!(req.body.NewPassword !== req.body.LastPassword)){ throw new Error("{ \"ok\":false, \"status\":400, \"err\":\"samePassword\"}");}
-
-		/*const validateUser = await ValidateUserRegistredByUserName(req.body.UserName, req.body.LastPassword);
-		//BROKEN SYSTEM
- 		if(validateUser.state){
-
+		console.log(req.headers.authorization);
+		const token = req.headers.authorization.split(" ")[1];
+		await jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, decoded) => {
+			console.log(decoded.UserID);
 			let isModified;
-
 			const salt = await bcrypt.genSalt(10);
-			const passwordHashed = await bcrypt.hash(newPassword, salt);
-
+			const passwordHashed = await bcrypt.hash(req.body.NewPassword, salt);
+	
 			try{
-				await Users.updateOne({ _id: id }, { $set: { "PrivateData.Password": passwordHashed } });
+				await Users.updateOne({ _id: decoded.UserID }, { $set: { "PrivateData.Password": passwordHashed } }); //id
 				isModified = true;
 			}catch{
 				isModified = false;
 			}
-
+	
 			if(isModified){
-				const token = createToken({UserID:validateUser.UserID});
+				const token = createToken({UserID:decoded.UserID}); //id
 				res.status(200).json({ok:true, token:token});
 			}else{throw new Error("{ \"ok\":false, \"status\":500, \"err\":\"wasNotModified\"}");}
-		}else{throw new Error("{ \"ok\":false, \"status\":401, \"err\":\"invalidCredentials\"}");}  */
-
+		});
 	}catch(err){
 		try{
 			const errorMessage = JSON.parse(err.message);

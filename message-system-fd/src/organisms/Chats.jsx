@@ -5,6 +5,7 @@ import {BoxesContext, UserIdContext, CurrentChatContext} from '../pages/Home'
 import Cookies from 'js-cookie'
 import socketIOClient from 'socket.io-client';
 import Loading from "../atoms/Loading.jsx"
+import NoMoreUsers from "../atoms/NoMoreUsers.jsx"
 
 function Chats({ webSocket, setWebSocket, setSearchType, chats, setChats}) {
   const [token] = useState(Cookies.get('JwtToken'))
@@ -103,7 +104,12 @@ function Chats({ webSocket, setWebSocket, setSearchType, chats, setChats}) {
       <div className="chats">
         {chats == null ?
         (
-          <Loading/>
+          <div className='chats-loading'>
+            <Loading/>
+          </div>
+        ): chats == 0 ?
+        (
+          <NoMoreUsers/>
         ):
         (
           chats.map((chat, i)=>{

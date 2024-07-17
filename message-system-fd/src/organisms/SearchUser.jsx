@@ -1,24 +1,19 @@
 import './SearchUser.css'
 import SerchedUser from "../molecules/SerchedUser"
 import Chat from "../molecules/Chat"
-import {useState, useContext, useEffect} from 'react'
-import {BoxesContext} from "../pages/Home"
+import {useState, useEffect} from 'react'
 import * as JsSearch from 'js-search';
 import { useForm } from 'react-hook-form'
 import Cookies from 'js-cookie'
 import NoMoreUsers from '../atoms/NoMoreUsers'
 import Loading from '../atoms/Loading'
+import GoBackArrow from '../atoms/GoBackArrow.jsx'
 
 function SearchUser({searchType, webSocket, chats, parentOrdedChats=[], setParentOrdedChats, setNewUserToAdd, header=true, setReturnCurrentSearchKnownUsers}) {
   const [token] = useState(Cookies.get('JwtToken'))
   const { register } = useForm()
-  const [boxes, setBoxes] = useContext(BoxesContext)
   const [ordedChats, setOrdedChats] = useState([])
   const [lastSetTimeoutValue, setLastSetTimeoutValue] = useState(false)
-
-  const Chats = ()=>{
-    setBoxes({box1:"Chats", box2:boxes.box2, currentBox:1})
-  }
 
   const postSearchKnownUsersByValue = (inputValue)=>{
     let inputSearchText = ""
@@ -154,7 +149,7 @@ function SearchUser({searchType, webSocket, chats, parentOrdedChats=[], setParen
   return (
     <div className='search-user-container'>
       <div className={header ? 'search-user-bar' : 'none'}>
-        <a className='search-user-go-back-arrow' onClick={()=>Chats()}><img src='arrow.png'/></a>
+        <GoBackArrow changeTo="Chats" boxNumber={1}/>
         <h1 className='search-user-outstanding-logo'>Search user.</h1>
       </div>
       <div>
@@ -173,7 +168,9 @@ function SearchUser({searchType, webSocket, chats, parentOrdedChats=[], setParen
         <div className=''>
           {ordedChats == null && parentOrdedChats == null ?
             (
-              <Loading/>
+              <div className='search-user-loading'>
+                <Loading/>
+              </div>
             ): ordedChats.length == 0 && parentOrdedChats.length == 0 ?
             (
               <NoMoreUsers/>

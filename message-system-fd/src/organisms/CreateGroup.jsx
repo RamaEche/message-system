@@ -1,24 +1,19 @@
 import './CreateGroup.css'
 import SearchUser from "../organisms/SearchUser"
 import AddedUser from "../molecules/AddedUser"
-import {useContext, useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useForm} from 'react-hook-form'
-import {BoxesContext} from "../pages/Home"
 import Cookies from 'js-cookie'
+import GoBackArrow from '../atoms/GoBackArrow.jsx'
 
 function CreateGroup({ webSocket, chats }) {
   const [chatsToAdd, setChatsToAdd] = useState([])
-  const [boxes, setBoxes] = useContext(BoxesContext)
   const [formError, setFormError] = useState(false)
   const [returnCurrentSearchKnownUsers, setReturnCurrentSearchKnownUsers] = useState()
   const [parentOrdedChats, setParentOrdedChats] = useState(chats)
   const {handleSubmit, register, formState} = useForm()
   const [token] = useState(Cookies.get('JwtToken'))
   let err = formState.errors;
-
-  const Chats = ()=>{
-    setBoxes({box1:"Chats", box2:boxes.box2, currentBox:1})
-  }
 
   useEffect(()=>{
     if(returnCurrentSearchKnownUsers != undefined){
@@ -73,7 +68,7 @@ function CreateGroup({ webSocket, chats }) {
     <>
       <div className='create-group-container'>
         <div className='create-group-bar'>
-          <a className='create-group-go-back-arrow' onClick={()=>Chats()}><img src='arrow.png'/></a>
+          <GoBackArrow changeTo="Chats" boxNumber={1}/>
           <h1 className='create-group-outstanding-logo'>Create group</h1>
         </div>
         <form onSubmit={handleSubmit((e)=>createGroup(e))}>

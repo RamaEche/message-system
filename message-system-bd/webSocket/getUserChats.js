@@ -1,7 +1,7 @@
 const { validateUserBySocket } = require("./controllers/validateUserBySocket.js");
 const Chats = require("../models/Chats.js");
 
-const postNewMessage = async (socket, data, user) => {
+const getUserChats = async (socket, data, user) => {
 	try{
 		const ids = user.Chats.Groups.concat(user.Chats.Users); 
 		let chats = [];
@@ -63,10 +63,10 @@ const postNewMessage = async (socket, data, user) => {
 		}
 		socket.emit("getUserChats", {status:200, chats});
 	} catch (err) {
-		socket.emit("postNewMessage", { status:500, error: "internalServerError" });
+		socket.emit("getUserChats", { status:500, error: "internalServerError" });
 		console.error(err);
 		return 0;
 	}
 };
 
-module.exports = postNewMessage;
+module.exports = getUserChats;

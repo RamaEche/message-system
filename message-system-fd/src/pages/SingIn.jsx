@@ -52,7 +52,7 @@ function SingIn() {
 
   const DeletePhoto = ()=>{
     form.current.reset();
-    setProfileImage('')
+    setProfileImage(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
   }
 
   return (
@@ -111,7 +111,7 @@ function SingIn() {
               <p>This field is required, and must contain between 5 and 20 characters.</p>
             </div>
           }
-          <input type='submit'/>
+          <input type='submit' value="Send"/>
           <a className='log-in-link' href='/LogIn'>Log in</a>
         </div>
       </form>

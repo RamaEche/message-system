@@ -1,0 +1,16 @@
+.go-back-arrow{
+    width: 30px;
+    filter: invert();
+    display: flex;
+    align-items: center;
+    position: absolute;
+    padding-left: 10px;
+}
+  
+.go-back-arrow img:hover{
+    filter: invert(0.16);
+}
+  
+.go-back-arrow img{
+    width: 100%;
+}

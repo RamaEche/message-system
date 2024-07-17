@@ -1,6 +1,6 @@
 import './MessageBox.css'
 import Cookies from "js-cookie";
-import {useState, useContext, useEffect, lazy, Suspense} from 'react'
+import {useState, useContext, useEffect, lazy, Suspense, useRef} from 'react'
 import {BoxesContext, UserIdContext, CurrentChatContext} from "../pages/Home"
 import Message from '../molecules/Message'
 import { useForm } from 'react-hook-form'
@@ -13,6 +13,7 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
   const [messages, setMessages] = useState([])
   const [token] = useState(Cookies.get('JwtToken'))
   const [userId] = useContext(UserIdContext)
+  const goBackArrow = useRef(null)
 
   const LazyLoadedComponent = lazy(() => import('emoji-picker-react')); // The import: import EmojiPicker from 'emoji-picker-react';
 
@@ -21,6 +22,19 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
   const Chats = ()=>{
     setBoxes({box1:"Chats", box2:boxes.box2, currentBox:1})
   }
+
+  const handleResize = () => {
+    if(window.innerWidth <= 850){
+      goBackArrow.current.classList.remove("none")
+    }else{
+      goBackArrow.current.classList.add("none")
+    }
+  }
+
+  useEffect(()=>{
+    window.addEventListener("resize", handleResize, false);
+    handleResize()
+  }, [])
 
   const ChatOption = ()=>{
     if(currentChat.chatType == "U"){
@@ -161,7 +175,7 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
   return (
     <div className='message-box'>
       <div className="message-box-bar-container">
-        <div className='message-box-go-back-arrow' onClick={()=>Chats()}><a className='go-back-arrow'><img src='arrow.png'/></a></div>
+        <div ref={goBackArrow} className='message-box-go-back-arrow-container' onClick={()=>Chats()}><a className='message-box-go-back-arrow'><img src='arrow.png'/></a></div> {/* This fragment is a modification of the GoBackArrow component */}
         <div className="message-box-bar" onClick={()=>ChatOption()}>
           <div className='message-box-profile-data'>
             <div className='message-box-profile-photo'></div>
