@@ -51,7 +51,6 @@ function Home() {
   useEffect(()=>{
     setWebSocket(socket)
     socket.on('updateUserChatCurrentStatus', data=>{
-      console.log(data)
       setChatsStatus(CchatsStatus=>{
         const chatIndex = CchatsStatus.findIndex(i=>i.chatId == data.chatId)
         try{

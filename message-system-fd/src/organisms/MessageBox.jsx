@@ -6,7 +6,7 @@ import Message from '../molecules/Message'
 import { useForm } from 'react-hook-form'
 import FileSelectorOption from '../atoms/FileSelectorOption'
 
-  function MessageBox({ webSocket }) {
+  function MessageBox({ webSocket, chatsImage, chatsStatus }) {
   const [messageInputFileButton, setMessageInputFileButton] = useState('close')
   const [boxes, setBoxes] = useContext(BoxesContext)
   const [currentChat, setCurrentChat] = useContext(CurrentChatContext)
@@ -14,6 +14,7 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
   const [token] = useState(Cookies.get('JwtToken'))
   const [userId] = useContext(UserIdContext)
   const goBackArrow = useRef(null)
+  const [userData, setUserData] = useState({ name:"Chat", state:false, src:`${import.meta.env.VITE_FRONTEND_APP_URL}group.png` })
 
   const LazyLoadedComponent = lazy(() => import('emoji-picker-react')); // The import: import EmojiPicker from 'emoji-picker-react';
 
@@ -85,8 +86,23 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
     })
   }
 
+  const chargeState = ()=>{
+    const chatsStatusIndex = chatsStatus.findIndex(i=>i.chatId == currentChat.chatId)
+    if(chatsStatusIndex != -1){
+      setUserData(CUserData=>({
+        ...CUserData,
+        state:chatsStatus[chatsStatusIndex].state
+      }))
+    }else{
+      setUserData(CUserData=>({
+        ...CUserData,
+        state:false
+      }))
+    }
+  }
+
   useEffect(()=>{
-    if(currentChat) {
+    if(messages.length > 0){
       setCurrentChat(currentChatData =>{
         currentChatData.chatMessages = messages
         return currentChatData
@@ -95,11 +111,15 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
   }, [messages])
 
   useEffect(()=>{
-    if(currentChat){
-      setMessages([])
-      webSocket.emit('getMessagesChunk', {authorization: `Barrer ${token}`, chatId:currentChat.chatId, chunk:0})
-    }
+    setMessages([])
+    webSocket.emit('getMessagesChunk', {authorization: `Barrer ${token}`, chatId:currentChat.chatId, chunk:0})
+    webSocket.emit('getChatDescriptionData', {authorization: `Barrer ${token}`, chatId:currentChat.chatId})
+    chargeState()
   }, [currentChat])
+
+  useEffect(()=>{
+    chargeState()
+  }, [chatsStatus])
 
   useEffect(()=>{
     let chatData;
@@ -159,6 +179,22 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
         webSocket.emit('postChatRead', {authorization: `Barrer ${token}`, chatId:currentChat.chatId})
       }
     });
+
+    webSocket.on('getChatDescriptionData', data=>{
+      const chatsImageIndex = chatsImage.findIndex(i=>i.chatID == currentChat.chatId)
+      if(chatsImageIndex != -1){
+        setUserData(CUserData=>({
+          ...CUserData,
+          src:chatsImage[chatsImageIndex].src,
+          name: data.name
+        }))
+      }else{
+        setUserData(CUserData=>({
+          ...CUserData,
+          name: data.name
+        }))
+      }
+    })
   }, [])
 
   const prueba = (emojiData)=>{
@@ -178,10 +214,12 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
         <div ref={goBackArrow} className='message-box-go-back-arrow-container' onClick={()=>Chats()}><a className='message-box-go-back-arrow'><img src='arrow.png'/></a></div> {/* This fragment is a modification of the GoBackArrow component */}
         <div className="message-box-bar" onClick={()=>ChatOption()}>
           <div className='message-box-profile-data'>
-            <div className='message-box-profile-photo'></div>
+            <div className='message-box-profile-photo'>
+              <img src={userData.src}/>
+            </div>
             <div>
-                <h3>Matias</h3>
-                <div>Online</div>
+                <h3>{userData.name}</h3>
+                <div>{userData.state == true && "Online"}</div>
             </div>
           </div>
           <img src='options.png' className='message-box-profile-options'/>

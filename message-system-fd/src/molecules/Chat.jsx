@@ -73,7 +73,6 @@ function Chat({onClick=false, chatsStatus, ChatID, Type, Name, Description, Igno
       
       if(chatInx != -1){
         setChatState(chatsStatus[chatInx].state)
-        console.log(chatsStatus[chatInx].state)
       }
     }
   },[chatsStatus])

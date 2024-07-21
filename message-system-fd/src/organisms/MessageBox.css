@@ -52,6 +52,7 @@
 
 .message-box-profile-data{
     display: flex;
+    align-items: center;
     color: #ddd;
 }
 
