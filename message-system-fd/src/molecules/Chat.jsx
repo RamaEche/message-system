@@ -1,18 +1,15 @@
 import './Chat.css'
-import {useState, useContext, useEffect, useRef} from 'react'
+import {useState, useContext, useEffect} from 'react'
 import {BoxesContext, CurrentChatContext} from '../pages/Home'
 import Cookies from 'js-cookie'
 
-function Chat({onClick=false, socket, ChatID, Type, Name, Description, IgnoredMessageCounter}) {
-
-  const mounted = useRef(false);
+function Chat({onClick=false, chatsStatus, ChatID, Type, Name, Description, IgnoredMessageCounter, chatsImage, setChatsImage}) {
   const [boxes, setBoxes] = useContext(BoxesContext)
   const [ignoredMessages, setIgnoredMessages] = useState(IgnoredMessageCounter)
   const [chatState, setChatState] = useState(false)
   const [, setCurrentChat] = useContext(CurrentChatContext)
   const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
   const [token] = useState(Cookies.get('JwtToken'))
-
   
   const OpenChat = ()=>{
     setCurrentChat(currentChatData =>({
@@ -47,27 +44,39 @@ function Chat({onClick=false, socket, ChatID, Type, Name, Description, IgnoredMe
     .then((info)=>{
       if(!info.msg){
         setPhotoSrc(URL.createObjectURL(info))
+        setChatsImage(currentChatsImage=>{
+          return [...currentChatsImage, {chatID:ChatID, src:URL.createObjectURL(info)}]
+        })
       }
     })
     .catch((err)=>console.log(err))
   }
 
-  useEffect(()=>{
-    if (!mounted.current) {
+  const setImage = ()=>{
+    let posibleImgIndx = chatsImage.findIndex(i=>i.chatID == ChatID)
+    if(posibleImgIndx != -1){
+      setPhotoSrc(chatsImage[posibleImgIndx].src)
+    }else{
       getChatPhotoById()
-      mounted.current = true;
     }
-
-    socket.on('updateUserChatCurrentStatus', data=>{
-      if(ChatID == data.chatId){
-        setChatState(data.state)
-      }
-    })
-  }, []);
+  }
 
   useEffect(()=>{
-    getChatPhotoById()
+    setImage()
   }, [ChatID])
+
+  useEffect(()=>{
+    if(chatsStatus){
+      const chatInx = chatsStatus.findIndex(i=>{
+        return i.chatId == ChatID
+      })
+      
+      if(chatInx != -1){
+        setChatState(chatsStatus[chatInx].state)
+        console.log(chatsStatus[chatInx].state)
+      }
+    }
+  },[chatsStatus])
 
   return (
     <a onClick={onClick ? ()=>onClick(ChatID) : ()=>OpenChat()} className='chat-box'>

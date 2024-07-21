@@ -15,6 +15,7 @@ const getGroupOptionData = require("./getGroupOptionData.js");
 const postLeaveGroup = require("./postLeaveGroup.js");
 const postDeleteGroup = require("./postDeleteGroup.js");
 const getChatOptionData = require("./getChatOptionData.js");
+const getChatDescriptionData = require("./getChatDescriptionData.js");
 const postChangeName = require("./postChangeName.js");
 
 const validateWS = async(next, socket, data, emitTo) =>{
@@ -42,6 +43,7 @@ io.on("connection", socket=>{
 	socket.on("postLeaveGroup", data=>{validateWS(postLeaveGroup, socket, data, "postLeaveGroup");});
 	socket.on("postDeleteGroup", data=>{validateWS(postDeleteGroup, socket, data, "postDeleteGroup");});
 	socket.on("getChatOptionData", data=>{validateWS(getChatOptionData, socket, data, "getChatOptionData");});
+	socket.on("getChatDescriptionData", data=>{validateWS(getChatDescriptionData, socket, data, "getChatDescriptionData");});
 	socket.on("postChangeName", data=>{validateWS(postChangeName, socket, data, "postChangeName");});
 	
 	socket.on("disconnect", async () => {

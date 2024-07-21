@@ -12,6 +12,7 @@ function GroupOption({ webSocket }) {
   const [boxes, setBoxes] = useContext(BoxesContext)
   const [currentChat] = useContext(CurrentChatContext)
   const [serverDataGeted, setServerDataGeted] = useState(null)
+  const [originalData, setOriginalData] = useState({chatImage:`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`, userName:null, description:null})
   let err = formState.errors;
   let files = [];
   const form = useRef(null)
@@ -46,6 +47,10 @@ function GroupOption({ webSocket }) {
     .then((info)=>{
       if(!info.msg){
         setChatImage(URL.createObjectURL(info))
+        setOriginalData(infoSrc=>({
+          ...infoSrc,
+          chatImage: URL.createObjectURL(info)
+        }))
       }
     })
     .catch((err)=>console.log(err))
@@ -63,7 +68,11 @@ function GroupOption({ webSocket }) {
       ChatId:currentChat.chatId
     });
     webSocket.on("getGroupOptionData", info=>{
-      setServerDataGeted(info)
+      setServerDataGeted(CurrentServerDataGeted=>({
+        ...CurrentServerDataGeted,
+        name: info.name,
+        description: info.description
+      }))
     })
   }, [])
 
@@ -74,6 +83,15 @@ function GroupOption({ webSocket }) {
     setValue('Description', serverDataGeted.description);
     getChatPhotoById()
     //Set name input to the name given by the main user to that user.
+  }
+
+  const deletePhoto = ()=>{
+    const CurrentName = watch('Name')
+    const CurrentDescription = watch('Description')
+    form.current.reset();
+    setChatImage(originalData.chatImage)
+    setValue('Name', CurrentName);
+    setValue('Description', CurrentDescription);
   }
 
   useEffect(()=>{
@@ -113,6 +131,21 @@ function GroupOption({ webSocket }) {
     })
     .catch((err)=>{console.error(err)})
   }
+
+  useEffect(()=>{
+    if (watch('ChatImage')){
+      files.push(watch('ChatImage')[0])
+      if(watch('ChatImage').length != 0){
+        const reader = new FileReader();
+  
+        reader.onload = function (e) {
+          setChatImage(e.target.result);
+        };
+    
+        reader.readAsDataURL(watch('ChatImage')[0]);
+      }
+    }
+  }, [watch('ChatImage')])
 
   const leaveTheGroup = ()=>{
     webSocket.emit("postLeaveGroup", {
@@ -159,11 +192,6 @@ function GroupOption({ webSocket }) {
     }
   }, [watch('ChatImage')])
 
-  const DeletePhoto = ()=>{
-    form.current.reset();
-    setChatImage(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
-  }
-
   return (
     <div className='group-option-container'>
       <div className='group-option-bar'>
@@ -180,7 +208,7 @@ function GroupOption({ webSocket }) {
                       <p>{formError}</p>
                     </div>
                   }
-                  {err.ProfileImage &&
+                  {err.ChatImage &&
                   <div className='form-err-aclaration sing-in-form-err-aclaration'>
                       <p>Profile photo error</p>
                     </div>
@@ -188,7 +216,7 @@ function GroupOption({ webSocket }) {
                   <div className='group-options-profile'>
                     <img className='group-options-profile-photo' src={chatImage}/>
                     <div className='group-options-profile-data'>
-                      <input type='button' onClick={()=>DeletePhoto()} className='link' value='Delete photo'/>
+                      <input type='button' onClick={()=>deletePhoto()} className='link' value='Delete photo'/>
                       <div className='sing-in-image-selector link'>
                         <input type='file' name='ChatImage' {...register('ChatImage')}/>
                       </div>
@@ -210,7 +238,7 @@ function GroupOption({ webSocket }) {
                         </div>
                       }
                       <div className='group-options-form-changes-buttons'>
-                        <input className='reset-button' onClick={data=>resetForm(data)} type='reset' value='Reset'/>
+                        <input className='reset-button' onClick={handleSubmit(data=>resetForm(data))} type='reset' value='Reset'/>
                         <input className='main-button send-button' type='submit' value='Send'/>
                       </div>
                   </div>
@@ -218,8 +246,8 @@ function GroupOption({ webSocket }) {
                 <div className='group-options-bar-people-container'>
                   <p className='group-options-bar-people-title'>Group users:</p>
                   <div className='group-options-bar-people'>
-                    { currentChat.chatData.users.map(({name, roll, userId})=>(
-                        <GroupUser key={userId} name={name} roll={roll} userId={userId}/>
+                    { currentChat.chatData.users.map(({name, roll, userId}, i)=>(
+                        <GroupUser key={i} name={name} roll={roll} userId={userId}/>
                       ))
                     }
                   </div>

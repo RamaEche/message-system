@@ -42,10 +42,10 @@ function UserOptions({ setWebSocket }) {
     })
     .then((info)=>{
       setPhotoSrc(URL.createObjectURL(info))
-      setOriginalData(infoSrc=>{
-        infoSrc.photoSrc = URL.createObjectURL(info)
-        return infoSrc
-      })
+      setOriginalData(infoSrc=>({
+        ...infoSrc,
+        photoSrc: URL.createObjectURL(info)
+      }))
     })
     .catch((err)=>console.log(err))
   }
@@ -88,11 +88,16 @@ function UserOptions({ setWebSocket }) {
   }, [watch('ProfileImage')])
 
   const deletePhoto = ()=>{
+    const CurrentUserName = watch('UserName')
+    const CurrentDescription = watch('Description')
+    form.current.reset();
     setPhotoSrc(originalData.photoSrc)
+    setValue('UserName', CurrentUserName);
+    setValue('Description', CurrentDescription);
   }
 
-  const resetForm = event=>{
-    event.preventDefault()
+  const resetForm = ()=>{
+    form.current.reset();
     setPhotoSrc(originalData.photoSrc)
     setValue('UserName', originalData.userName);
     setValue('Description', originalData.description);
@@ -132,11 +137,11 @@ function UserOptions({ setWebSocket }) {
       setValue('UserName', data.info.userName);
       setValue('Description', data.info.description);
       getUserPhotoById(data.info.id)
-      setOriginalData(infoSrc=>{
-        infoSrc.userName = data.info.userName
-        infoSrc.description = data.info.description
-        return infoSrc
-      })
+      setOriginalData(infoSrc=>({
+        ...infoSrc,
+        userName: data.info.userName,
+        description: data.info.description
+      }))
     });
   }, [])
 
@@ -180,7 +185,7 @@ function UserOptions({ setWebSocket }) {
               </div>
             }
             <div className='user-options-form-changes-buttons'>
-              <input onClick={event=>resetForm(event)} type='reset' className='reset-button' value="Reset"/>
+              <input onClick={()=>resetForm()} type='reset' className='reset-button' value="Reset"/>
               <input className='user-options-submit reset-button' type='submit' value="Send"/>
             </div>
         </div>

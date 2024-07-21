@@ -6,7 +6,7 @@ const postCreateGroup = async (socket, data, user) => {
 		let usersToAddById = [];
 		for (let i = 0; i < data.chatsIdToAdd.length; i++) {
 			const currentChatObj = await Chats.findById(data.chatsIdToAdd[i]).exec();
-			usersToAddById.push(currentChatObj.Users.filter(currentUserId => currentUserId != user.id)[0].UserId);
+			usersToAddById.push(currentChatObj.Users.filter(currentUserId => currentUserId.UserId != user.id)[0].UserId);
 		}
 		createComunicationChanel({name:data.name, description:data.description, type:"G", usersID:usersToAddById}, user.id);
 		socket.emit("postCreateGroup", { status:200, ok:true });

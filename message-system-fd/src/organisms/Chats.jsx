@@ -3,17 +3,14 @@ import Chat from '../molecules/Chat'
 import {useContext, useEffect, useState} from 'react'
 import {BoxesContext, UserIdContext, CurrentChatContext} from '../pages/Home'
 import Cookies from 'js-cookie'
-import socketIOClient from 'socket.io-client';
 import Loading from "../atoms/Loading.jsx"
 import NoMoreUsers from "../atoms/NoMoreUsers.jsx"
 
-function Chats({ webSocket, setWebSocket, setSearchType, chats, setChats}) {
+function Chats({ socket, chatsStatus, setSearchType, chats, setChats, chatsImage, setChatsImage}) {
   const [token] = useState(Cookies.get('JwtToken'))
   const [boxes, setBoxes] = useContext(BoxesContext)
   const [currentChat] = useContext(CurrentChatContext)
   const [, setUserId] = useContext(UserIdContext)
-
-  const socket = socketIOClient('http://localhost:3000');
 
   const SearchChat = ()=>{
     setSearchType("knownUsers")
@@ -34,7 +31,6 @@ function Chats({ webSocket, setWebSocket, setSearchType, chats, setChats}) {
   }
 
   useEffect(()=>{
-    setWebSocket(socket)
 
     //socket.emit('authenticateUser', {authorization:`Barrer ${token}`})
     socket.emit('getUserChats', {authorization:`Barrer ${token}`})
@@ -113,7 +109,7 @@ function Chats({ webSocket, setWebSocket, setSearchType, chats, setChats}) {
         ):
         (
           chats.map((chat, i)=>{
-            return <Chat socket={webSocket} key={i} ChatID={chat.id} Type={chat.Type} Name={chat.Name} Description={chat.Description} IgnoredMessageCounter={chat.IgnoredMessageCounter}/>
+            return <Chat key={i} chatsImage={chatsImage} setChatsImage={setChatsImage} chatsStatus={chatsStatus} ChatID={chat.id} Type={chat.Type} Name={chat.Name} Description={chat.Description} IgnoredMessageCounter={chat.IgnoredMessageCounter}/>
           })
         )}
       </div>

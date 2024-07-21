@@ -63,6 +63,19 @@
     border-radius: 35px;
 }
 
+.message-box-profile-info{
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.message-box-profile-photo img{
+    height: 100%;
+    width: 100%;
+    border-radius: 35px;
+}
+
 .message-box-profile-options{
     filter: invert();
     height: 50%;
