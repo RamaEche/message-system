@@ -9,7 +9,7 @@ import NoMoreUsers from '../atoms/NoMoreUsers'
 import Loading from '../atoms/Loading'
 import GoBackArrow from '../atoms/GoBackArrow.jsx'
 
-function SearchUser({searchType, webSocket, chats, parentOrdedChats=[], setParentOrdedChats, setNewUserToAdd, header=true, setReturnCurrentSearchKnownUsers}) {
+function SearchUser({searchType, webSocket, chats, parentOrdedChats=[], setParentOrdedChats, setNewUserToAdd, header=true, chatsImage, setChatsImage}) {
   const [token] = useState(Cookies.get('JwtToken'))
   const { register } = useForm()
   const [ordedChats, setOrdedChats] = useState([])
@@ -127,13 +127,11 @@ function SearchUser({searchType, webSocket, chats, parentOrdedChats=[], setParen
   }
 
   const returnKnownUsers = (chatId)=>{
-    let selectedChat
-    setParentOrdedChats(currentOrdedChats=>{
-      selectedChat = currentOrdedChats.filter(currentChat => currentChat.id == chatId)[0]
-      currentOrdedChats = currentOrdedChats.filter(currentChat => currentChat.id != chatId)
-      return currentOrdedChats
+    setParentOrdedChats(CParentOrdedChats=>{
+      const i = CParentOrdedChats.findIndex(currentChat => currentChat.id == chatId)
+      CParentOrdedChats[i].added = true;
+      return [...CParentOrdedChats]
     })
-    setReturnCurrentSearchKnownUsers(selectedChat)
   }
 
   useEffect(()=>{
@@ -182,11 +180,11 @@ function SearchUser({searchType, webSocket, chats, parentOrdedChats=[], setParen
                 })
                 : searchType == "knownUsers" ?
                 ordedChats.map((chat, i)=>{
-                  return <Chat socket={webSocket} key={i} ChatID={chat.id} Type={chat.Type} Name={chat.Name} Description={chat.Description} UserCurrentState={chat.UserCurrentState}  IgnoredMessageCounter={chat.IgnoredMessageCounter}/>
+                  return <Chat socket={webSocket} key={i} ChatID={chat.id} chatsImage={chatsImage} setChatsImage={setChatsImage} Type={chat.Type} Name={chat.Name} Description={chat.Description} UserCurrentState={chat.UserCurrentState}  IgnoredMessageCounter={chat.IgnoredMessageCounter}/>
                 })
                 : searchType == "returnKnownUsers" &&
                 parentOrdedChats.map((chat, i)=>{
-                  return <Chat onClick={returnKnownUsers} socket={webSocket} key={i} ChatID={chat.id} Type={chat.Type} Name={chat.Name} Description={chat.Description} UserCurrentState={chat.UserCurrentState}  IgnoredMessageCounter={chat.IgnoredMessageCounter}/>
+                  return <div className={chat.added == true ? "none" : ""} key={i}><Chat onClick={returnKnownUsers} socket={webSocket} chatsImage={chatsImage} setChatsImage={setChatsImage} ChatID={chat.id} Type={chat.Type} Name={chat.Name} Description={chat.Description} UserCurrentState={chat.UserCurrentState}  IgnoredMessageCounter={chat.IgnoredMessageCounter}/></div>
                 })
             )
           }

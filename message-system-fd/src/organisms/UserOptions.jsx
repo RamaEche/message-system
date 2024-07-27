@@ -52,7 +52,7 @@ function UserOptions({ setWebSocket }) {
 
   const onSubmit = (e)=>{
     const formData = new FormData();
-    formData.append('ProfileImage', e.ProfileImage[0])
+    photoSrc != `${import.meta.env.VITE_FRONTEND_APP_URL}user.png` ? formData.append('ProfileImage', e.ProfileImage[0]) : formData.append('ProfileImage', "none")
     formData.append('UserName', e.UserName)
     formData.append('Description', e.Description)
 
@@ -91,7 +91,7 @@ function UserOptions({ setWebSocket }) {
     const CurrentUserName = watch('UserName')
     const CurrentDescription = watch('Description')
     form.current.reset();
-    setPhotoSrc(originalData.photoSrc)
+    setPhotoSrc(`${import.meta.env.VITE_FRONTEND_APP_URL}user.png`)
     setValue('UserName', CurrentUserName);
     setValue('Description', CurrentDescription);
   }
@@ -162,7 +162,7 @@ function UserOptions({ setWebSocket }) {
             <p>Profile photo error.</p>
           </div>
         }
-        <img className='user-image-selector' src={photoSrc}/>
+        <img className='user-options-image-selector' src={photoSrc}/>
         <div className='image-selector-buttons'>
           <input type='button' onClick={()=>deletePhoto()} className='link' value='Delete photo'/>
           <div className='sing-in-image-selector link'>

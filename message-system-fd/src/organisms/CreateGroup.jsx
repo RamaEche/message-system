@@ -6,40 +6,37 @@ import {useForm} from 'react-hook-form'
 import Cookies from 'js-cookie'
 import GoBackArrow from '../atoms/GoBackArrow.jsx'
 
-function CreateGroup({ webSocket, chats }) {
-  const [chatsToAdd, setChatsToAdd] = useState([])
+function CreateGroup({ webSocket, chats, chatsImage, setChatsImage }) {
   const [formError, setFormError] = useState(false)
-  const [returnCurrentSearchKnownUsers, setReturnCurrentSearchKnownUsers] = useState()
   const [parentOrdedChats, setParentOrdedChats] = useState(chats)
   const {handleSubmit, register, formState} = useForm()
   const [token] = useState(Cookies.get('JwtToken'))
   let err = formState.errors;
 
   useEffect(()=>{
-    if(returnCurrentSearchKnownUsers != undefined){
-      setChatsToAdd(currentChatsToAdd =>{
-        return [...currentChatsToAdd, returnCurrentSearchKnownUsers]
-      })
-    }
-  },[returnCurrentSearchKnownUsers])
+    setParentOrdedChats(cParentOrdedChats=>{
+      for (let i = 0; i < cParentOrdedChats.length; i++) {
+        cParentOrdedChats[i].added = false;
+      }
+      return [...cParentOrdedChats]
+    })
+  }, [])
 
   const removeUser = (id)=>{
-    setChatsToAdd(currentChatsToAdd =>{
-      currentChatsToAdd = currentChatsToAdd.filter(x => x.id != id)
-      return currentChatsToAdd
-    })
-    setParentOrdedChats(currentOrdedChats =>{
-      const chatToAdd = chats.filter(x =>x.id == id)[0]
-      currentOrdedChats = [...currentOrdedChats, chatToAdd]
-      return currentOrdedChats
+    setParentOrdedChats(CParentOrdedChats=>{
+      const i = CParentOrdedChats.findIndex(currentChat => currentChat.id == id)
+      CParentOrdedChats[i].added = false;
+      return [...CParentOrdedChats]
     })
   }
 
   const createGroup = (e)=>{
     let chatsIdToAdd = []
-    chatsToAdd.map(({id})=>{
-      chatsIdToAdd.push(id)
-    })
+    for (let i = 0; i < parentOrdedChats.length; i++) {
+      if(parentOrdedChats[i].added == true){
+        chatsIdToAdd.push(parentOrdedChats[i].id)
+      }
+    }
     webSocket.emit("postCreateGroup", {
       authorization: `Barrer ${token}`,
       name:e.name,
@@ -96,12 +93,12 @@ function CreateGroup({ webSocket, chats }) {
           </div>
           <h2 className='add-user-added-users-title'>Add user:</h2>
           <div className='create-group-added-users'>
-            {chatsToAdd.map(({Name, id}, i)=>{
-              return <AddedUser onClick={removeUser} Name={Name} id={id} key={i}/>
+            {parentOrdedChats.map(({Name, id, added}, i)=>{
+              return <div className={added == false ? "none" : ""} key={i}><AddedUser onClick={removeUser} Name={Name} id={id} chatsImage={chatsImage} /></div>
             })}
           </div>
           <div className='create-group-input-container'>
-            <SearchUser searchType="returnKnownUsers" webSocket={webSocket} chats={chats} parentOrdedChats={parentOrdedChats} setParentOrdedChats={setParentOrdedChats} header={false} setReturnCurrentSearchKnownUsers={setReturnCurrentSearchKnownUsers}/>
+            <SearchUser searchType="returnKnownUsers" chatsImage={chatsImage} setChatsImage={setChatsImage} webSocket={webSocket} chats={chats} parentOrdedChats={parentOrdedChats} setParentOrdedChats={setParentOrdedChats} header={false}/>
           </div>
         </form>
       </div>

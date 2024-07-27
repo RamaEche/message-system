@@ -6,13 +6,13 @@ import Confirmation from '../molecules/Confirmation'
 import GroupUser from '../molecules/GroupUser'
 import Cookies from 'js-cookie'
 
-function GroupOption({ webSocket }) {
+function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId }) {
   const [token] = useState(Cookies.get('JwtToken'))
   const { register, handleSubmit, formState, watch, setValue } = useForm()
   const [boxes, setBoxes] = useContext(BoxesContext)
   const [currentChat] = useContext(CurrentChatContext)
   const [serverDataGeted, setServerDataGeted] = useState(null)
-  const [originalData, setOriginalData] = useState({chatImage:`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`, userName:null, description:null})
+  const [, setOriginalData] = useState({chatImage:`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`, userName:null, description:null})
   let err = formState.errors;
   let files = [];
   const form = useRef(null)
@@ -89,7 +89,7 @@ function GroupOption({ webSocket }) {
     const CurrentName = watch('Name')
     const CurrentDescription = watch('Description')
     form.current.reset();
-    setChatImage(originalData.chatImage)
+    setChatImage(`${import.meta.env.VITE_FRONTEND_APP_URL}user.png`)
     setValue('Name', CurrentName);
     setValue('Description', CurrentDescription);
   }
@@ -109,7 +109,7 @@ function GroupOption({ webSocket }) {
     const formData = new FormData();
     formData.append('Name', e.Name)
     formData.append('Description', e.Description)
-    formData.append('ChatImage', e.ChatImage[0])
+    chatImage != `${import.meta.env.VITE_FRONTEND_APP_URL}user.png` ? formData.append('ChatImage', e.ChatImage[0]) : formData.append('ChatImage', "none")
 
     fetch(`${import.meta.env.VITE_SERVER_API_URL}UpdateGroup`, {
       method: 'POST',
@@ -247,7 +247,7 @@ function GroupOption({ webSocket }) {
                   <p className='group-options-bar-people-title'>Group users:</p>
                   <div className='group-options-bar-people'>
                     { currentChat.chatData.users.map(({name, roll, userId}, i)=>(
-                        <GroupUser key={i} name={name} roll={roll} userId={userId}/>
+                        <GroupUser key={i} name={name} roll={roll} userId={userId} chatsStatus={chatsStatus} webSocket={webSocket} chats={chats} CurrentUserId={CurrentUserId}/>
                       ))
                     }
                   </div>

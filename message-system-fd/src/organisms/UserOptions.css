@@ -72,3 +72,14 @@
 .user-options-container p{
     margin: 20px 0 10px 0;
 }
+
+.user-options-image-selector{
+    width: 110px;
+    margin: 18px 0 0 0;
+    outline: 1px solid #dfdfdf;
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 250px;
+    margin: 18px 0 0 0;
+  }

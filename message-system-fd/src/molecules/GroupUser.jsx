@@ -2,8 +2,8 @@ import './GroupUser.css'
 import {useState, useEffect} from 'react'
 import Cookies from 'js-cookie'
 
-function GroupUser({name, roll, userId}) {
-  const [userCurrentState] = useState(false)
+function GroupUser({ name, roll, userId, chatsStatus, chats, CurrentUserId }) {
+  const [userCurrentState, setUserCurrentState] = useState(false)
   const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}user.png`)
   const [token] = useState(Cookies.get('JwtToken'))
   
@@ -32,6 +32,25 @@ function GroupUser({name, roll, userId}) {
   useEffect(()=>{
     getUserPhotoById()
   }, [])
+
+  const reloadState = ()=>{
+    if(userId != CurrentUserId){
+      const currentChatIdex = chats.findIndex(i=>i.UserChatPerspectiveLinkId == userId)
+      const currentChatsStatusIndex = chatsStatus.findIndex(i=>i.chatId == chats[currentChatIdex].id)
+      
+      if(currentChatsStatusIndex != -1){
+        setUserCurrentState(chatsStatus[currentChatsStatusIndex].state)
+      }else{
+        setUserCurrentState(false)
+      }
+    }else{
+      setUserCurrentState(true)
+    }
+  }
+
+  useEffect(()=>{
+    reloadState()
+  },[chatsStatus])
 
   return (
     <>

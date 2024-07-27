@@ -103,9 +103,9 @@
 .group-options-profile-photo{
     width: 100px;
     height: 100px;
-    background-color: gray;
     border-radius: 100%;
     object-fit: cover;
+    outline: 1px solid #dfdfdf;
 }
 
 .group-options-profile-data{

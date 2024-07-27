@@ -98,11 +98,11 @@ function Home() {
                 ) : boxes.box1 == 'UserOptions' ? (
                   <UserOptions webSocket={webSocket} setWebSocket={setWebSocket}/>
                 ) : boxes.box1 == 'SearchUser' ? (
-                  <SearchUser webSocket={webSocket} searchType={searchType} chats={chats} setNewUserToAdd={setNewUserToAdd}/>
+                  <SearchUser webSocket={webSocket} searchType={searchType} chats={chats} setNewUserToAdd={setNewUserToAdd} chatsImage={chatsImage} setChatsImage={setChatsImage}/>
                 ) : boxes.box1 == 'AddUser' ? (
                   <AddUser webSocket={webSocket} newUserToAdd={newUserToAdd}/>
                 ) : boxes.box1 == 'CreateGroup' && (
-                  <CreateGroup webSocket={webSocket} chats={chats}/>
+                  <CreateGroup webSocket={webSocket} chats={chats} chatsImage={chatsImage} setChatsImage={setChatsImage}/>
                 )
               }
             </div>
@@ -112,7 +112,7 @@ function Home() {
                 ) : boxes.box2 == 'MessageBox' ? (
                   <MessageBox chatsStatus={chatsStatus} webSocket={webSocket} chatsImage={chatsImage}/>
                 ) : boxes.box2 == 'GroupOption' ? (
-                  <GroupOption webSocket={webSocket}/>
+                  <GroupOption webSocket={webSocket} chatsStatus={chatsStatus} chats={chats} CurrentUserId={userId}/>
                 ) : boxes.box2 == 'ChatOption' ? (
                   <ChatOption webSocket={webSocket}/>
                 ) : boxes.box2 == 'aboutMessage' && (

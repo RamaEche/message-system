@@ -15,10 +15,11 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
   const [userId] = useContext(UserIdContext)
   const goBackArrow = useRef(null)
   const [userData, setUserData] = useState({ name:"Chat", state:false, src:`${import.meta.env.VITE_FRONTEND_APP_URL}group.png` })
+  const textA = useRef(null)
 
   const LazyLoadedComponent = lazy(() => import('emoji-picker-react')); // The import: import EmojiPicker from 'emoji-picker-react';
 
-  const { register, handleSubmit, reset, setValue, watch } = useForm()
+  const { handleSubmit, reset } = useForm()
 
   const Chats = ()=>{
     setBoxes({box1:"Chats", box2:boxes.box2, currentBox:1})
@@ -45,8 +46,8 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
     }
   }
 
-  const sendMessage = (data)=>{
-    if(data.replaceAll(' ', '') == '') {
+  const sendMessage = ()=>{
+    if(textA.current.value.replaceAll(' ', '') == '') {
       reset();
       return 0
     }
@@ -55,7 +56,7 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
     createMessage(
       undefined,
       currentChat.chatData.type,
-      data,
+      textA.current.value,
       new Date(),
       name,
       true,
@@ -68,7 +69,7 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
     webSocket.emit("postNewMessage", {
       authorization: `Barrer ${token}`,
       chatId:currentChat.chatId,
-      text:data
+      text:textA.current.value
     });
     reset();
   }
@@ -113,7 +114,7 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
   useEffect(()=>{
     setMessages([])
     webSocket.emit('getMessagesChunk', {authorization: `Barrer ${token}`, chatId:currentChat.chatId, chunk:0})
-    webSocket.emit('getChatDescriptionData', {authorization: `Barrer ${token}`, chatId:currentChat.chatId})
+    webSocket.emit('getChatDescriptionData', {authorization: `Barrer ${token}`, chatId:currentChat.chatId, chatType:currentChat.chatType})
     chargeState()
   }, [currentChat])
 
@@ -181,7 +182,7 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
     });
 
     webSocket.on('getChatDescriptionData', data=>{
-      const chatsImageIndex = chatsImage.findIndex(i=>i.chatID == currentChat.chatId)
+      const chatsImageIndex = chatsImage.findIndex(i=>i.chatID == data.chatId)
       if(chatsImageIndex != -1){
         setUserData(CUserData=>({
           ...CUserData,
@@ -191,6 +192,7 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
       }else{
         setUserData(CUserData=>({
           ...CUserData,
+          src:`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`,
           name: data.name
         }))
       }
@@ -198,15 +200,8 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
   }, [])
 
   const prueba = (emojiData)=>{
-    setValue('text', watch("text")+String.fromCodePoint(parseInt(emojiData.unified, 16)), { shouldValidate: true })
+    textA.current.value = textA.current.value+String.fromCodePoint(parseInt(emojiData.unified, 16))
   }
-
-  const manejarKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      sendMessage(event.target.value);
-    }
-  };
 
   return (
     <div className='message-box'>
@@ -233,7 +228,7 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
         </div>
       </div>
       <form className='message-box-input' onSubmit={handleSubmit((data)=>sendMessage(data.text))}>
-        <input type='text' className='message-box-input-text' placeholder='Send mensage...' onKeyDown={manejarKeyPress} {...register('text', {required: true})}/>
+        <div className="message-box-input-text-container"><textarea className="message-box-input-text" ref={textA} placeholder='Send mensage...'></textarea></div>
         <FileSelectorOption className='message-input-file' messageInputFileButton={messageInputFileButton} setMessageInputFileButton={setMessageInputFileButton} onClick={()=>{setMessageInputFileButton("open")}}></FileSelectorOption>
         <div className='message-input-send-container'>
           <input type="submit" className='message-input-send' value=""/>

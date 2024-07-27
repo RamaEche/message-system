@@ -86,11 +86,12 @@
 }
 
 .chat-options-profile-photo{
-    width: 100px;
-    height: 100px;
-    background-color: gray;
-    border-radius: 100%;
+    outline: 1px solid #dfdfdf;
+    width: 110px;
+    height: 110px;
     object-fit: cover;
+    border-radius: 250px;
+    margin: 18px 0 0 0;
 }
 
 .chat-options-profile-data{

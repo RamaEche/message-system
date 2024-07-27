@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const Chats = require("../models/Chats.js");
 const fs = require("fs/promises");
-const { rmSync } = require("fs");
+const { rmSync, readdirSync, unlinkSync } = require("fs");
 const path = require("path");
 const imageType = require("image-type");
 
@@ -30,6 +30,14 @@ const postUpdateGroup = async(req, res)=>{
 				}
 			}else if(req.body.Description != chat.Description){
 				throw new Error("{ \"ok\":false, \"status\":400, \"err\":\"invalidInputs\"}");
+			}
+
+			if(req.body.ChatImage == "none"){
+				await Chats.updateOne({_id:req.headers["chatid"]}, {$set:{"PhotoPath":null}});
+				const folderPath = path.join(process.env.MEDIA_FILES, "chats", `chat-ID${req.headers["chatid"]}`);
+				const filenames = readdirSync(folderPath);
+				console.log(path.join(folderPath, filenames[0]));
+				unlinkSync(path.join(folderPath, filenames[0]));
 			}
 		}
     

@@ -108,16 +108,30 @@
     justify-content: space-evenly;
 }
 
-.message-box-input-text{
+.message-box-input-text-container{
+    padding: 10px 0;
     background-color: aliceblue;
     width: calc(100% - 180px);
-    height: 100%;
     margin: 0 10px;
     border-radius: 100px;
-    padding: 0;
+    padding-right: 30px;
     padding-left: 30px;
-    font-size: medium;
+
 }
+
+.message-box-input-text{
+    width: 100%;
+    height: calc(100% - 10px);
+    padding-top: 10px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    font-size: large;
+    resize: none;
+}
+
+.message-box-input-text:focus-visible{
+    outline: none;
+  }
 
 .message-input-file{
     background-color: aliceblue;

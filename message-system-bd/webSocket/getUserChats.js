@@ -11,6 +11,7 @@ const getUserChats = async (socket, data, user) => {
 			let otherChatUserCurrentState;
 			let name;
 			let ignoredMsgs = 0;
+			let UserChatPerspectiveLinkId = null;
 
 			if(currentChat.Messages.length != 0){chatDescription = currentChat.Messages[currentChat.Messages.length-1].TextMessage;}
 			else{ chatDescription = "";}
@@ -24,6 +25,7 @@ const getUserChats = async (socket, data, user) => {
 				await currentChat.Users.forEach(async chatUser => {
 					if(chatUser.UserId != user.id){
 						name = chatUser.Name;
+						UserChatPerspectiveLinkId = chatUser.UserId;
 					}
 				});
 
@@ -54,6 +56,7 @@ const getUserChats = async (socket, data, user) => {
 
 			chats.push({
 				id: currentChat.id,
+				UserChatPerspectiveLinkId,
 				Name:name,
 				Type:currentChat.Type,
 				Description:chatDescription,

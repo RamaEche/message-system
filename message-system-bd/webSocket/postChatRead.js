@@ -5,7 +5,7 @@ const postChatRead = async (socket, data)=>{
 	try{
 		let validatedData = await validateInWSSystem(socket, "postChatRead", data);
 		if (validatedData == 0) return 0;
-		let [userId] = validatedData;
+		let userId = validatedData[1];
 
 		const chat = await Chats.findById(data.chatId);
 		for (let i = chat.Messages.length; i > 0; i--) {

@@ -25,6 +25,7 @@
 
 .message-container-text-container p{
     overflow-wrap: anywhere;
+    white-space: pre-wrap;
 }
 
 .message-container-name-container{

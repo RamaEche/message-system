@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const Users = require("../models/Users.js");
 const fs = require("fs/promises");
-const { rmSync } = require("fs");
+const { rmSync, readdirSync, unlinkSync } = require("fs");
 const path = require("path");
 const imageType = require("image-type");
 
@@ -24,6 +24,13 @@ const updateProfile = async(req, res)=>{
 				await Users.updateOne({_id:req.user.id}, {$set:{"PrivateData.Description":req.body.Description}});
 			}else if(req.body.Description != req.user.PrivateData.Description){
 				throw new Error("{ \"ok\":false, \"status\":400, \"err\":\"invalidInputs\"}");
+			}
+
+			if(req.body.ProfileImage == "none"){
+				await Users.updateOne({_id:req.user.id}, {$set:{"PrivateData.ProfilePhotoPath":null}});
+				const folderPath = path.join(process.env.MEDIA_FILES, "users", `user-ID${req.user.id}`);
+				const filenames = readdirSync(folderPath);
+				unlinkSync( path.join(folderPath, filenames[0]));
 			}
 		}
 
