@@ -202,7 +202,7 @@ function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId }) {
         <div className='group-option-content-scroll'>
           {serverDataGeted &&
             <>
-                <form className='group-options-form-container' ref={form} onSubmit={handleSubmit((data)=>submitForm(data))}>
+                <form ref={form} onSubmit={handleSubmit((data)=>submitForm(data))} className='group-option-form'>
                   {formError &&
                     <div className='form-err-aclaration'>
                       <p>{formError}</p>
@@ -224,7 +224,7 @@ function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId }) {
                   </div>
                   <div className='group-options-container'>
                       <p>Name</p>
-                      <input className='input-text group-input-text' type='text' name='Name' {...register('Name', { maxLength: 20, minLength: 4})}/>
+                      <input className='input-text' type='text' name='Name' {...register('Name', { maxLength: 20, minLength: 4})}/>
                       {err.Name &&
                         <div className='input-err-aclaration'>
                           <p>This field must contain between 4 and 20 characters</p>

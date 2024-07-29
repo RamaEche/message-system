@@ -140,36 +140,38 @@ function ChatOption({ webSocket }) {
       </div>
       {serverDataGeted &&
         <form className='chat-options-form-container' ref={form} onSubmit={handleSubmit((data)=>submitForm(data))}>
-          {formError &&
-            <div className='form-err-aclaration'>
-              <p>{formError}</p>
-            </div>
-          }
-          {err.ProfileImage &&
-          <div className='form-err-aclaration sing-in-form-err-aclaration'>
-              <p>Profile photo error.</p>
-            </div>
-          }
-          <div className='chat-options-profile'>
-            <img className='chat-options-profile-photo' src={photoSrc}/>
-            <div className='chat-options-profile-data'>
-              <h3>{serverDataGeted ? serverDataGeted.userName : ''}</h3>
-              <p>{serverDataGeted ? serverDataGeted.description : ''}</p>
-              <p className='user-storage'></p>
-            </div>
-          </div>
-          <div className='chat-options-container'>
-              <p>Name</p>
-              <input className='input-text' type='text' name='Name' {...register('Name', { maxLength: 15, minLength: 4})}/>
-              {err.Name &&
-                <div className='input-err-aclaration'>
-                  <p>This field must contain between 4 and 15 characters.</p>
-                </div>
-              }
-              <div className='chat-options-form-changes-buttons'>
-                <input className='reset-button' onClick={handleSubmit(data=>resetForm(data))} type='reset' value="Reset"/>
-                <input className='main-button send-button' type='submit' value="Send"/>
+          <div>
+            {formError &&
+              <div className='form-err-aclaration'>
+                <p>{formError}</p>
               </div>
+            }
+            {err.ProfileImage &&
+            <div className='form-err-aclaration sing-in-form-err-aclaration'>
+                <p>Profile photo error.</p>
+              </div>
+            }
+            <div className='chat-options-profile'>
+              <img className='chat-options-profile-photo' src={photoSrc}/>
+              <div className='chat-options-profile-data'>
+                <h3>{serverDataGeted ? serverDataGeted.userName : ''}</h3>
+                <p>{serverDataGeted ? serverDataGeted.description : ''}</p>
+                <p className='user-storage'></p>
+              </div>
+            </div>
+            <div className='chat-options-container'>
+                <p>Name</p>
+                <input className='input-text' type='text' name='Name' {...register('Name', { maxLength: 15, minLength: 4})}/>
+                {err.Name &&
+                  <div className='input-err-aclaration'>
+                    <p>This field must contain between 4 and 15 characters.</p>
+                  </div>
+                }
+                <div className='chat-options-form-changes-buttons'>
+                  <input className='reset-button' onClick={handleSubmit(data=>resetForm(data))} type='reset' value="Reset"/>
+                  <input className='main-button send-button' type='submit' value="Send"/>
+                </div>
+            </div>
           </div>
         </form>
       }

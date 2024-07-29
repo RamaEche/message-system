@@ -150,7 +150,7 @@ function SearchUser({searchType, webSocket, chats, parentOrdedChats=[], setParen
         <GoBackArrow changeTo="Chats" boxNumber={1}/>
         <h1 className='search-user-outstanding-logo'>Search user.</h1>
       </div>
-      <div>
+      <div className='search-user-content'>
         <div className='search-user-input-container'>
           <div className="search-user-img-container">
             <div className='search-user-img-content'>
@@ -163,32 +163,42 @@ function SearchUser({searchType, webSocket, chats, parentOrdedChats=[], setParen
             searchType == "returnKnownUsers" && ((e)=>returnSearchKnownUsersByValue(e))
           })}/>
         </div>
-        <div className=''>
+        <>
           {ordedChats == null && parentOrdedChats == null ?
             (
-              <div className='search-user-loading'>
-                <Loading/>
+              <div className='search-user-chats'>
+                <div className='search-user-loading'>
+                  <Loading/>
+                </div>
               </div>
             ): ordedChats.length == 0 && parentOrdedChats.length == 0 ?
             (
-              <NoMoreUsers/>
+              <div className='search-user-chats'>
+                <NoMoreUsers/>
+              </div>
             )
             :(
               searchType == "unknownUsers" ?
-                ordedChats.map(({id, userName, userDescription}, i)=>{
-                  return <SerchedUser id={id} userName={userName} userDescription={userDescription} setNewUserToAdd={setNewUserToAdd} key={i}/>
-                })
+                <div className='search-user-chats'>
+                  {ordedChats.map(({id, userName, userDescription}, i)=>{
+                    return <SerchedUser id={id} userName={userName} userDescription={userDescription} setNewUserToAdd={setNewUserToAdd} key={i}/>
+                  })}
+                </div>
                 : searchType == "knownUsers" ?
-                ordedChats.map((chat, i)=>{
-                  return <Chat socket={webSocket} key={i} ChatID={chat.id} chatsImage={chatsImage} setChatsImage={setChatsImage} Type={chat.Type} Name={chat.Name} Description={chat.Description} UserCurrentState={chat.UserCurrentState}  IgnoredMessageCounter={chat.IgnoredMessageCounter}/>
-                })
+                  <div className='search-user-chats'>
+                  {ordedChats.map((chat, i)=>{
+                    return <Chat socket={webSocket} key={i} ChatID={chat.id} chatsImage={chatsImage} setChatsImage={setChatsImage} Type={chat.Type} Name={chat.Name} Description={chat.Description} UserCurrentState={chat.UserCurrentState}  IgnoredMessageCounter={chat.IgnoredMessageCounter}/>
+                  })}
+                  </div>
                 : searchType == "returnKnownUsers" &&
-                parentOrdedChats.map((chat, i)=>{
-                  return <div className={chat.added == true ? "none" : ""} key={i}><Chat onClick={returnKnownUsers} socket={webSocket} chatsImage={chatsImage} setChatsImage={setChatsImage} ChatID={chat.id} Type={chat.Type} Name={chat.Name} Description={chat.Description} UserCurrentState={chat.UserCurrentState}  IgnoredMessageCounter={chat.IgnoredMessageCounter}/></div>
-                })
+                  <div className=''>
+                  {parentOrdedChats.map((chat, i)=>{
+                    return <Chat className={chat.added == true ? "none" : ""} key={i} onClick={returnKnownUsers} socket={webSocket} chatsImage={chatsImage} setChatsImage={setChatsImage} ChatID={chat.id} Type={chat.Type} Name={chat.Name} Description={chat.Description} UserCurrentState={chat.UserCurrentState}  IgnoredMessageCounter={chat.IgnoredMessageCounter}/>
+                  })}
+                  </div>
             )
           }
-        </div>
+        </>
       </div>
     </div>
   )

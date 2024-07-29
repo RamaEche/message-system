@@ -3,7 +3,7 @@ import {useState, useContext, useEffect} from 'react'
 import {BoxesContext, CurrentChatContext} from '../pages/Home'
 import Cookies from 'js-cookie'
 
-function Chat({onClick=false, chatsStatus, ChatID, Type, Name, Description, IgnoredMessageCounter, chatsImage, setChatsImage}) {
+function Chat({className="", onClick=false, chatsStatus, ChatID, Type, Name, Description, IgnoredMessageCounter, chatsImage, setChatsImage}) {
   const [boxes, setBoxes] = useContext(BoxesContext)
   const [ignoredMessages, setIgnoredMessages] = useState(IgnoredMessageCounter)
   const [chatState, setChatState] = useState(false)
@@ -78,7 +78,7 @@ function Chat({onClick=false, chatsStatus, ChatID, Type, Name, Description, Igno
   },[chatsStatus])
 
   return (
-    <a onClick={onClick ? ()=>onClick(ChatID) : ()=>OpenChat()} className='chat-box'>
+    <a onClick={onClick ? ()=>onClick(ChatID) : ()=>OpenChat()} className={'chat-box '+className}>
         <div className='chat-content'>
             <div className='chat-data'>
                 <img className="chat-image" src={photoSrc}/>

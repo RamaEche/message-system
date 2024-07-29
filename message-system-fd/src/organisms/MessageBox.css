@@ -97,6 +97,7 @@
     align-items: flex-end;
     overflow-y: scroll;
     flex-direction: column-reverse;
+    scrollbar-width: none;
 }
 
 .message-box-input{
@@ -110,7 +111,7 @@
 
 .message-box-input-text-container{
     padding: 10px 0;
-    background-color: aliceblue;
+    background-color: #fff;
     width: calc(100% - 180px);
     margin: 0 10px;
     border-radius: 100px;
@@ -122,7 +123,7 @@
 .message-box-input-text{
     width: 100%;
     height: calc(100% - 10px);
-    padding-top: 10px;
+    padding-top: 7px;
     overflow-y: hidden;
     overflow-x: hidden;
     font-size: large;

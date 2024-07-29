@@ -7,7 +7,6 @@
 .group-option-content{
     width: 100%;
     height: calc(100% - 55px);
-    border-right: solid 1px #aaa;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -20,6 +19,7 @@
     flex-direction: column;
     align-items: center;
     width: inherit;
+    padding-bottom: 10px;
 }
 
 .group-option-bar{
@@ -62,6 +62,10 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
+}
+
+.group-option-form{
+    width: 70%;
 }
 
 .group-options-form-changes-buttons{

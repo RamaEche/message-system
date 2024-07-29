@@ -2,7 +2,10 @@
     width: 100%;
     height: 100%;
     background-color: #fff;
-    border-right: solid 1px #aaa;
+}
+
+.create-group-content{
+    overflow-y:scroll;
 }
 
 .search-user-bar{
@@ -58,10 +61,11 @@
 }
 
 .search-user-img-content{
-    height: 56px;
-    position: absolute;
+    height: 0;
+    position: relative;
     display: flex;
     align-items: center;
+    top: 28px;
 }
 
 .search-user-img{
@@ -72,4 +76,14 @@
 
 .search-user-loading{
     margin-top: 50px;
+}
+
+.search-user-content{
+    height: calc(100% - 55px);
+}
+
+.search-user-chats{
+    overflow-y: scroll;
+    height: calc(100% - 56px);
+    scrollbar-width: thin;
 }

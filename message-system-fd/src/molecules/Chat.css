@@ -11,6 +11,10 @@
     background-color: #f0f0f0;
 }
 
+.chat-box:first-of-type{
+    border-top: #aaa solid 1px;
+}
+
 .chat-content{
     height: 100%;
     width: calc(100% - 20px);

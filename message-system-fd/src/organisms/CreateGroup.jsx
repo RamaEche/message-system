@@ -68,7 +68,7 @@ function CreateGroup({ webSocket, chats, chatsImage, setChatsImage }) {
           <GoBackArrow changeTo="Chats" boxNumber={1}/>
           <h1 className='create-group-outstanding-logo'>Create group</h1>
         </div>
-        <form onSubmit={handleSubmit((e)=>createGroup(e))}>
+        <form className='create-group-content' onSubmit={handleSubmit((e)=>createGroup(e))}>
           {formError &&
             <div className='form-err-aclaration'>
               <p>{formError}</p>

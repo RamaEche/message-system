@@ -2,7 +2,6 @@
     width: 100%;
     height: 100%;
     background-color: #fff;
-    border-right: solid 1px #aaa;
     display: flex;
     flex-direction: column;
 }
@@ -35,11 +34,11 @@
 }
 
 .chat-options-form-container{
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px;
+    overflow-y: scroll;
+    scrollbar-width: none;
 }
 
 .chat-options-container{

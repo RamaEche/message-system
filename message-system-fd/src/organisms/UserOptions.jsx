@@ -151,54 +151,56 @@ function UserOptions({ setWebSocket }) {
         <GoBackArrow changeTo="Chats" boxNumber={1}/>
         <h1 className='user-option-outstanding-logo'>Text Message System</h1>
       </div>
-      <form className='user-options-form-container' ref={form} onSubmit={handleSubmit((data)=>onSubmit(data))}>
-        {formError &&
-          <div className='form-err-aclaration'>
-            <p>{formError}</p>
-          </div>
-        }
-        {err.ProfileImage &&
-        <div className='form-err-aclaration sing-in-form-err-aclaration'>
-            <p>Profile photo error.</p>
-          </div>
-        }
-        <img className='user-options-image-selector' src={photoSrc}/>
-        <div className='image-selector-buttons'>
-          <input type='button' onClick={()=>deletePhoto()} className='link' value='Delete photo'/>
-          <div className='sing-in-image-selector link'>
-            <input type='file' name='ProfileImage' {...register('ProfileImage')}/>
-          </div>
-        </div>
-        <div className='user-options-container'>
-            <p>Username</p>
-            <input className='input-text' type='text' name='UserName' {...register('UserName', { maxLength: 15, minLength: 4})}/>
-            {err.UserName &&
-              <div className='input-err-aclaration'>
-                <p>This field must contain between 4 and 15 characters.</p>
-              </div>
-            }
-            <p>Description</p>
-            <input className='input-text' type='text' name='Description' {...register('Description', { maxLength: 100, minLength: 1})}/>
-            {err.Description &&
-              <div className='input-err-aclaration'>
-                <p>This field is required, and must contain between 1 and 100 characters.</p>
-              </div>
-            }
-            <div className='user-options-form-changes-buttons'>
-              <input onClick={()=>resetForm()} type='reset' className='reset-button' value="Reset"/>
-              <input className='user-options-submit reset-button' type='submit' value="Send"/>
+      <div className='user-option-content'>
+        <form className='user-options-form-container' ref={form} onSubmit={handleSubmit((data)=>onSubmit(data))}>
+          {formError &&
+            <div className='form-err-aclaration'>
+              <p>{formError}</p>
             </div>
-        </div>
-      </form>
-      <a className='user-options-link link' href='/restorePassword'>Change password</a>
-      <button className='user-options-link link' onClick={()=>setOpenConfirmation2(true)}>Close account</button>
-      <button className='user-options-link link' onClick={()=>setOpenConfirmation1(true)}>Remove account</button>
-      {openConfirmation1 &&
-        <Confirmation cbFalse={()=>setOpenConfirmation1(false)} cbTrue={()=>removeAccount()} text="Are you sure you want to delete the account?"/>
-      }
-      {openConfirmation2 &&
-        <Confirmation cbFalse={()=>setOpenConfirmation2(false)} cbTrue={()=>closeAccount()} text="Are you sure you want to close the account?"/>
-      }
+          }
+          {err.ProfileImage &&
+          <div className='form-err-aclaration sing-in-form-err-aclaration'>
+              <p>Profile photo error.</p>
+            </div>
+          }
+          <img className='user-options-image-selector' src={photoSrc}/>
+          <div className='image-selector-buttons'>
+            <input type='button' onClick={()=>deletePhoto()} className='link' value='Delete photo'/>
+            <div className='sing-in-image-selector link'>
+              <input type='file' name='ProfileImage' {...register('ProfileImage')}/>
+            </div>
+          </div>
+          <div className='user-options-container'>
+              <p>Username</p>
+              <input className='input-text' type='text' name='UserName' {...register('UserName', { maxLength: 15, minLength: 4})}/>
+              {err.UserName &&
+                <div className='input-err-aclaration'>
+                  <p>This field must contain between 4 and 15 characters.</p>
+                </div>
+              }
+              <p>Description</p>
+              <input className='input-text' type='text' name='Description' {...register('Description', { maxLength: 100, minLength: 1})}/>
+              {err.Description &&
+                <div className='input-err-aclaration'>
+                  <p>This field is required, and must contain between 1 and 100 characters.</p>
+                </div>
+              }
+              <div className='user-options-form-changes-buttons'>
+                <input onClick={()=>resetForm()} type='reset' className='reset-button' value="Reset"/>
+                <input className='user-options-submit reset-button' type='submit' value="Send"/>
+              </div>
+          </div>
+        </form>
+        <a className='user-options-link link' href='/restorePassword'>Change password</a>
+        <button className='user-options-link link' onClick={()=>setOpenConfirmation2(true)}>Close account</button>
+        <button className='user-options-link link' onClick={()=>setOpenConfirmation1(true)}>Remove account</button>
+        {openConfirmation1 &&
+          <Confirmation cbFalse={()=>setOpenConfirmation1(false)} cbTrue={()=>removeAccount()} text="Are you sure you want to delete the account?"/>
+        }
+        {openConfirmation2 &&
+          <Confirmation cbFalse={()=>setOpenConfirmation2(false)} cbTrue={()=>closeAccount()} text="Are you sure you want to close the account?"/>
+        }
+      </div>
     </div>
   )
 }
