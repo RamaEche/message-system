@@ -94,7 +94,7 @@ function Home() {
           <div className='app-container'>
             <div ref={box1} className='box1'>
               {boxes.box1 == 'Chats' ? (
-                  <Chats webSocket={webSocket} chatsStatus={chatsStatus} chatsImage={chatsImage} setChatsImage={setChatsImage} socket={socket} setSearchType={setSearchType} chats={chats} setChats={setChats}/>
+                  <Chats webSocket={webSocket} oneBoxeMode={oneBoxeMode} chatsStatus={chatsStatus} chatsImage={chatsImage} setChatsImage={setChatsImage} socket={socket} setSearchType={setSearchType} chats={chats} setChats={setChats}/>
                 ) : boxes.box1 == 'UserOptions' ? (
                   <UserOptions webSocket={webSocket} setWebSocket={setWebSocket}/>
                 ) : boxes.box1 == 'SearchUser' ? (
@@ -116,7 +116,7 @@ function Home() {
                 ) : boxes.box2 == 'ChatOption' ? (
                   <ChatOption webSocket={webSocket}/>
                 ) : boxes.box2 == 'aboutMessage' && (
-                  <AboutMessage webSocket={webSocket}/>
+                  <AboutMessage webSocket={webSocket} chatsImage={chatsImage}/>
                 )
               }
             </div>

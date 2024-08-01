@@ -82,28 +82,6 @@ function ChatOption({ webSocket }) {
     webSocket.on("postChangeName", ()=>{
       location.href = import.meta.env.VITE_FRONTEND_APP_URL;
     })
-    fetch(`${import.meta.env.VITE_SERVER_API_URL}postChangeName`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'authorization': `Barrer ${token}`,
-        'ChatId':currentChat.chatId
-      },
-      body:JSON.stringify({
-        name: e.Name
-      })
-    })
-   .then((res)=>{
-     if(res.statusText == 'OK'){
-       return res.json()
-     }else{
-       console.error(res)
-     }
-   })
-   .then(()=>{
-     location.href = import.meta.env.VITE_FRONTEND_APP_URL;
-   })
-   .catch((err)=>console.error(err))
   }
 
   //Block user (private chat only, not groups)
@@ -161,7 +139,7 @@ function ChatOption({ webSocket }) {
             </div>
             <div className='chat-options-container'>
                 <p>Name</p>
-                <input className='input-text' type='text' name='Name' {...register('Name', { maxLength: 15, minLength: 4})}/>
+                <input className='input-text' type='text' name='Name' {...register('Name', { required:true, maxLength: 15, minLength: 4})}/>
                 {err.Name &&
                   <div className='input-err-aclaration'>
                     <p>This field must contain between 4 and 15 characters.</p>

@@ -5,10 +5,10 @@ import Cookies from 'js-cookie'
 import Confirmation from '../molecules/Confirmation'
 import AboutMessageUser from '../molecules/AboutMessageUser'
 
-function AboutMessage({ webSocket }) {
+function AboutMessage({ webSocket, chatsImage}) {
   const [boxes, setBoxes] = useContext(BoxesContext)
   const [currentChat] = useContext(CurrentChatContext)
-  const [focusedChat, setFocusedChat] = useState(currentChat.chatMessages[currentChat.chatFocusMessage])
+  const [focusedChat, setFocusedChat] = useState(currentChat.chatMessages.slice().reverse()[currentChat.chatFocusMessage])
   const [token] = useState(Cookies.get('JwtToken'))
   const [userId] = useContext(UserIdContext)
   const [openConfirmation, setOpenConfirmation] = useState(false)
@@ -24,6 +24,10 @@ function AboutMessage({ webSocket }) {
       console.log(data)
     })
   }, [])
+
+  useEffect(()=>{
+    console.log(focusedChat)
+  }, [focusedChat])
 
   const deleteMessage = ()=>{
     if(focusedChat.id != undefined){
@@ -51,7 +55,7 @@ function AboutMessage({ webSocket }) {
         <div className='about-message-bar-people-container'>
           {focusedChat.id != undefined ?
             focusedChat.seenBy.map((id, index)=>(
-              <AboutMessageUser key={index} id={id} focusedChat={focusedChat}/>
+              <AboutMessageUser key={index} id={id} focusedChat={focusedChat} chatsImage={chatsImage}/>
             ))
           :
           <AboutMessageUser id={userId} focusedChat={focusedChat}/>}

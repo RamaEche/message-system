@@ -3,12 +3,12 @@ import {useState, useContext, useEffect} from 'react'
 import {BoxesContext, CurrentChatContext} from '../pages/Home'
 import Cookies from 'js-cookie'
 
-function Chat({className="", onClick=false, chatsStatus, ChatID, Type, Name, Description, IgnoredMessageCounter, chatsImage, setChatsImage}) {
+function Chat({className="", setClicked, onClick=false, chatsStatus, ChatID, Type, Name, Description, IgnoredMessageCounter, chatsImage, setChatsImage}) {
   const [boxes, setBoxes] = useContext(BoxesContext)
   const [ignoredMessages, setIgnoredMessages] = useState(IgnoredMessageCounter)
   const [chatState, setChatState] = useState(false)
   const [, setCurrentChat] = useContext(CurrentChatContext)
-  const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
+  const [photoSrc, setPhotoSrc] = useState(``)
   const [token] = useState(Cookies.get('JwtToken'))
   
   const OpenChat = ()=>{
@@ -19,6 +19,7 @@ function Chat({className="", onClick=false, chatsStatus, ChatID, Type, Name, Des
     }))
     setBoxes({box1:boxes.box1, box2:"MessageBox", currentBox:2})
     setIgnoredMessages(0)
+    setClicked(ChatID)
   }
   
   useEffect(()=>{
@@ -47,6 +48,14 @@ function Chat({className="", onClick=false, chatsStatus, ChatID, Type, Name, Des
         setChatsImage(currentChatsImage=>{
           return [...currentChatsImage, {chatID:ChatID, src:URL.createObjectURL(info)}]
         })
+      }else if(info.msg){
+        if(Type == "G"){
+          setPhotoSrc(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
+          setChatsImage(currentChatsImage=>[...currentChatsImage, {chatID:ChatID, src:`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`}])
+        }else{
+          setPhotoSrc(`${import.meta.env.VITE_FRONTEND_APP_URL}user.png`)
+          setChatsImage(currentChatsImage=>[...currentChatsImage, {chatID:ChatID, src:`${import.meta.env.VITE_FRONTEND_APP_URL}user.png`}])
+        }
       }
     })
     .catch((err)=>console.log(err))

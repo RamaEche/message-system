@@ -1,16 +1,19 @@
 import './Chats.css'
 import Chat from '../molecules/Chat'
-import {useContext, useEffect, useState} from 'react'
-import {BoxesContext, UserIdContext, CurrentChatContext} from '../pages/Home'
+import {useContext, useEffect, useState, useRef} from 'react'
+import {BoxesContext, UserIdContext} from '../pages/Home'
 import Cookies from 'js-cookie'
 import Loading from "../atoms/Loading.jsx"
 import NoMoreUsers from "../atoms/NoMoreUsers.jsx"
 
-function Chats({ socket, chatsStatus, setSearchType, chats, setChats, chatsImage, setChatsImage}) {
+function Chats({ socket, oneBoxeMode, chatsStatus, setSearchType, chats, setChats, chatsImage, setChatsImage}) {
   const [token] = useState(Cookies.get('JwtToken'))
   const [boxes, setBoxes] = useContext(BoxesContext)
-  const [currentChat] = useContext(CurrentChatContext)
   const [, setUserId] = useContext(UserIdContext)
+  const [clicked, setClicked] = useState("")
+  const clickedRef = useRef(clicked);
+  const oneBoxeModeRef = useRef(oneBoxeMode);
+  const boxesRef = useRef(boxes);
 
   const SearchChat = ()=>{
     setSearchType("knownUsers")
@@ -56,14 +59,17 @@ function Chats({ socket, chatsStatus, setSearchType, chats, setChats, chatsImage
     })
 
     socket.on('fromServerNewMessage', data => {
-      if(data.chatId==currentChat.chatId){
+      if((clickedRef.current == data.chatId && oneBoxeModeRef.current == true && boxesRef.current.currentBox == 2) || (clickedRef.current == data.chatId && oneBoxeModeRef.current == false && boxesRef.current.box2 != "Welcome")){
         return 0
       }
 
-      setChats(prevChats =>{
-        let currentChats = prevChats;
-        let modificatedChat = currentChats.filter(chat => chat.id==data.chatId)
-        modificatedChat = modificatedChat[0]
+      setChats(currentChats =>{
+        const modificatedChatIndex = currentChats.findIndex(chat => chat.id==data.chatId)
+        if(modificatedChatIndex == -1){
+          location.href = import.meta.env.VITE_FRONTEND_APP_URL;
+        }
+        const modificatedChat = currentChats[modificatedChatIndex]
+        console.log(currentChats[modificatedChatIndex], modificatedChatIndex)
         let newChat = {
           id: modificatedChat.id,
           Name:modificatedChat.Name,
@@ -72,13 +78,23 @@ function Chats({ socket, chatsStatus, setSearchType, chats, setChats, chatsImage
           UserCurrentState:modificatedChat.UserCurrentState,
           IgnoredMessageCounter:modificatedChat.IgnoredMessageCounter+1,
         };
-        currentChats = currentChats.filter(chat => chat.id!=data.chatId)
-        currentChats.push(newChat)
-
-        return currentChats;
+        currentChats[modificatedChatIndex] = newChat
+        return [...currentChats];
       })
     });
   }, []);
+
+  useEffect(() => {
+    clickedRef.current = clicked;
+  }, [clicked]);
+
+  useEffect(() => {
+    oneBoxeModeRef.current = oneBoxeMode;
+  }, [oneBoxeMode]);
+
+  useEffect(() => {
+    boxesRef.current = boxes;
+  }, [boxes]);
 
   return (
     <div className='chats-box'>
@@ -109,7 +125,7 @@ function Chats({ socket, chatsStatus, setSearchType, chats, setChats, chatsImage
         ):
         (
           chats.map((chat, i)=>{
-            return <Chat key={i} chatsImage={chatsImage} setChatsImage={setChatsImage} chatsStatus={chatsStatus} ChatID={chat.id} Type={chat.Type} Name={chat.Name} Description={chat.Description} IgnoredMessageCounter={chat.IgnoredMessageCounter}/>
+            return <Chat key={i} setClicked={setClicked} chatsImage={chatsImage} setChatsImage={setChatsImage} chatsStatus={chatsStatus} ChatID={chat.id} Type={chat.Type} Name={chat.Name} Description={chat.Description} IgnoredMessageCounter={chat.IgnoredMessageCounter}/>
           })
         )}
       </div>

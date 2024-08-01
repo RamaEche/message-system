@@ -1,51 +1,34 @@
 import './AboutMessageUser.css'
 import {useState, useContext, useEffect} from 'react'
 import {CurrentChatContext} from "../pages/Home"
-import Cookies from 'js-cookie'
 
-function AboutMessageUser({id, focusedChat}) {
+function AboutMessageUser({id, focusedChat, chatsImage}) {
   const [currentChat] = useContext(CurrentChatContext)
-  const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
-  const [messageStateText, setMessageStateText] = useState()
-  const [fileStateText, setFileStateText] = useState()
+  const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}user.png`)
+  //const [messageStateText, setMessageStateText] = useState()
+  //const [fileStateText, setFileStateText] = useState()
   const [name, setName] = useState("")
-  const [token] = useState(Cookies.get('JwtToken'))
   
-  useEffect(()=>{
-    let currentUser = currentChat.chatData.users.filter(user => user.userId == id)[0]
-    setName(currentUser.name)
-  }, [id])
-
-  const getChatPhotoById = ()=>{
-    fetch(`${import.meta.env.VITE_SERVER_API_URL}getChatPhotoById`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'authorization': `Barrer ${token}`,
-        'ChatId':currentChat.chatId
-      }
-    })
-    .then((res)=>{
-      if(res.statusText == 'OK'){
-        return res.blob()
-      }else{
-        return res.json()
-      }
-    })
-    .then((info)=>{
-      if(!info.msg){
-        setPhotoSrc(URL.createObjectURL(info))
-      }
-    })
-    .catch((err)=>console.log(err))
+  const setImage = ()=>{
+    console.log(chatsImage)
+    let posibleImgIndx = chatsImage.findIndex(i=>i.chatID == id)
+    setPhotoSrc(chatsImage[posibleImgIndx].src)
   }
 
   useEffect(()=>{
-    getChatPhotoById()
+    let currentUser = currentChat.chatData.users.filter(user => user.userId == id)[0]
+    setName(currentUser.name)
+
+    setImage()
+  }, [id])
+
+  useEffect(()=>{
+    //This is commented because the file system is not working.
+    /*
     let fullMessageState = focusedChat.messageState
     let fullFileState = focusedChat.fileState
 
-    if(fullMessageState == "mixed"){ //If focusedChat.messageState is mixed.
+     if(fullMessageState == "mixed"){ //If focusedChat.messageState is mixed.
         fullMessageState = "onServer";
         if(fullFileState != "none"){
             fullFileState = "onServer"
@@ -59,21 +42,6 @@ function AboutMessageUser({id, focusedChat}) {
                 }
             }
         }
-    }
-
-    switch (fullMessageState) {
-        case "sending":
-            setMessageStateText("Sending message...")
-            break;
-        case "onServer":
-            setMessageStateText("Message not seen.")
-            break;
-        case "seen":
-            setMessageStateText("Message seen.")
-            break;
-        default:
-            setMessageStateText("error")
-            break;
     }
 
     switch (fullFileState) {
@@ -93,6 +61,21 @@ function AboutMessageUser({id, focusedChat}) {
             setFileStateText("error")
             break;
     }
+      switch (fullMessageState) {
+        case "sending":
+          setMessageStateText("Sending message...")
+          break;
+        case "onServer":
+          setMessageStateText("Message not seen.")
+          break;
+        case "seen":
+          setMessageStateText("Message seen.")
+          break;
+        default:
+          setMessageStateText("error")
+          break;
+      }
+      */
   }, []);
 
   return (
@@ -107,10 +90,13 @@ function AboutMessageUser({id, focusedChat}) {
             </div>
         </div>
         <div className='about-message-user-states'>
-            <p className="about-message-user-state-message">{messageStateText}</p>
-            {fileStateText != "" &&
+            <p className="about-message-user-state-message">{
+              focusedChat.messageState == "sending" ? "Sending message..." :
+              focusedChat.messageState == "onServer" ? "Message not seen." :
+              focusedChat.messageState == "seen" ? "Message seen." : "error"}</p>
+{/*             {fileStateText != "" &&
                 <p className="about-message-user-state-file">{fileStateText}</p>
-            }
+            } */}
         </div>
     </a>  
     </>

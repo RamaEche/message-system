@@ -172,14 +172,14 @@ function UserOptions({ setWebSocket }) {
           </div>
           <div className='user-options-container'>
               <p>Username</p>
-              <input className='input-text' type='text' name='UserName' {...register('UserName', { maxLength: 15, minLength: 4})}/>
+              <input className='input-text' type='text' name='UserName' {...register('UserName', { required:true, maxLength: 15, minLength: 4})}/>
               {err.UserName &&
                 <div className='input-err-aclaration'>
                   <p>This field must contain between 4 and 15 characters.</p>
                 </div>
               }
               <p>Description</p>
-              <input className='input-text' type='text' name='Description' {...register('Description', { maxLength: 100, minLength: 1})}/>
+              <input className='input-text' type='text' name='Description' {...register('Description', { required:true, maxLength: 100, minLength: 1})}/>
               {err.Description &&
                 <div className='input-err-aclaration'>
                   <p>This field is required, and must contain between 1 and 100 characters.</p>

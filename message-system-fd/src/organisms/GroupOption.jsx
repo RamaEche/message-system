@@ -224,14 +224,14 @@ function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId }) {
                   </div>
                   <div className='group-options-container'>
                       <p>Name</p>
-                      <input className='input-text' type='text' name='Name' {...register('Name', { maxLength: 20, minLength: 4})}/>
+                      <input className='input-text' type='text' name='Name' {...register('Name', { required:true, maxLength: 20, minLength: 4})}/>
                       {err.Name &&
                         <div className='input-err-aclaration'>
                           <p>This field must contain between 4 and 20 characters</p>
                         </div>
                       }
                       <p>Description</p>
-                      <input className='input-text' type='text' name='Description' {...register('Description', { maxLength: 80, minLength: 1})}/>
+                      <input className='input-text' type='text' name='Description' {...register('Description', { required:true, maxLength: 80, minLength: 1})}/>
                       {err.Description &&
                         <div className='input-err-aclaration'>
                           <p>This field must contain between 1 and 80 characters</p>
@@ -252,8 +252,8 @@ function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId }) {
                     }
                   </div>
                 </div>
-                <button className='user-options-link link-red' onClick={()=>setOpenConfirmation1(true)}>Leave the group</button>
-                <button className='user-options-link link-red' onClick={()=>setOpenConfirmation2(true)}>Delete group</button>
+                {currentChat.chatData.users.length > 1 && <button className='user-options-link link-red' onClick={()=>setOpenConfirmation1(true)}>Leave the group</button>}
+                {currentChat.chatData.users.find(i=>i.userId == CurrentUserId).roll == "A" && <button className='user-options-link link-red' onClick={()=>setOpenConfirmation2(true)}>Delete group</button>}
                 {openConfirmation1 &&
                   <Confirmation cbFalse={()=>setOpenConfirmation1(false)} cbTrue={()=>leaveTheGroup()} text="Are you sure you want to leave the group?"/>
                 }

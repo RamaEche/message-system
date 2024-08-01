@@ -6,6 +6,11 @@ const postLeaveGroup = async (socket, data, user) => {
 		const currentChat = await Chats.findById(data.chatId).exec();
 		if(currentChat.Users.length == 0) throw new Error("{ \"ok\":false, \"status\":400, \"err\":\"lastUser\"}");
 
+		if(currentChat.Users.length == 1){
+			socket.emit("postLeaveGroup", { status:400, error: "Invalid acction." });
+			return 0;
+		}
+
 		let newUsers = [];
 		let anyAdmin = false;
 		currentChat.Users.forEach(({UserId, Roll})=>{
@@ -16,6 +21,7 @@ const postLeaveGroup = async (socket, data, user) => {
 				}
 			}
 		});
+
 		if(!anyAdmin){
 			newUsers[0].Roll = "A";
 		}

@@ -84,7 +84,7 @@ function CreateGroup({ webSocket, chats, chatsImage, setChatsImage }) {
             }
             <p>Description</p>
             <input className='input-text' type='text' name="description" {...register("description", { required: true, maxLength: 80, minLength: 1})}/>
-            {err.name &&
+            {err.description &&
               <div className='input-err-aclaration'>
                 <p>This field must contain between 1 and 80 characters</p>
               </div>

@@ -3,10 +3,15 @@ const Chats = require("../models/Chats.js");
 const fs = require("fs/promises");
 const path = require("path");
 
-const postDeleteGroup = async (socket, data) => {
+const postDeleteGroup = async (socket, data, user) => {
 	try {
 		const currentChat = await Chats.findById(data.chatId).exec();
 		let chatUsers = currentChat.Users;
+
+		if(currentChat.Users.find(i=>i.UserId == user.id).Roll != "A"){
+			socket.emit("postDeleteGroup", { status:400, error: "Invalid acction." });
+			return 0;
+		}
     
 		for (let i = 0; i < chatUsers.length; i++) {
 			const currentUsers = await Users.findById(chatUsers[i].UserId).exec();

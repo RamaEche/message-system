@@ -4,9 +4,9 @@ import { BoxesContext, CurrentChatContext } from '../pages/Home'
 
 function Message({ index, text, time, name=null, internalOrigin }){
     const [boxes, setBoxes] = useContext(BoxesContext)
-    const [setCurrentChat] = useContext(CurrentChatContext)
+    const [, setCurrentChat] = useContext(CurrentChatContext)
     const messageStatePanel = ()=>{
-        setBoxes({box1:boxes.box1, box2:"aboutMessage"})
+        setBoxes({box1:boxes.box1, box2:"aboutMessage", currentBox:2})
         setCurrentChat(currentChatData =>{
             currentChatData.chatFocusMessage = index
             return currentChatData
