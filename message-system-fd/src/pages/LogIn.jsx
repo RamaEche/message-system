@@ -50,7 +50,7 @@ function LogIn() {
             </div>
           }
           <label>Password</label>
-          <input className={err.Password ? "input-text input-err" : "input-text"} type='text' {...register('Password', { maxLength: 20, minLength: 5, required: true})}/>
+          <input className={err.Password ? "input-text input-err" : "input-text"} type='password' {...register('Password', { maxLength: 20, minLength: 5, required: true})}/>
           {err.Password &&
             <div className='input-err-aclaration'>
               <p>This field is required, and must contain between 5 and 20 characters.</p>

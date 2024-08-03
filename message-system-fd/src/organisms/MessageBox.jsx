@@ -1,6 +1,6 @@
 import './MessageBox.css'
 import Cookies from "js-cookie";
-import {useState, useContext, useEffect, lazy, Suspense, useRef} from 'react'
+import React, {useState, useContext, useEffect, lazy, Suspense, useRef} from 'react'
 import {BoxesContext, UserIdContext, CurrentChatContext} from "../pages/Home"
 import Message from '../molecules/Message'
 import { useForm } from 'react-hook-form'
@@ -16,6 +16,7 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
   const goBackArrow = useRef(null)
   const [userData, setUserData] = useState({ name:"Chat", state:false, src:`${import.meta.env.VITE_FRONTEND_APP_URL}group.png` })
   const textA = useRef(null)
+  const lastDate = useRef(false)
 
   const LazyLoadedComponent = lazy(() => import('emoji-picker-react')); // The import: import EmojiPicker from 'emoji-picker-react';
 
@@ -71,14 +72,31 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
       chatId:currentChat.chatId,
       text:textA.current.value
     });
+    textA.current.value = "";
     reset();
   }
 
   const createMessage = (id, chatType, text, postedTime, name, internalOrigin, sentBy, seenBy, fileState="none", messageState="sending")=>{
     //messageState = sending, onServer, seen and mixed
     //fileState = none, sending, onServer, seen and mixed
+    
+    let hours = postedTime.getHours()
+    hours = hours < 10 ? "0"+hours : hours
+    let minutes = postedTime.getMinutes()
+    minutes = minutes < 10 ? "0"+minutes : minutes
+
+    const msgDay = postedTime.getDate()
+    const msgMonth = postedTime.getMonth()+1
+    const msgFullYear = postedTime.getFullYear()
+
+    let date = false
+    if(lastDate.current != `${msgMonth}/${msgDay}/${msgFullYear}`){
+      lastDate.current = `${msgMonth}/${msgDay}/${msgFullYear}`
+      date = `${msgMonth}/${msgDay}/${msgFullYear}`
+    }
+
     setMessages(msgs =>{
-      const newMsgs = [...msgs, {id, chatType, text, time:postedTime.getHours()+':'+postedTime.getMinutes(), name, internalOrigin, sentBy, seenBy, fileState, messageState}]
+      const newMsgs = [...msgs, {id, chatType, text, time:hours+':'+minutes, name, internalOrigin, sentBy, seenBy, fileState, messageState, date}]
       setCurrentChat(currentChatData =>{
         currentChatData.chatMessages = newMsgs
         return currentChatData
@@ -113,6 +131,7 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
 
   useEffect(()=>{
     setMessages([])
+    lastDate.current = false
     webSocket.emit('getMessagesChunk', {authorization: `Barrer ${token}`, chatId:currentChat.chatId, chunk:0})
     webSocket.emit('getChatDescriptionData', {authorization: `Barrer ${token}`, chatId:currentChat.chatId, chatType:currentChat.chatType})
     chargeState()
@@ -199,7 +218,7 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
     })
   }, [])
 
-  const prueba = (emojiData)=>{
+  const addEmoji = (emojiData)=>{
     textA.current.value = textA.current.value+String.fromCodePoint(parseInt(emojiData.unified, 16))
   }
 
@@ -222,8 +241,15 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
       </div>
       <div className='message-box-messages'>
         <div className='message-box-messages-container'>
-          {messages.slice().reverse().map(({text, time, name, internalOrigin}, index)=>(
-            <Message key={index} index={index} text={text} time={time} name={name} internalOrigin={internalOrigin}/>
+          {messages.slice().reverse().map(({text, time, date, name, internalOrigin}, index)=>(
+            <React.Fragment key={index}>
+              <Message index={index} text={text} time={time} name={name} internalOrigin={internalOrigin}/>
+              {date && (
+                date == `${new Date().getMonth()+1}/${new Date().getDate()}/${new Date().getFullYear()}` ?
+                <div className='message-box-date-pointer'><p>Today</p></div> :
+                <div className='message-box-date-pointer'><p>{date}</p></div>
+              )}
+            </React.Fragment>
           ))}
         </div>
       </div>
@@ -238,7 +264,7 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
         <div className='message-box-input-file'>
               <div>
                 <Suspense fallback={<><br/><br/>Loading...</>}>
-                  <LazyLoadedComponent onEmojiClick={(Emoji)=>prueba(Emoji)} emojiStyle={"google"} skinTonesDisabled={true} lazyLoadEmojis={true}/>
+                  <LazyLoadedComponent onEmojiClick={(Emoji)=>addEmoji(Emoji)} emojiStyle={"google"} skinTonesDisabled={true} lazyLoadEmojis={true}/>
                 </Suspense>
               </div>
           <div className='message-box-input-file-detail'></div>

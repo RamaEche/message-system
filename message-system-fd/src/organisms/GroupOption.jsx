@@ -12,7 +12,6 @@ function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId }) {
   const [boxes, setBoxes] = useContext(BoxesContext)
   const [currentChat] = useContext(CurrentChatContext)
   const [serverDataGeted, setServerDataGeted] = useState(null)
-  const [, setOriginalData] = useState({chatImage:`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`, userName:null, description:null})
   let err = formState.errors;
   let files = [];
   const form = useRef(null)
@@ -47,7 +46,7 @@ function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId }) {
     .then((info)=>{
       if(!info.msg){
         setChatImage(URL.createObjectURL(info))
-        setOriginalData(infoSrc=>({
+        serverDataGeted(infoSrc=>({
           ...infoSrc,
           chatImage: URL.createObjectURL(info)
         }))
@@ -79,6 +78,7 @@ function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId }) {
   //Reset form with the existing name.
   const resetForm = ()=>{
     form.current.reset();
+    setChatImage(serverDataGeted.chatImage != null ? serverDataGeted.chatImage : `${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
     setValue('Name', serverDataGeted.name);
     setValue('Description', serverDataGeted.description);
     getChatPhotoById()
@@ -89,7 +89,7 @@ function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId }) {
     const CurrentName = watch('Name')
     const CurrentDescription = watch('Description')
     form.current.reset();
-    setChatImage(`${import.meta.env.VITE_FRONTEND_APP_URL}user.png`)
+    setChatImage(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
     setValue('Name', CurrentName);
     setValue('Description', CurrentDescription);
   }
@@ -238,7 +238,7 @@ function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId }) {
                         </div>
                       }
                       <div className='group-options-form-changes-buttons'>
-                        <input className='reset-button' onClick={handleSubmit(data=>resetForm(data))} type='reset' value='Reset'/>
+                        <input className='reset-button' onClick={()=>resetForm()} type='button' value='Reset'/>
                         <input className='main-button send-button' type='submit' value='Send'/>
                       </div>
                   </div>

@@ -196,3 +196,12 @@
     right: 82.5px;
     transform: rotate(45deg);
 }
+
+.message-box-date-pointer{
+    padding: 5px 8px;
+    color: #202020;
+    background: #ffffff8a;
+    margin: 5px auto;
+    border-radius: 8px;
+    font-size: smaller;
+}

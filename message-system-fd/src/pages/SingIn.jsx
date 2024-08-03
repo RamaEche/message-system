@@ -98,14 +98,14 @@ function SingIn() {
             </div>
           }
           <label>Password</label>
-          <input className={err.Password ? "input-text input-err" : "input-text"} type='text' name='Password'  {...register('Password', { maxLength: 20, minLength: 5, required: true})}/>
+          <input className={err.Password ? "input-text input-err" : "input-text"} type='password' name='Password'  {...register('Password', { maxLength: 20, minLength: 5, required: true})}/>
           {err.Password &&
             <div className='input-err-aclaration'>
               <p>This field is required, and must contain between 5 and 20 characters.</p>
             </div>
           }
           <label>Validate pasword</label>
-          <input className={err.ValidatePasword ? "input-text input-err" : "input-text"} type='text' name='ValidatePasword'  {...register('ValidatePasword', { maxLength: 20, minLength: 5, required: true})}/>
+          <input className={err.ValidatePasword ? "input-text input-err" : "input-text"} type='password' name='ValidatePasword'  {...register('ValidatePasword', { maxLength: 20, minLength: 5, required: true})}/>
           {err.ValidatePasword &&
             <div className='input-err-aclaration'>
               <p>This field is required, and must contain between 5 and 20 characters.</p>

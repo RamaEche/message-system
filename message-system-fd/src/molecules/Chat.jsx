@@ -3,12 +3,12 @@ import {useState, useContext, useEffect} from 'react'
 import {BoxesContext, CurrentChatContext} from '../pages/Home'
 import Cookies from 'js-cookie'
 
-function Chat({className="", setClicked, onClick=false, chatsStatus, ChatID, Type, Name, Description, IgnoredMessageCounter, chatsImage, setChatsImage}) {
+function Chat({className="", setClicked=false, onClick=false, chatsStatus, ChatID, Type, Name, Description, IgnoredMessageCounter, chatsImage, setChatsImage}) {
   const [boxes, setBoxes] = useContext(BoxesContext)
   const [ignoredMessages, setIgnoredMessages] = useState(IgnoredMessageCounter)
   const [chatState, setChatState] = useState(false)
   const [, setCurrentChat] = useContext(CurrentChatContext)
-  const [photoSrc, setPhotoSrc] = useState(``)
+  const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
   const [token] = useState(Cookies.get('JwtToken'))
   
   const OpenChat = ()=>{
@@ -19,7 +19,7 @@ function Chat({className="", setClicked, onClick=false, chatsStatus, ChatID, Typ
     }))
     setBoxes({box1:boxes.box1, box2:"MessageBox", currentBox:2})
     setIgnoredMessages(0)
-    setClicked(ChatID)
+    setClicked != false && setClicked(ChatID)
   }
   
   useEffect(()=>{
@@ -97,8 +97,8 @@ function Chat({className="", setClicked, onClick=false, chatsStatus, ChatID, Typ
                 </div>
             </div>
             <div className='notifications'>
-                {ignoredMessages >= 1 && <div className='green-circle-notification'>{ignoredMessages}</div>}
-                {Type == "U" && <div className={chatState == true ? 'blue-circle-notification' : 'gray-circle-notification'}></div>}
+                {setClicked != false && ignoredMessages >= 1 && <div className='green-circle-notification'>{ignoredMessages}</div>}
+                {setClicked != false &&  Type == "U" && <div className={chatState == true ? 'blue-circle-notification' : 'gray-circle-notification'}></div>}
             </div>
         </div>
     </a>

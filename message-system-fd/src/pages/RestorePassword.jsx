@@ -52,14 +52,14 @@ function RestorePassword() {
             </div>
           }
           <p>Last password</p>
-          <input className={err.LastPassword ? " input-text input-err" : " input-text"} type='text' {...register('LastPassword', { maxLength: 20, minLength: 5, required: true})}/>
+          <input className={err.LastPassword ? " input-text input-err" : " input-text"} type='password' {...register('LastPassword', { maxLength: 20, minLength: 5, required: true})}/>
           {err.LastPassword &&
             <div className='input-err-aclaration'>
               <p>This field is required, and must contain between 4 and 20 characters.</p>
             </div>
           }
           <p>New password</p>
-          <input className={err.NewPassword ? " input-text input-err" : " input-text"} type='text' {...register('NewPassword', { maxLength: 20, minLength: 5, required: true})}/>
+          <input className={err.NewPassword ? " input-text input-err" : " input-text"} type='password' {...register('NewPassword', { maxLength: 20, minLength: 5, required: true})}/>
           {err.NewPassword &&
             <div className='input-err-aclaration'>
               <p>This field is required, and must contain between 4 and 20 characters.</p>

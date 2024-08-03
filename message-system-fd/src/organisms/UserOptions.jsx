@@ -98,7 +98,7 @@ function UserOptions({ setWebSocket }) {
 
   const resetForm = ()=>{
     form.current.reset();
-    setPhotoSrc(originalData.photoSrc)
+    setPhotoSrc(originalData.photoSrc != null ? originalData.photoSrc : `${import.meta.env.VITE_FRONTEND_APP_URL}user.png`)
     setValue('UserName', originalData.userName);
     setValue('Description', originalData.description);
   }
@@ -186,7 +186,7 @@ function UserOptions({ setWebSocket }) {
                 </div>
               }
               <div className='user-options-form-changes-buttons'>
-                <input onClick={()=>resetForm()} type='reset' className='reset-button' value="Reset"/>
+                <input onClick={()=>resetForm()} type='button' className='reset-button' value="Reset"/>
                 <input className='user-options-submit reset-button' type='submit' value="Send"/>
               </div>
           </div>

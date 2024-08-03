@@ -146,7 +146,7 @@ function ChatOption({ webSocket }) {
                   </div>
                 }
                 <div className='chat-options-form-changes-buttons'>
-                  <input className='reset-button' onClick={handleSubmit(data=>resetForm(data))} type='reset' value="Reset"/>
+                  <input className='reset-button' onClick={()=>resetForm()} type='button' value="Reset"/>
                   <input className='main-button send-button' type='submit' value="Send"/>
                 </div>
             </div>

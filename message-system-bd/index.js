@@ -48,7 +48,7 @@ app.get("/getUserPhotoById", validateTokenMW, getUserPhotoById);
 app.post("/UpdateProfile", upload.single("ProfileImage"), validateTokenMW, postUpdateProfile);
 app.post("/UpdateGroup", upload.single("ChatImage"), validateTokenMW, postUpdateGroup);
 
-app.post("/removeUser", postRemoveUser); //Review, it is likely that it needs verification.
+app.post("/removeUser", validateTokenMW, postRemoveUser); //Review, it is likely that it needs verification.
 
 server.listen(process.env.PORT, () => {
 	console.log(`Server listening on port ${process.env.PORT}`);
