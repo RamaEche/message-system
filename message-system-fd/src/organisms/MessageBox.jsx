@@ -39,7 +39,7 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
     handleResize()
   }, [])
 
-  const ChatOption = ()=>{
+   const ChatOption = ()=>{
     if(currentChat.chatType == "U"){
       setBoxes({box1:boxes.box1, box2:"ChatOption"})
     }else{

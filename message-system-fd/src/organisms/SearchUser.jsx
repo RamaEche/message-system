@@ -181,7 +181,7 @@ function SearchUser({searchType, webSocket, chats, parentOrdedChats=[], setParen
               searchType == "unknownUsers" ?
                 <div className='search-user-chats'>
                   {ordedChats.map(({id, userName, userDescription}, i)=>{
-                    return <SerchedUser id={id} userName={userName} userDescription={userDescription} setNewUserToAdd={setNewUserToAdd} key={i}/>
+                    return <SerchedUser id={id} chatsImage={chatsImage} userName={userName} userDescription={userDescription} setNewUserToAdd={setNewUserToAdd} key={i}/>
                   })}
                 </div>
                 : searchType == "knownUsers" ?

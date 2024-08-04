@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import Cookies from 'js-cookie'
 import GoBackArrow from '../atoms/GoBackArrow'
 
-function ChatOption({ webSocket }) {
+function ChatOption({ webSocket, chatsImage }) {
   const [token] = useState(Cookies.get('JwtToken'))
   const { register, handleSubmit, formState, watch, setValue } = useForm()
   const [currentChat] = useContext(CurrentChatContext)
@@ -16,28 +16,6 @@ function ChatOption({ webSocket }) {
   const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
 
   watch('Name', '');
-
-  const getChatPhotoById = ()=>{
-    fetch(`${import.meta.env.VITE_SERVER_API_URL}getChatPhotoById`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'authorization': `Barrer ${token}`,
-        'ChatId':currentChat.chatId
-      }
-    })
-    .then((res)=>{
-      if(res.statusText == 'OK'){
-        return res.blob()
-      }else{
-        console.error(res.statusText)
-      }
-    })
-    .then((info)=>{
-      setPhotoSrc(URL.createObjectURL(info))
-    })
-    .catch((err)=>console.log(err))
-  }
 
   const getChatOptionData = ()=>{
     webSocket.emit("getChatOptionData", {
@@ -50,8 +28,10 @@ function ChatOption({ webSocket }) {
   }
 
   useEffect(()=>{
-    //Upload user image.
-    getChatPhotoById()
+    const chatsImageIndex = chatsImage.findIndex(i=>i.chatID == currentChat.chatId)
+    if(chatsImageIndex != -1){
+      setPhotoSrc(chatsImage[chatsImageIndex].src)
+    }
 
     //Load username of the user.
     //Upload user description.

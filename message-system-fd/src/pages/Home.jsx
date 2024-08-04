@@ -8,7 +8,7 @@ import Welcome from '../organisms/Welcome'
 import MessageBox from '../organisms/MessageBox'
 import ChatOption from '../organisms/ChatOption'
 import GroupOption from '../organisms/GroupOption'
-import AboutMessage from '../organisms/AboutMessage'
+//import AboutMessage from '../organisms/AboutMessage'
 
 import './Home.css'
 import {useState, createContext, useEffect, useRef} from 'react'
@@ -112,11 +112,12 @@ function Home() {
                 ) : boxes.box2 == 'MessageBox' ? (
                   <MessageBox chatsStatus={chatsStatus} webSocket={webSocket} chatsImage={chatsImage}/>
                 ) : boxes.box2 == 'GroupOption' ? (
-                  <GroupOption webSocket={webSocket} chatsStatus={chatsStatus} chats={chats} CurrentUserId={userId}/>
+                  <GroupOption webSocket={webSocket} chatsImage={chatsImage} chatsStatus={chatsStatus} chats={chats} CurrentUserId={userId}/>
                 ) : boxes.box2 == 'ChatOption' ? (
-                  <ChatOption webSocket={webSocket}/>
+                  <ChatOption webSocket={webSocket} chatsImage={chatsImage}/>
                 ) : boxes.box2 == 'aboutMessage' && (
-                  <AboutMessage webSocket={webSocket} chatsImage={chatsImage}/>
+                  //<AboutMessage webSocket={webSocket} chatsImage={chatsImage}/>
+                  <></>
                 )
               }
             </div>

@@ -1,9 +1,9 @@
 import './Message.css';
-import { useContext } from 'react';
-import { BoxesContext, CurrentChatContext } from '../pages/Home'
+//import { useContext } from 'react';
+//import { BoxesContext, CurrentChatContext } from '../pages/Home'
 
-function Message({ index, text, time, name=null, internalOrigin }){
-    const [boxes, setBoxes] = useContext(BoxesContext)
+function Message({ /*index,*/ text, time, name=null, internalOrigin }){
+/*    const [boxes, setBoxes] = useContext(BoxesContext)
     const [, setCurrentChat] = useContext(CurrentChatContext)
     const messageStatePanel = ()=>{
         setBoxes({box1:boxes.box1, box2:"aboutMessage", currentBox:2})
@@ -11,10 +11,10 @@ function Message({ index, text, time, name=null, internalOrigin }){
             currentChatData.chatFocusMessage = index
             return currentChatData
         })
-    }
+    } */
 
     return(
-        <div className={internalOrigin ? 'message-container' : 'message-container external-origin'} onClick={()=>{messageStatePanel()}}>
+        <div className={internalOrigin ? 'message-container' : 'message-container external-origin'} /*onClick={()=>{messageStatePanel()}}*/>
             {name != null && <p className='message-container-name-container'>{name}</p>}
             <div className='message-container-text-container'>
                 <span>{time}</span>

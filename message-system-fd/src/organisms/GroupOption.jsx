@@ -6,7 +6,7 @@ import Confirmation from '../molecules/Confirmation'
 import GroupUser from '../molecules/GroupUser'
 import Cookies from 'js-cookie'
 
-function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId }) {
+function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId, chatsImage }) {
   const [token] = useState(Cookies.get('JwtToken'))
   const { register, handleSubmit, formState, watch, setValue } = useForm()
   const [boxes, setBoxes] = useContext(BoxesContext)
@@ -27,51 +27,29 @@ function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId }) {
   watch('Name', '');
   watch('Description', '');
 
-  const getChatPhotoById = ()=>{
-    fetch(`${import.meta.env.VITE_SERVER_API_URL}getChatPhotoById`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'authorization': `Barrer ${token}`,
-        'ChatId':currentChat.chatId
-      }
-    })
-    .then((res)=>{
-      if(res.statusText == 'OK'){
-        return res.blob()
-      }else{
-        return res.json()
-      }
-    })
-    .then((info)=>{
-      if(!info.msg){
-        setChatImage(URL.createObjectURL(info))
-        serverDataGeted(infoSrc=>({
-          ...infoSrc,
-          chatImage: URL.createObjectURL(info)
-        }))
-      }
-    })
-    .catch((err)=>console.log(err))
-  }
-
   useEffect(()=>{
-    //Upload user image.
-    getChatPhotoById()
 
-    //Load username of the user.
-    //Upload user description.
-    //Load username.
     webSocket.emit("getGroupOptionData", {
       authorization: `Barrer ${token}`,
       ChatId:currentChat.chatId
     });
     webSocket.on("getGroupOptionData", info=>{
-      setServerDataGeted(CurrentServerDataGeted=>({
-        ...CurrentServerDataGeted,
-        name: info.name,
-        description: info.description
-      }))
+      const chatsImageIndex = chatsImage.findIndex(i=>i.chatID == currentChat.chatId)
+      if(chatsImageIndex != -1){
+        setChatImage(chatsImage[chatsImageIndex].src)
+        setServerDataGeted(CurrentServerDataGeted=>({
+          ...CurrentServerDataGeted,
+          name: info.name,
+          description: info.description,
+          chatImage:chatsImage[chatsImageIndex].src
+        }))
+      }else{
+        setServerDataGeted(CurrentServerDataGeted=>({
+          ...CurrentServerDataGeted,
+          name: info.name,
+          description: info.description
+        })) 
+      }
     })
   }, [])
 
@@ -81,7 +59,10 @@ function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId }) {
     setChatImage(serverDataGeted.chatImage != null ? serverDataGeted.chatImage : `${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
     setValue('Name', serverDataGeted.name);
     setValue('Description', serverDataGeted.description);
-    getChatPhotoById()
+    const chatsImageIndex = chatsImage.findIndex(i=>i.chatID == currentChat.chatId)
+    if(chatsImageIndex != -1){
+      setChatImage(chatsImage[chatsImageIndex].src)
+    }
     //Set name input to the name given by the main user to that user.
   }
 
@@ -89,7 +70,10 @@ function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId }) {
     const CurrentName = watch('Name')
     const CurrentDescription = watch('Description')
     form.current.reset();
-    setChatImage(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
+    const chatsImageIndex = chatsImage.findIndex(i=>i.chatID == currentChat.chatId)
+    if(chatsImageIndex != -1){
+      setChatImage(chatsImage[chatsImageIndex].src)
+    }
     setValue('Name', CurrentName);
     setValue('Description', CurrentDescription);
   }
