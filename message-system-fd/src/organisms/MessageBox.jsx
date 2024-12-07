@@ -6,14 +6,13 @@ import Message from '../molecules/Message'
 import { useForm } from 'react-hook-form'
 import FileSelectorOption from '../atoms/FileSelectorOption'
 
-  function MessageBox({ webSocket, chatsImage, chatsStatus }) {
+  function MessageBox({ webSocket, chatsImage, chatsStatus, messageBoxGoBackArrow }) {
   const [messageInputFileButton, setMessageInputFileButton] = useState('close')
   const [boxes, setBoxes] = useContext(BoxesContext)
   const [currentChat, setCurrentChat] = useContext(CurrentChatContext)
   const [messages, setMessages] = useState([])
   const [token] = useState(Cookies.get('JwtToken'))
   const [userId] = useContext(UserIdContext)
-  const goBackArrow = useRef(null)
   const [userData, setUserData] = useState({ name:"Chat", state:false, src:`${import.meta.env.VITE_FRONTEND_APP_URL}group.png` })
   const textA = useRef(null)
   const lastDate = useRef(false)
@@ -25,19 +24,6 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
   const Chats = ()=>{
     setBoxes({box1:"Chats", box2:boxes.box2, currentBox:1})
   }
-
-  const handleResize = () => {
-    if(window.innerWidth <= 850){
-      goBackArrow.current.classList.remove("none")
-    }else{
-      goBackArrow.current.classList.add("none")
-    }
-  }
-
-  useEffect(()=>{
-    window.addEventListener("resize", handleResize, false);
-    handleResize()
-  }, [])
 
    const ChatOption = ()=>{
     if(currentChat.chatType == "U"){
@@ -225,7 +211,7 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
   return (
     <div className='message-box'>
       <div className="message-box-bar-container">
-        <div ref={goBackArrow} className='message-box-go-back-arrow-container' onClick={()=>Chats()}><a className='message-box-go-back-arrow'><img src='arrow.png'/></a></div> {/* This fragment is a modification of the GoBackArrow component */}
+        <div className={messageBoxGoBackArrow ? 'message-box-go-back-arrow-container' : 'message-box-go-back-arrow-container none'} onClick={()=>Chats()}><a className='message-box-go-back-arrow'><img src='arrow.png'/></a></div> {/* This fragment is a modification of the GoBackArrow component */}
         <div className="message-box-bar" onClick={()=>ChatOption()}>
           <div className='message-box-profile-data'>
             <div className='message-box-profile-photo'>

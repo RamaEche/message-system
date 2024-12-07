@@ -32,19 +32,25 @@ function Home() {
   const box2 = useRef(null)
   const [chatsStatus, setChatsStatus] = useState([])
   const [chatsImage, setChatsImage] = useState([])
+  const lastWSize = useRef(null)
+  const [messageBoxGoBackArrow, setMessageBoxGoBackArrow] = useState(null)
 
-  const socket = socketIOClient('http://localhost:3000');
+  const socket = socketIOClient(`${import.meta.env.VITE_SERVER_API_URL}`);
 
   const handleResize = () => {
-    if(window.innerWidth <= 850){
+    if(window.innerWidth <= 850 && (lastWSize.current == null || lastWSize.current > 850)){
+      lastWSize.current = window.innerWidth
       setOneBoxeMode(true)
       setBoxes(boxes)
       box1.current.classList.remove("none")
       box2.current.classList.add("none")
-    }else{
+      setMessageBoxGoBackArrow(true)
+    }else if(window.innerWidth > 850 && (lastWSize.current == null || lastWSize.current <= 850)){
+      lastWSize.current = window.innerWidth
       setOneBoxeMode(false)
       box1.current.classList.remove("none")
       box2.current.classList.remove("none")
+      setMessageBoxGoBackArrow(false)
     }
   }
 
@@ -110,7 +116,7 @@ function Home() {
               {boxes.box2 == 'Welcome' ? (
                   <Welcome/>
                 ) : boxes.box2 == 'MessageBox' ? (
-                  <MessageBox chatsStatus={chatsStatus} webSocket={webSocket} chatsImage={chatsImage}/>
+                  <MessageBox chatsStatus={chatsStatus} webSocket={webSocket} chatsImage={chatsImage} messageBoxGoBackArrow={messageBoxGoBackArrow}/>
                 ) : boxes.box2 == 'GroupOption' ? (
                   <GroupOption webSocket={webSocket} chatsImage={chatsImage} chatsStatus={chatsStatus} chats={chats} CurrentUserId={userId}/>
                 ) : boxes.box2 == 'ChatOption' ? (

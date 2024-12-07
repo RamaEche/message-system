@@ -22,7 +22,7 @@ function UserOptions({ setWebSocket }) {
   watch("UserName", "")
   watch("Description", "")
 
-  const socket = socketIOClient('http://localhost:3000');
+  const socket = socketIOClient(`${import.meta.env.VITE_SERVER_API_URL}`);
 
   const getUserPhotoById = id=>{
     fetch(`${import.meta.env.VITE_SERVER_API_URL}getUserPhotoById`, {

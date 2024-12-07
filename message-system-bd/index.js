@@ -24,7 +24,7 @@ let app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
 	cors: {
-		origin: "*",
+		origin: "http://localhost:5173",
 		methods: ["GET", "POST"]
 	}
 });
@@ -50,7 +50,7 @@ app.post("/UpdateGroup", upload.single("ChatImage"), validateTokenMW, postUpdate
 
 app.post("/removeUser", validateTokenMW, postRemoveUser); //Review, it is likely that it needs verification.
 
-server.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, "0.0.0.0", () => {
 	console.log(`Server listening on port ${process.env.PORT}`);
 });
 

@@ -5,7 +5,6 @@ import {useState, useEffect} from 'react'
 import * as JsSearch from 'js-search';
 import { useForm } from 'react-hook-form'
 import Cookies from 'js-cookie'
-import NoMoreUsers from '../atoms/NoMoreUsers'
 import Loading from '../atoms/Loading'
 import GoBackArrow from '../atoms/GoBackArrow.jsx'
 
@@ -148,7 +147,7 @@ function SearchUser({searchType, webSocket, chats, parentOrdedChats=[], setParen
     <div className='search-user-container'>
       <div className={header ? 'search-user-bar' : 'none'}>
         <GoBackArrow changeTo="Chats" boxNumber={1}/>
-        <h1 className='search-user-outstanding-logo'>Search user.</h1>
+        <h1 className='search-user-outstanding-logo'>{searchType=="unknownUsers" ? "Found users" : "Search user."}</h1>
       </div>
       <div className='search-user-content'>
         <div className='search-user-input-container'>
@@ -174,7 +173,9 @@ function SearchUser({searchType, webSocket, chats, parentOrdedChats=[], setParen
             ): ordedChats.length == 0 && parentOrdedChats.length == 0 ?
             (
               <div className='search-user-chats'>
-                <NoMoreUsers/>
+                <div className='search-user-not-found-container'>
+                  <p>No users found, try another search.</p>
+                </div>
               </div>
             )
             :(
