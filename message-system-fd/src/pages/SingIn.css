@@ -60,7 +60,7 @@
 }
 
 .sing-in-page{
-  height: 100vh;
+  height: calc(var(--real-vh) * 100);
   width: 100%;
   display: flex;
   flex-direction: column;

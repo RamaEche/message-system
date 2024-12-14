@@ -1,3 +1,7 @@
+:root {
+  --real-vh: 100vh; /* Valor por defecto */
+}
+
 .hidden{
   display: none;
 }
