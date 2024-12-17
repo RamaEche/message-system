@@ -7,6 +7,7 @@ const Users = require("../models/Users.js");
 const createToken = require("../controllers/createToken.js");
 const imageType = require("image-type");
 const { rmSync } = require("fs");
+const uploadFile = require("../controllers/uploadFile.js");
 
 const singIn = async(req, res)=>{
 	try{
@@ -58,12 +59,8 @@ const singIn = async(req, res)=>{
 		}
     
 		const userID = newUserRes.UserID;
-		const mediaFiles = path.join(process.env.MEDIA_FILES, "users", `user-ID${userID}`);
-		await fs.mkdir(mediaFiles, { recursive: true });
-
-		fs.rename(path.join(process.env.UPLOADS_FILES, req.file.filename), path.join(mediaFiles, req.file.filename));
-
-		await Users.updateOne({_id:userID}, {$set:{"PrivateData.ProfilePhotoPath":path.join(mediaFiles, req.file.filename)}});
+		const cloudRes = await uploadFile(path.join(process.env.UPLOADS_FILES, req.file.filename), `mediaFiles/mediaFiles/users/user-ID${userID}`);
+		await Users.updateOne({_id:userID}, {$set:{"PrivateData.ProfilePhotoPath":cloudRes}});
 
 		res.status(201).json(newUserRes.serverRes);
 	}catch(err){

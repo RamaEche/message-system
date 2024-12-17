@@ -1,60 +1,31 @@
 require("dotenv").config();
 
 const Chats = require("../models/Chats");
-const { readdir } = require("fs/promises");
-const path = require("path");
+const Users = require("../models/Users");
 
 const getChatPhotoById = async(req, res)=>{
 	try{
-		let dir;
-		let fileName;
-		let files;
+		let photoPath;
+
 		const currentChat = await Chats.findById(req.headers.chatid);
 		if(currentChat.Type == "G"){
-			dir = path.join(process.env.MEDIA_FILES, "chats", `chat-ID${req.headers.chatid}`);
-
-			try{
-				files = await readdir(dir);
-			}catch(err){
-				throw new Error();
-			}
-
-			files.map((element, i) => {
-				if(element.startsWith("ChatImage-")){
-					fileName = files[i];
-				}
-			});
+			photoPath = currentChat.PhotoPath;
 		}else{
-			currentChat.Users.forEach(c=>{
-				if(c.UserId != req.user.id) dir = path.join(process.env.MEDIA_FILES, "users", `user-ID${c.UserId}`);
+			let usersID = [];
+			await currentChat.Users.forEach(async c=>{
+				usersID.push(c.UserId);
 			});
 
-			try{
-				files = await readdir(dir);
-			}catch(err){
-				throw new Error();
+			for (let a = 0; a < usersID.length; a++) {
+				if(usersID[a] != req.user.id){
+					const currentUser = await Users.findById(usersID[a]);
+					photoPath = currentUser.PrivateData.ProfilePhotoPath;
+				}
 			}
-
-			files.map((element, i) => {
-				if(element.startsWith("ProfileImage-"))fileName = files[i];
-			});
 		}
 
-		let options = {
-			root: dir,
-			dotfiles: "deny",
-			headers: {
-				"x-timestamp": Date.now(),
-				"x-sent": true
-			}
-		};
-
 		try{
-			res.sendFile(fileName, options, function (err) {
-				if (err) {
-					console.log(err);
-				}
-			});
+			res.status(200).json({ok:true, state:200, msg:photoPath});
 		}catch (err){
 			res.status(500).json({ok:false, state:500, msg:"noImage"});
 		}

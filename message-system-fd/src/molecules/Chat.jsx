@@ -36,19 +36,15 @@ function Chat({className="", setClicked=false, onClick=false, chatsStatus, ChatI
       }
     })
     .then((res)=>{
-      if(res.statusText == 'OK'){
-        return res.blob()
-      }else{
-        return res.json()
-      }
+      return res.json()
     })
     .then((info)=>{
-      if(!info.msg){
-        setPhotoSrc(URL.createObjectURL(info))
+      if(info.state == 200){
+        setPhotoSrc(info.msg)
         setChatsImage(currentChatsImage=>{
-          return [...currentChatsImage, {chatID:ChatID, src:URL.createObjectURL(info)}]
+          return [...currentChatsImage, {chatID:ChatID, src:info.msg}]
         })
-      }else if(info.msg){
+      }else if(info.state == 500){
         if(Type == "G"){
           setPhotoSrc(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
           setChatsImage(currentChatsImage=>[...currentChatsImage, {chatID:ChatID, src:`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`}])

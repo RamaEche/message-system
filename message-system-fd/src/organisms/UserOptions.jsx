@@ -35,16 +35,16 @@ function UserOptions({ setWebSocket }) {
     })
     .then((res)=>{
       if(res.statusText == 'OK'){
-        return res.blob()
+        return res.json()
       }else{
         console.error("No image")
       }
     })
     .then((info)=>{
-      setPhotoSrc(URL.createObjectURL(info))
+      setPhotoSrc(info.msg)
       setOriginalData(infoSrc=>({
         ...infoSrc,
-        photoSrc: URL.createObjectURL(info)
+        photoSrc: info
       }))
     })
     .catch((err)=>console.log(err))

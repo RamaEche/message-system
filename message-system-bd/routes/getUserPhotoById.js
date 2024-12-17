@@ -1,37 +1,11 @@
 require("dotenv").config();
 
-const { readdir } = require("fs/promises");
-const path = require("path");
+const Users = require("../models/Users");
 
 const getUserPhotoById = async(req, res)=>{
 	try{
-		let dir;
-		let fileName;
-		let files;
-
-		dir = path.join(process.env.MEDIA_FILES, "users", `user-ID${req.headers.userid}`);
-		files = await readdir(dir);
-
-		files.map((element, i) => {
-			if(element.startsWith("ProfileImage-"))fileName = files[i];
-		});
-
-		if(!fileName) throw new Error("{ \"ok\":false, \"status\":400, \"err\":\"noChatImage\"}");
-
-		let options = {
-			root: dir,
-			dotfiles: "deny",
-			headers: {
-				"x-timestamp": Date.now(),
-				"x-sent": true
-			}
-		};
-
-		res.sendFile(fileName, options, function (err) {
-			if (err) {
-				throw new Error();
-			}
-		});
+		const currentUser = await Users.findById(req.headers.userid);
+		res.status(200).json({ok:true, msg:currentUser.PrivateData.ProfilePhotoPath});
 	}catch(err){
 		try{
 			const errorMessage = JSON.parse(err.message);

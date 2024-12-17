@@ -5,6 +5,8 @@ const fs = require("fs/promises");
 const { rmSync, readdirSync, unlinkSync } = require("fs");
 const path = require("path");
 const imageType = require("image-type");
+const uploadFile = require("../controllers/uploadFile.js");
+const deleteFile = require("../controllers/deleteFile.js");
 
 const postUpdateGroup = async(req, res)=>{
 	let chat = await Chats.findById(req.headers["chatid"]);
@@ -45,10 +47,12 @@ const postUpdateGroup = async(req, res)=>{
 		console.log(req.file);
 		if(req.file){
 			const changeImage = async()=>{ //Image change.
-				const mediaFiles = path.join(process.env.MEDIA_FILES, "chats", `chat-ID${req.headers["chatid"]}`);  
-				fs.rename(path.join(process.env.UPLOADS_FILES, req.file.filename), path.join(mediaFiles, req.file.filename));
-    
-				await Chats.updateOne({_id:req.headers["chatid"]}, {$set:{"PhotoPath":path.join(mediaFiles, req.file.filename)}});
+				const currentChat = await Chats.findById(req.headers["chatid"]);
+				const url = currentChat.PhotoPath;
+				deleteFile(url, "mediaFiles/mediaFiles/chats/");
+
+				const cloudRes = uploadFile(path.join(process.env.UPLOADS_FILES, req.file.filename), `mediaFiles/mediaFiles/chats/chat-ID${req.headers["chatid"]}`);
+				await Chats.updateOne({_id:req.headers["chatid"]}, {$set:{"PhotoPath":cloudRes}});
 			};
 
 			Imgbuffer = await fs.readFile(path.join(process.env.UPLOADS_FILES, req.file.filename));

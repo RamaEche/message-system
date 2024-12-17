@@ -5,6 +5,8 @@ const fs = require("fs/promises");
 const { rmSync, readdirSync, unlinkSync } = require("fs");
 const path = require("path");
 const imageType = require("image-type");
+const uploadFile = require("../controllers/uploadFile.js");
+const deleteFile = require("../controllers/deleteFile.js");
 
 const updateProfile = async(req, res)=>{
 	let Imgbuffer;
@@ -36,10 +38,12 @@ const updateProfile = async(req, res)=>{
 
 		if(req.file){
 			const changeImage = async()=>{ //Image change.
-				const mediaFiles = path.join(process.env.MEDIA_FILES, "users", `user-ID${req.user.id}`);  
-				fs.rename(path.join(process.env.UPLOADS_FILES, req.file.filename), path.join(mediaFiles, req.file.filename));
-    
-				await Users.updateOne({_id:req.user.id}, {$set:{"PrivateData.ProfilePhotoPath":path.join(mediaFiles, req.file.filename)}});
+				const currentUser = await Users.findById(req.user.id);
+				const url = currentUser.PrivateData.ProfilePhotoPath;
+				deleteFile(url, "mediaFiles/mediaFiles/users/");
+
+				const cloudRes = await uploadFile(path.join(process.env.UPLOADS_FILES, req.file.filename), `mediaFiles/mediaFiles/users/user-ID${req.user.id}`);
+				await Users.updateOne({_id:req.user.id}, {$set:{"PrivateData.ProfilePhotoPath":cloudRes}});
 			};
 
 			Imgbuffer = await fs.readFile(path.join(process.env.UPLOADS_FILES, req.file.filename));
@@ -51,11 +55,7 @@ const updateProfile = async(req, res)=>{
 
 			if(req.user.PrivateData.ProfilePhotoPath){
 				try{
-					const lastImage = await fs.readFile(req.user.PrivateData.ProfilePhotoPath);
-					if(lastImage != Imgbuffer){
-						rmSync(req.user.PrivateData.ProfilePhotoPath);
-						changeImage();
-					}
+					changeImage();
 				}catch(err){
 					throw new Error("{ \"ok\":false, \"status\":500, \"err\":\"impossibleImageUpdate\"}");
 				}

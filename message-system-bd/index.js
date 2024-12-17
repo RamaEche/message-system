@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const bodyParser = require("body-parser");
+const cloudinary = require("cloudinary").v2;
 const multer = require("multer");
 require("./config/db.js");
 let express = require("express");
@@ -19,6 +20,23 @@ const storage = multer.diskStorage({
 	}
 });
 const upload = multer({storage:storage, limits:{ files:1 }});
+
+cloudinary.config({
+	cloud_name: "djqxeifq3",
+	api_key: "824242418821641",
+	api_secret: "hm48SZuO8zZm3UDsOChxZcUX6Xs"
+});
+
+async function uploadImage(imagePath) {
+	try {
+		const result = await cloudinary.uploader.upload(imagePath);
+		console.log("Enlace de la imagen:", result.secure_url);
+		return result.secure_url; // URL pública
+	} catch (error) {
+		console.error("Error al subir la imagen:", error);
+	}
+}
+//uploadImage("./ruta/a/imagen.jpg");
 
 let app = express();
 const server = http.createServer(app);
