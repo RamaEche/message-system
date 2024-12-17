@@ -27,17 +27,6 @@ cloudinary.config({
 	api_secret: "hm48SZuO8zZm3UDsOChxZcUX6Xs"
 });
 
-async function uploadImage(imagePath) {
-	try {
-		const result = await cloudinary.uploader.upload(imagePath);
-		console.log("Enlace de la imagen:", result.secure_url);
-		return result.secure_url; // URL pública
-	} catch (error) {
-		console.error("Error al subir la imagen:", error);
-	}
-}
-//uploadImage("./ruta/a/imagen.jpg");
-
 let app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -67,6 +56,19 @@ app.post("/UpdateProfile", upload.single("ProfileImage"), validateTokenMW, postU
 app.post("/UpdateGroup", upload.single("ChatImage"), validateTokenMW, postUpdateGroup);
 
 app.post("/removeUser", validateTokenMW, postRemoveUser); //Review, it is likely that it needs verification.
+
+// // Embedded client //--//
+// // start
+// const path = require("path");
+
+// console.log(__dirname);
+// app.use(express.static(path.join(__dirname, "/client/dist")));
+
+// app.get("*", (req, res)=>{
+// 	res.sendFile(path.join(__dirname, "/client/dist/index.html"));
+// });
+
+// //client end
 
 server.listen(process.env.PORT, "0.0.0.0", () => {
 	console.log(`Server listening on port ${process.env.PORT}`);

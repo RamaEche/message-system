@@ -1,4 +1,6 @@
 # Logs
+build
+
 message-system-fd/logs
 message-system-fd/*.log
 message-system-fd/npm-debug.log*
