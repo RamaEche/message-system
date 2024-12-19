@@ -3,6 +3,7 @@ import {useState, useContext, useEffect, useRef} from 'react'
 import {BoxesContext, CurrentChatContext} from "../pages/Home"
 import { useForm } from 'react-hook-form'
 import Confirmation from '../molecules/Confirmation'
+import errorManager from  '../controllers/errorManager.js'
 import GroupUser from '../molecules/GroupUser'
 import Cookies from 'js-cookie'
 
@@ -15,7 +16,7 @@ function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId, chatsImage 
   let err = formState.errors;
   let files = [];
   const form = useRef(null)
-  const [formError] = useState(false)
+  const [formError, setFormError] = useState(false)
   const [chatImage, setChatImage] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`);
   const [openConfirmation1, setOpenConfirmation1] = useState(false)
   const [openConfirmation2, setOpenConfirmation2] = useState(false)
@@ -100,15 +101,13 @@ function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId, chatsImage 
       },
       body: formData
     })
-    .then((res)=>{
-      if(res.statusText == 'OK'){
-        return res.blob()
+    .then((res)=>res.json())
+    .then(info=>{
+      if(info.ok){
+        location.href = import.meta.env.VITE_FRONTEND_APP_URL;
       }else{
-        console.error(res.statusText)
+        errorManager(info, setFormError)
       }
-    })
-    .then(()=>{
-      location.href = import.meta.env.VITE_FRONTEND_APP_URL;
     })
     .catch((err)=>{console.error(err)})
   }

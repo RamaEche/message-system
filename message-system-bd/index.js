@@ -22,9 +22,9 @@ const storage = multer.diskStorage({
 const upload = multer({storage:storage, limits:{ files:1 }});
 
 cloudinary.config({
-	cloud_name: "djqxeifq3",
-	api_key: "824242418821641",
-	api_secret: "hm48SZuO8zZm3UDsOChxZcUX6Xs"
+	cloud_name: process.env.CD_NAME,
+	api_key: process.env.CD_API_KEY,
+	api_secret: process.env.CD_API_SECRET
 });
 
 let app = express();

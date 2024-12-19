@@ -16,7 +16,6 @@ async function validateToken(req, res){
 			}
 		}else if (req.cookies){
 			token = req.cookies.Authorization;
-			console.log(token);
 		}else{
 			return res.status(403).json({ err: "Auth null." });
 		}
@@ -56,7 +55,6 @@ async function validateToken(req, res){
 				try{req.user = await Users.findById(decoded.UserID).exec();}
 				catch(err){
 					if(res) ret = res.status(403).json({ error: "Valid Token But invalid user." });
-					console.error(err);
 				}
 			}
 		});

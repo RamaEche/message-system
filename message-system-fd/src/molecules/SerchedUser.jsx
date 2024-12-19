@@ -31,9 +31,9 @@ function SerchedUser( { id, userName, userDescription, setNewUserToAdd } ){
             }
         })
         .then((info)=>{
-          setPhotoSrc(info.msg)
+          if(info.msg) setPhotoSrc(info.msg)
         })
-        .catch((err)=>console.log(err))
+        .catch((err)=>console.error(err))
     }
 
     useEffect(()=>{

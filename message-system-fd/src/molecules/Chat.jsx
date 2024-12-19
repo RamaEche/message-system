@@ -40,10 +40,12 @@ function Chat({className="", setClicked=false, onClick=false, chatsStatus, ChatI
     })
     .then((info)=>{
       if(info.state == 200){
-        setPhotoSrc(info.msg)
-        setChatsImage(currentChatsImage=>{
-          return [...currentChatsImage, {chatID:ChatID, src:info.msg}]
-        })
+        if(info.msg){
+          setPhotoSrc(info.msg)
+          setChatsImage(currentChatsImage=>{
+            return [...currentChatsImage, {chatID:ChatID, src:info.msg}]
+          })
+        }
       }else if(info.state == 500){
         if(Type == "G"){
           setPhotoSrc(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
@@ -54,7 +56,7 @@ function Chat({className="", setClicked=false, onClick=false, chatsStatus, ChatI
         }
       }
     })
-    .catch((err)=>console.log(err))
+    .catch((err)=>console.error(err))
   }
 
   const setImage = ()=>{

@@ -14,10 +14,8 @@ const restorePassword = async(req, res)=>{
 		}
 
 		if(!(req.body.NewPassword !== req.body.LastPassword)){ throw new Error("{ \"ok\":false, \"status\":400, \"err\":\"samePassword\"}");}
-		console.log(req.headers.authorization);
 		const token = req.headers.authorization.split(" ")[1];
 		await jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, decoded) => {
-			console.log(decoded.UserID);
 			let isModified;
 			const salt = await bcrypt.genSalt(10);
 			const passwordHashed = await bcrypt.hash(req.body.NewPassword, salt);

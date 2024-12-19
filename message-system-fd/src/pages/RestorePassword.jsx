@@ -11,7 +11,6 @@ function RestorePassword() {
   let err = formState.errors;
 
   const onSubmit = (data)=>{
-    console.log(JSON.stringify({UserName:data.UserName, Password:data.Password, LastPassword:data.LastPassword}))
     fetch(`${import.meta.env.VITE_SERVER_API_URL}RestorePassword`, {
     method: 'POST',
     headers: {
@@ -29,7 +28,7 @@ function RestorePassword() {
         errorManager(info, setFormError)
       }
     })
-    .catch((err)=>console.log(err))
+    .catch((err)=>console.error(err))
   }
   
   return (

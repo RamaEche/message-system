@@ -20,7 +20,6 @@ function AddUser({ webSocket, newUserToAdd }) {
       if(info.ok){
         location.href = import.meta.env.VITE_FRONTEND_APP_URL;
       }else{
-        console.error(info)
         switch (info.err) {
           case "chatInCommon":
             setFormError("You already have a chat with this user.")

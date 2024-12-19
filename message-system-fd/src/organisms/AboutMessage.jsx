@@ -19,15 +19,7 @@ function AboutMessage({ webSocket, chatsImage}) {
 
   useEffect(()=>{
     setFocusedChat(currentChat.chatMessages.slice().reverse()[currentChat.chatFocusMessage])
-
-    webSocket.on("deleteMessage", data=>{
-      console.log(data)
-    })
   }, [])
-
-  useEffect(()=>{
-    console.log(focusedChat)
-  }, [focusedChat])
 
   const deleteMessage = ()=>{
     if(focusedChat.id != undefined){
@@ -37,7 +29,7 @@ function AboutMessage({ webSocket, chatsImage}) {
         messageId:focusedChat.id
       })
     }else{
-      console.log("The message is not on the server so it cannot be deleted.")
+      console.error("The message is not on the server so it cannot be deleted.")
     }
     setOpenConfirmation(false)
     MessageBox()

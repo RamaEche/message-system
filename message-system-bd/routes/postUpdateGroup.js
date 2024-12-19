@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const Chats = require("../models/Chats.js");
 const fs = require("fs/promises");
-const { rmSync, readdirSync, unlinkSync } = require("fs");
+const { rmSync } = require("fs");
 const path = require("path");
 const imageType = require("image-type");
 const uploadFile = require("../controllers/uploadFile.js");
@@ -35,23 +35,21 @@ const postUpdateGroup = async(req, res)=>{
 			}
 
 			if(req.body.ChatImage == "none"){
+				const currentChat = await Chats.findById(req.headers["chatid"]);
+				const url = currentChat.PhotoPath;
+				await deleteFile(url, "mediaFiles/mediaFiles/chats/");
 				await Chats.updateOne({_id:req.headers["chatid"]}, {$set:{"PhotoPath":null}});
-				const folderPath = path.join(process.env.MEDIA_FILES, "chats", `chat-ID${req.headers["chatid"]}`);
-				const filenames = readdirSync(folderPath);
-				console.log(path.join(folderPath, filenames[0]));
-				unlinkSync(path.join(folderPath, filenames[0]));
 			}
 		}
     
 
-		console.log(req.file);
 		if(req.file){
 			const changeImage = async()=>{ //Image change.
 				const currentChat = await Chats.findById(req.headers["chatid"]);
 				const url = currentChat.PhotoPath;
-				deleteFile(url, "mediaFiles/mediaFiles/chats/");
+				await deleteFile(url, "mediaFiles/mediaFiles/chats/");
 
-				const cloudRes = uploadFile(path.join(process.env.UPLOADS_FILES, req.file.filename), `mediaFiles/mediaFiles/chats/chat-ID${req.headers["chatid"]}`);
+				const cloudRes = await uploadFile(path.join(process.env.UPLOADS_FILES, req.file.filename), `mediaFiles/mediaFiles/chats/chat-ID${req.headers["chatid"]}`);
 				await Chats.updateOne({_id:req.headers["chatid"]}, {$set:{"PhotoPath":cloudRes}});
 			};
 
@@ -64,11 +62,7 @@ const postUpdateGroup = async(req, res)=>{
 
 			if(chat.PhotoPath){
 				try{
-					const lastImage = await fs.readFile(chat.PhotoPath);
-					if(lastImage != Imgbuffer){
-						rmSync(chat.PhotoPath);
-						changeImage();
-					}
+					await changeImage();
 				}catch(err){
 					throw new Error("{ \"ok\":false, \"status\":500, \"err\":\"impossibleImageUpdate\"}");
 				}

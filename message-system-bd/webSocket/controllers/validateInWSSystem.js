@@ -12,7 +12,6 @@ const validateInWSSystem = async (socket, emitTo, data, WSclients)=>{
 		return [user, user.id];
 	}catch(err){
 		socket.emit(emitTo, { status:401, error: "Unauthorized." });
-		console.error({ status:401, error: "Unauthorized." });
 		return 0;
 	}
 };

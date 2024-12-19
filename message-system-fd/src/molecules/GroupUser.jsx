@@ -24,9 +24,9 @@ function GroupUser({ name, roll, userId, chatsStatus, chats, CurrentUserId }) {
       }
     })
     .then((info)=>{
-      setPhotoSrc(info.msg)
+      if(info.msg) setPhotoSrc(info.msg)
     })
-    .catch((err)=>console.log(err))
+    .catch((err)=>console.error(err))
   }
 
   useEffect(()=>{

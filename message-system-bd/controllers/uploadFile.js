@@ -8,7 +8,6 @@ async function uploadFile(filePath, folder) {
 		return result.secure_url;
 	} catch (error) {
 		console.error("Error uploading file:", error);
-		throw error;
 	}
 }
 

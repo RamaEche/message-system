@@ -7,7 +7,6 @@ const authenticateUser = async (socket, emitTo, data, WSclients, user)=>{
         
 	}catch (err){
 		socket.emit("authenticateUser", { status:403, error: "Valid Token But invalid user." });
-		console.error(err);
 		return 0;
 	}
 
@@ -34,7 +33,6 @@ const authenticateUser = async (socket, emitTo, data, WSclients, user)=>{
 
 	}catch(err){
 		socket.emit("authenticateUser", { status:403, error: "Valid Token But invalid user." });
-		console.error(err);
 		return 0;
 	}
 };

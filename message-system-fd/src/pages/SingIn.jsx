@@ -20,7 +20,6 @@ function SingIn() {
     formData.append('Password', e.Password)
     formData.append('ValidatePasword', e.ValidatePasword)
 
-    console.log(e)
     fetch(`${import.meta.env.VITE_SERVER_API_URL}SingIn`, {
       method: 'POST',
       body: formData
@@ -68,22 +67,22 @@ function SingIn() {
           }
           {err.ProfileImage &&
           <div className='form-err-aclaration sing-in-form-err-aclaration'>
-              <p>It is mandatory to add a profile photo.</p>
+              <p>{/* It is mandatory to add a profile photo. */}</p>
             </div>
           }
           <img className='user-image-selector' src={profileImage}/>
           <div className='image-selector-buttons'>
             <input type='button' onClick={()=>DeletePhoto()} className='link' value='Delete photo'/>
             <div className='sing-in-image-selector link'>
-              <input type='file' name='ProfileImage' {...register('ProfileImage', { required: true })}/>
+              <input type='file' name='ProfileImage' {...register('ProfileImage', { required: false })}/>
             </div>
           </div>
           <p className='image-selector-instructions'>File smaller than 25x25px.</p>
           <div className='sing-in-description-container'>
-            <input className={err.Description ? "sing-in-description input-text input-err" : "sing-in-description input-text"} name='Description' type='text' placeholder='Description'  {...register('Description', { maxLength: 100, minLength: 1, required: true})}/>
+            <input className={err.Description ? "sing-in-description input-text input-err" : "sing-in-description input-text"} name='Description' type='text' placeholder='Description'  {...register('Description', { maxLength: 100 })}/>
             {err.Description &&
               <div className='input-err-aclaration'>
-                <p>This field is required, and must contain between 1 and 100 characters.</p>
+                <p>This field must contain a maximum of 100 characters.</p>
               </div>
             }
           </div>

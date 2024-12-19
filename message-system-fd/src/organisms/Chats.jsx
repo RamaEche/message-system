@@ -43,7 +43,7 @@ function Chats({ socket, oneBoxeMode, chatsStatus, setSearchType, chats, setChat
       }else if(data.status == 200){
         setUserId(data.userId)
       }else{
-        console.log(data)
+        console.error(data)
       }
       socket.emit('getUserChats', {authorization:`Barrer ${token}`})
     })
@@ -54,7 +54,7 @@ function Chats({ socket, oneBoxeMode, chatsStatus, setSearchType, chats, setChat
       }else if(data.status == 200){
         setChats(data.chats)
       }else{
-        console.log(data)
+        console.error(data)
       }
     })
 
@@ -69,7 +69,6 @@ function Chats({ socket, oneBoxeMode, chatsStatus, setSearchType, chats, setChat
           location.href = import.meta.env.VITE_FRONTEND_APP_URL;
         }
         const modificatedChat = currentChats[modificatedChatIndex]
-        console.log(currentChats[modificatedChatIndex], modificatedChatIndex)
         let newChat = {
           id: modificatedChat.id,
           Name:modificatedChat.Name,

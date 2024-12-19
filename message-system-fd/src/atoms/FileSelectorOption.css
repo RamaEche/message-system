@@ -71,7 +71,7 @@
 
 .FileSelector-emojis{
     display: flex;
-    transform:translateX(-11px) translateY(-2px);
+    transform:translateX(-10px) translateY(-1px);
 }
 
 .FileSelector-emoji{

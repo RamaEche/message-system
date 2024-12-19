@@ -18,16 +18,11 @@ const postSearchUnknownUsers = async (socket, data, user) => {
 			}
 		});
 
-		unOrdedCurrentUsers.map(u=>{
-			console.log(u.PrivateData.UserName);
-		});
-
 		var search = new JsSearch.Search("id");
 		search.addIndex(["PrivateData", "UserName"]);
 		search.addDocuments(unOrdedCurrentUsers);
 		let middleChat = search.search(data.inputValue.toLowerCase());
 
-		console.log(middleChat);
 		let arrayToSend = [];
 		let chatInCommon = false;
 		middleChat.map((currentUser)=>{

@@ -31,7 +31,9 @@ const postRemoveUser = async(req, res)=>{
 					try{
 						const mediaFiles = path.join(process.env.MEDIA_FILES, "chats", `chat-ID${ids[i]}`);
 						await fs.rm(mediaFiles, { recursive: true });
-					}catch{console.log();}
+					}catch{
+						//
+					}
 					await Chats.deleteOne({_id:ids[i]});
 				}else{
 					let newUsers = [];
@@ -59,7 +61,7 @@ const postRemoveUser = async(req, res)=>{
 		console.log("Deleted account.");
 		res.status(500).json({ok:true});
 	}catch(err){
-		console.error(err);
+		console.error("Error deleting account. Possible web attack: ", err);
 		try{
 			const err=JSON.parse(err.message);
 			res.status(err.status || 400).json(err);

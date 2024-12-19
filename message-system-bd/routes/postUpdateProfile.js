@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const Users = require("../models/Users.js");
 const fs = require("fs/promises");
-const { rmSync, readdirSync, unlinkSync } = require("fs");
+const { rmSync } = require("fs");
 const path = require("path");
 const imageType = require("image-type");
 const uploadFile = require("../controllers/uploadFile.js");
@@ -22,17 +22,17 @@ const updateProfile = async(req, res)=>{
 				throw new Error("{ \"ok\":false, \"status\":400, \"err\":\"invalidInputs\"}");
 			}
 
-			if(req.body.Description != req.user.PrivateData.Description && req.body.Description.length >= 1 && req.body.Description.length <= 100){ //Description change.
+			if(req.body.Description != req.user.PrivateData.Description && req.body.Description.length <= 100){ //Description change.
 				await Users.updateOne({_id:req.user.id}, {$set:{"PrivateData.Description":req.body.Description}});
 			}else if(req.body.Description != req.user.PrivateData.Description){
 				throw new Error("{ \"ok\":false, \"status\":400, \"err\":\"invalidInputs\"}");
 			}
 
 			if(req.body.ProfileImage == "none"){
+				const currentUser = await Users.findById(req.user.id);
+				const url = currentUser.PrivateData.ProfilePhotoPath;
+				await deleteFile(url, "mediaFiles/mediaFiles/users/");
 				await Users.updateOne({_id:req.user.id}, {$set:{"PrivateData.ProfilePhotoPath":null}});
-				const folderPath = path.join(process.env.MEDIA_FILES, "users", `user-ID${req.user.id}`);
-				const filenames = readdirSync(folderPath);
-				unlinkSync( path.join(folderPath, filenames[0]));
 			}
 		}
 
@@ -40,7 +40,7 @@ const updateProfile = async(req, res)=>{
 			const changeImage = async()=>{ //Image change.
 				const currentUser = await Users.findById(req.user.id);
 				const url = currentUser.PrivateData.ProfilePhotoPath;
-				deleteFile(url, "mediaFiles/mediaFiles/users/");
+				await deleteFile(url, "mediaFiles/mediaFiles/users/");
 
 				const cloudRes = await uploadFile(path.join(process.env.UPLOADS_FILES, req.file.filename), `mediaFiles/mediaFiles/users/user-ID${req.user.id}`);
 				await Users.updateOne({_id:req.user.id}, {$set:{"PrivateData.ProfilePhotoPath":cloudRes}});
@@ -55,7 +55,7 @@ const updateProfile = async(req, res)=>{
 
 			if(req.user.PrivateData.ProfilePhotoPath){
 				try{
-					changeImage();
+					await changeImage();
 				}catch(err){
 					throw new Error("{ \"ok\":false, \"status\":500, \"err\":\"impossibleImageUpdate\"}");
 				}

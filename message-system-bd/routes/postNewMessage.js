@@ -15,7 +15,7 @@ const postNewMessgae = async(req, res)=>{
 		}
 	}catch (err){
 		res.status(403).json({ error: "Invalid chat." });
-		console.error(err);
+		console.error("Attempted message to non-existent chat. Possible web attack: ", err);
 	}
 
 	//Save message to chat database.

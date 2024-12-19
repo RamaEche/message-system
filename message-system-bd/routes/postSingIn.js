@@ -11,20 +11,22 @@ const uploadFile = require("../controllers/uploadFile.js");
 
 const singIn = async(req, res)=>{
 	try{
-		const Imgbuffer = await fs.readFile(path.join(process.env.UPLOADS_FILES, req.file.filename));
-		const ImgType = imageType(Imgbuffer);
-		if(!(ImgType && ImgType.mime === "image/jpeg")){
-			await rmSync(path.join(process.env.UPLOADS_FILES, req.file.filename));
-			throw new Error("{ \"ok\":false, \"status\":400, \"err\":\"invalidInputs\"}");
+		if(req.file){
+			const Imgbuffer = await fs.readFile(path.join(process.env.UPLOADS_FILES, req.file.filename));
+			const ImgType = imageType(Imgbuffer);
+			if(!(ImgType && ImgType.mime === "image/jpeg")){
+				await rmSync(path.join(process.env.UPLOADS_FILES, req.file.filename));
+				throw new Error("{ \"ok\":false, \"status\":400, \"err\":\"invalidInputs\"}");
+			}
 		}
 
 		let newUserRes;
     
-		if(!(req.body && req.body.UserName && req.body.ValidatePasword && req.body.Password && req.body.Description &&
+		if(!(req.body && req.body.UserName && req.body.ValidatePasword && req.body.Password &&
 			req.body.UserName.length >= 4 && req.body.UserName.length <= 15 &&
 			req.body.ValidatePasword.length >= 5 && req.body.ValidatePasword.length <= 20 &&
 			req.body.Password.length >= 5 && req.body.Password.length <= 20 &&
-			req.body.Description.length >= 1 && req.body.Description.length <= 100)){
+			req.body.Description.length <= 100)){
 			throw new Error("{ \"ok\":false, \"status\":400, \"err\":\"invalidInputs\"}");
 		}
 
@@ -35,11 +37,16 @@ const singIn = async(req, res)=>{
     
 		const salt = await bcrypt.genSalt(10);
 		const passwordHashed = await bcrypt.hash(req.body.Password, salt);
+
+		let description = "";
+		if(req.body.Description){
+			description = req.body.Description;
+		}
 		await Users.create({
 			PrivateData:{
 				Password: passwordHashed,
 				UserName: req.body.UserName,
-				Description: req.body.Description,
+				Description: description,
 				ProfilePhotoPath: "",
 				ProfileState: "Active"
 			},
@@ -58,10 +65,11 @@ const singIn = async(req, res)=>{
 			};
 		}
     
-		const userID = newUserRes.UserID;
-		const cloudRes = await uploadFile(path.join(process.env.UPLOADS_FILES, req.file.filename), `mediaFiles/mediaFiles/users/user-ID${userID}`);
-		await Users.updateOne({_id:userID}, {$set:{"PrivateData.ProfilePhotoPath":cloudRes}});
-
+		if(req.file){
+			const userID = newUserRes.UserID;
+			const cloudRes = await uploadFile(path.join(process.env.UPLOADS_FILES, req.file.filename), `mediaFiles/mediaFiles/users/user-ID${userID}`);
+			await Users.updateOne({_id:userID}, {$set:{"PrivateData.ProfilePhotoPath":cloudRes}});
+		}
 		res.status(201).json(newUserRes.serverRes);
 	}catch(err){
 		try{

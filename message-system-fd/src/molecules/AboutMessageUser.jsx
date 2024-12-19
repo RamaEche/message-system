@@ -10,7 +10,6 @@ function AboutMessageUser({id, focusedChat, chatsImage}) {
   const [name, setName] = useState("")
   
   const setImage = ()=>{
-    console.log(chatsImage)
     let posibleImgIndx = chatsImage.findIndex(i=>i.chatID == id)
     setPhotoSrc(chatsImage[posibleImgIndx].src)
   }

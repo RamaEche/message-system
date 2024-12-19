@@ -8,7 +8,7 @@ const deleteMessage = async (socket, data, user) => {
 
 	}catch (err){
 		socket.emit("deleteMessage", { status:403, error: "invalidChat" });
-		console.error(err);
+		console.error("Attempted message to non-existent chat. Possible web attack: ", err);
 		return 0;
 	}
 
@@ -28,7 +28,6 @@ const deleteMessage = async (socket, data, user) => {
 		}
 	}catch (err){
 		socket.emit("deleteMessage", { status:403, error: "unprivilegedUser" });
-		console.error(err);
 		return 0;
 	}
 
@@ -43,7 +42,7 @@ const deleteMessage = async (socket, data, user) => {
 		}
 	} catch (err) {
 		socket.emit("deleteMessage", { status:400, error: "invalidMessageId" });
-		console.error(err);
+		console.error("Attempted message to non-existent message. Possible web attack: ", err);
 		return 0;
 	}
 

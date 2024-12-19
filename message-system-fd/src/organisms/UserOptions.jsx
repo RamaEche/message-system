@@ -41,11 +41,13 @@ function UserOptions({ setWebSocket }) {
       }
     })
     .then((info)=>{
-      setPhotoSrc(info.msg)
-      setOriginalData(infoSrc=>({
-        ...infoSrc,
-        photoSrc: info
-      }))
+      if(info.msg){
+        setPhotoSrc(info.msg)
+        setOriginalData(infoSrc=>({
+          ...infoSrc,
+          photoSrc: info.msg
+        }))
+      }
     })
     .catch((err)=>console.log(err))
   }
@@ -63,7 +65,7 @@ function UserOptions({ setWebSocket }) {
       },
       body: formData
     })
-    .then((res)=>res.json())
+    .then((res)=>res.json()) 
     .then((info)=>{
       if(info.ok){
         location.href = import.meta.env.VITE_FRONTEND_APP_URL;
@@ -179,10 +181,10 @@ function UserOptions({ setWebSocket }) {
                 </div>
               }
               <p>Description</p>
-              <input className='input-text' type='text' name='Description' {...register('Description', { required:true, maxLength: 100, minLength: 1})}/>
+              <input className='input-text' type='text' name='Description' {...register('Description', { maxLength: 100})}/>
               {err.Description &&
                 <div className='input-err-aclaration'>
-                  <p>This field is required, and must contain between 1 and 100 characters.</p>
+                  <p>This field must contain a maximum of 100 characters.</p>
                 </div>
               }
               <div className='user-options-form-changes-buttons'>
