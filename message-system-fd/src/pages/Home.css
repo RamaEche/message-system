@@ -22,12 +22,48 @@
   .box2{
     width: 65%;
   }
+
+  .home-box1-loading{
+    display: flex;
+    justify-content: center;
+    height: 95%;
+    width: 524.5px;
+    position: absolute;
+    align-items: center;
+    background: white;
+    z-index: 100;
+  }
+
+  .home-box2-loading{
+    display: flex;
+    justify-content: center;
+    height: 95%;
+    width: 975px;
+    position: absolute;
+    align-items: center;
+    background: white;
+    z-index: 100;
+  }
+
+  .home-box2-loading-w-850{
+    width: 70% !important;
+  }
   
   @media (max-width: 1545px) {
     .app-container{
       height: 100%;
       max-width: none;
       width: 100vw;
+    }
+
+    .home-box1-loading{
+      width: calc(35% - 1px);
+      height: 100%;
+    }
+
+    .home-box2-loading{
+      width: calc(65% - 1px);
+      height: 100%;
     }
   }
 
@@ -37,7 +73,17 @@
       height: 95%;
       width: 70%;
     }
-  
+    
+    .home-box1-loading{
+      width: 70%;
+      height: 95%;
+    }
+
+    .home-box2-loading{
+      width: auto;
+      height: 95%;
+    }
+
     .box1{
       width: 100%;
       border-right: none;
@@ -52,11 +98,30 @@
     .app-container{
       width: 85%;
     }
+
+    .home-box1-loading{
+      width: 85%;
+      height: 95%;
+    }
+
+    .home-box2-loading{
+      width: 85%;
+      height: 95%;
+    }
   }
   
   @media (max-width: 450px) {
     .app-container{
       height: 100%;
       width: 100%;
+    }
+    .home-box1-loading{
+      width: 100%;
+      height: 100%;
+    }
+
+    .home-box2-loading{
+      width: 100%;
+      height: 100%;
     }
   }

@@ -4,7 +4,7 @@ import Cookies from 'js-cookie'
 
 function GroupUser({ name, roll, userId, chatsStatus, chats, CurrentUserId }) {
   const [userCurrentState, setUserCurrentState] = useState(false)
-  const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}user.png`)
+  const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}user.webp`)
   const [token] = useState(Cookies.get('JwtToken'))
   
   const getUserPhotoById = ()=>{

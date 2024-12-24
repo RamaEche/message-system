@@ -9,6 +9,7 @@ import MessageBox from '../organisms/MessageBox'
 import ChatOption from '../organisms/ChatOption'
 import GroupOption from '../organisms/GroupOption'
 //import AboutMessage from '../organisms/AboutMessage'
+import Loading from '../atoms/Loading'
 
 import './Home.css'
 import {useState, createContext, useEffect, useRef} from 'react'
@@ -30,10 +31,14 @@ function Home() {
   const [searchType, setSearchType] = useState("error")
   const box1 = useRef(null)
   const box2 = useRef(null)
+  const loadingBox2 = useRef(null)
   const [chatsStatus, setChatsStatus] = useState([])
   const [chatsImage, setChatsImage] = useState([])
   const lastWSize = useRef(null)
   const [messageBoxGoBackArrow, setMessageBoxGoBackArrow] = useState(null)
+
+  const [box1Loaded, setBox1Loaded] = useState(false)
+  const [box2Loaded, setBox2Loaded] = useState(false)
 
   const socket = socketIOClient(`${import.meta.env.VITE_SERVER_API_URL}`);
 
@@ -73,21 +78,46 @@ function Home() {
 
   useEffect(()=>{
     oneBoxeMode == null && handleResize()
+    if(!oneBoxeMode){
+      try{
+        loadingBox2.current.classList.remove("home-box2-loading-w-850")
+      }catch{
+        //
+      }
+    }
   }, [oneBoxeMode])
 
+  const boxLoaded = (box) => {
+    if (box === 1) setBox1Loaded(true);
+    if (box === 2) setBox2Loaded(true);
+  };
+
   useEffect(()=>{
+    if(boxes.currentBox == 1){
+      setBox1Loaded(false)
+    }
+    if(boxes.currentBox == 2){
+      setBox2Loaded(false)
+    }
+
     if(oneBoxeMode){
       if(boxes.currentBox == 1){
         box2.current.classList.add("none")
+        loadingBox2.current.classList.remove("home-box2-loading-w-850")
         box1.current.classList.remove("none")
       }
   
       if(boxes.currentBox == 2){
         box1.current.classList.add("none")
+        loadingBox2.current.classList.add("home-box2-loading-w-850")
         box2.current.classList.remove("none")
       }
     }
   }, [boxes])
+
+  useEffect(()=>{
+    console.log("box1Loaded: ", box1Loaded)
+  },[box1Loaded])
 
   return (
     <CurrentChatContext.Provider value={[currentChat, setCurrentChat]}>
@@ -99,28 +129,38 @@ function Home() {
           {/* <VideoPlayer/> */}
           <div className='app-container'>
             <div ref={box1} className='box1'>
+              {!box1Loaded &&
+                <div className='home-box1-loading'>
+                  <Loading/>
+                </div>
+              }
               {boxes.box1 == 'Chats' ? (
-                  <Chats webSocket={webSocket} oneBoxeMode={oneBoxeMode} chatsStatus={chatsStatus} chatsImage={chatsImage} setChatsImage={setChatsImage} socket={socket} setSearchType={setSearchType} chats={chats} setChats={setChats}/>
+                  <Chats webSocket={webSocket} boxLoaded={boxLoaded} oneBoxeMode={oneBoxeMode} chatsStatus={chatsStatus} chatsImage={chatsImage} setChatsImage={setChatsImage} socket={socket} setSearchType={setSearchType} chats={chats} setChats={setChats}/>
                 ) : boxes.box1 == 'UserOptions' ? (
-                  <UserOptions webSocket={webSocket} setWebSocket={setWebSocket}/>
+                  <UserOptions webSocket={webSocket} boxLoaded={boxLoaded} setWebSocket={setWebSocket}/>
                 ) : boxes.box1 == 'SearchUser' ? (
-                  <SearchUser webSocket={webSocket} searchType={searchType} chats={chats} setNewUserToAdd={setNewUserToAdd} chatsImage={chatsImage} setChatsImage={setChatsImage}/>
+                  <SearchUser webSocket={webSocket} boxLoaded={boxLoaded} searchType={searchType} chats={chats} setNewUserToAdd={setNewUserToAdd} chatsImage={chatsImage} setChatsImage={setChatsImage}/>
                 ) : boxes.box1 == 'AddUser' ? (
                   <AddUser webSocket={webSocket} newUserToAdd={newUserToAdd}/>
                 ) : boxes.box1 == 'CreateGroup' && (
-                  <CreateGroup webSocket={webSocket} chats={chats} chatsImage={chatsImage} setChatsImage={setChatsImage}/>
+                  <CreateGroup webSocket={webSocket} boxLoaded={boxLoaded} chats={chats} chatsImage={chatsImage} setChatsImage={setChatsImage}/>
                 )
               }
             </div>
             <div ref={box2} className='box2'>
+              {!box2Loaded &&
+                <div ref={loadingBox2} className='home-box2-loading'>
+                  <Loading/>
+                </div>
+              }
               {boxes.box2 == 'Welcome' ? (
-                  <Welcome/>
+                  <Welcome setBox2Loaded={setBox2Loaded}/>
                 ) : boxes.box2 == 'MessageBox' ? (
-                  <MessageBox chatsStatus={chatsStatus} webSocket={webSocket} chatsImage={chatsImage} messageBoxGoBackArrow={messageBoxGoBackArrow}/>
+                  <MessageBox setBox2Loaded={setBox2Loaded} chatsStatus={chatsStatus} webSocket={webSocket} chatsImage={chatsImage} messageBoxGoBackArrow={messageBoxGoBackArrow}/>
                 ) : boxes.box2 == 'GroupOption' ? (
-                  <GroupOption webSocket={webSocket} chatsImage={chatsImage} chatsStatus={chatsStatus} chats={chats} CurrentUserId={userId}/>
+                  <GroupOption webSocket={webSocket} setBox2Loaded={setBox2Loaded} chatsImage={chatsImage} chatsStatus={chatsStatus} chats={chats} CurrentUserId={userId}/>
                 ) : boxes.box2 == 'ChatOption' ? (
-                  <ChatOption webSocket={webSocket} chatsImage={chatsImage}/>
+                  <ChatOption webSocket={webSocket} setBox2Loaded={setBox2Loaded} chatsImage={chatsImage}/>
                 ) : boxes.box2 == 'aboutMessage' && (
                   //<AboutMessage webSocket={webSocket} chatsImage={chatsImage}/>
                   <></>

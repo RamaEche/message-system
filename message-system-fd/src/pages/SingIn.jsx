@@ -6,7 +6,7 @@ import errorManager from  '../controllers/errorManager.js'
 
 function SingIn() {
   const { register, handleSubmit, formState, watch } = useForm()
-  const [profileImage, setProfileImage] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`);
+  const [profileImage, setProfileImage] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.webp`);
   let files = [];
   let err = formState.errors;
   const [formError, setFormError] = useState(false)
@@ -51,7 +51,7 @@ function SingIn() {
 
   const DeletePhoto = ()=>{
     form.current.reset();
-    setProfileImage(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
+    setProfileImage(`${import.meta.env.VITE_FRONTEND_APP_URL}group.webp`)
   }
 
   return (

@@ -6,7 +6,7 @@ import {useForm} from 'react-hook-form'
 import Cookies from 'js-cookie'
 import GoBackArrow from '../atoms/GoBackArrow.jsx'
 
-function CreateGroup({ webSocket, chats, chatsImage, setChatsImage }) {
+function CreateGroup({ webSocket, boxLoaded, chats, chatsImage, setChatsImage }) {
   const [formError, setFormError] = useState(false)
   const [parentOrdedChats, setParentOrdedChats] = useState(chats)
   const {handleSubmit, register, formState} = useForm()
@@ -97,7 +97,7 @@ function CreateGroup({ webSocket, chats, chatsImage, setChatsImage }) {
             })}
           </div>
           <div className='create-group-input-container'>
-            <SearchUser searchType="returnKnownUsers" chatsImage={chatsImage} setChatsImage={setChatsImage} webSocket={webSocket} chats={chats} parentOrdedChats={parentOrdedChats} setParentOrdedChats={setParentOrdedChats} header={false}/>
+            <SearchUser searchType="returnKnownUsers" chatsImage={chatsImage} boxLoaded={boxLoaded} setChatsImage={setChatsImage} webSocket={webSocket} chats={chats} parentOrdedChats={parentOrdedChats} setParentOrdedChats={setParentOrdedChats} header={false}/>
           </div>
         </form>
       </div>

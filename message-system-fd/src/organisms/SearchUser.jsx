@@ -8,7 +8,7 @@ import Cookies from 'js-cookie'
 import Loading from '../atoms/Loading'
 import GoBackArrow from '../atoms/GoBackArrow.jsx'
 
-function SearchUser({searchType, webSocket, chats, parentOrdedChats=[], setParentOrdedChats, setNewUserToAdd, header=true, chatsImage, setChatsImage}) {
+function SearchUser({searchType, webSocket, boxLoaded, chats, parentOrdedChats=[], setParentOrdedChats, setNewUserToAdd, header=true, chatsImage, setChatsImage}) {
   const [token] = useState(Cookies.get('JwtToken'))
   const { register } = useForm()
   const [ordedChats, setOrdedChats] = useState([])
@@ -153,7 +153,7 @@ function SearchUser({searchType, webSocket, chats, parentOrdedChats=[], setParen
         <div className='search-user-input-container'>
           <div className="search-user-img-container">
             <div className='search-user-img-content'>
-              <img src="search.png" className="search-user-img" />
+              <img src="search.webp" className="search-user-img" onLoad={()=> boxLoaded(1)}/>
             </div>
           </div>
           <input className='search-user-input' type='text' name='searchInput' {...register('searchInput', {

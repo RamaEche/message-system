@@ -3,12 +3,12 @@ import {useState, useContext, useEffect} from 'react'
 import {BoxesContext, CurrentChatContext} from '../pages/Home'
 import Cookies from 'js-cookie'
 
-function Chat({className="", setClicked=false, onClick=false, chatsStatus, ChatID, Type, Name, Description, IgnoredMessageCounter, chatsImage, setChatsImage}) {
+function Chat({className="", setIsImageCount, setClicked=false, onClick=false, chatsStatus, ChatID, Type, Name, Description, IgnoredMessageCounter, chatsImage, setChatsImage}) {
   const [boxes, setBoxes] = useContext(BoxesContext)
   const [ignoredMessages, setIgnoredMessages] = useState(IgnoredMessageCounter)
   const [chatState, setChatState] = useState(false)
   const [, setCurrentChat] = useContext(CurrentChatContext)
-  const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
+  const [photoSrc, setPhotoSrc] = useState(null)
   const [token] = useState(Cookies.get('JwtToken'))
   
   const OpenChat = ()=>{
@@ -45,14 +45,20 @@ function Chat({className="", setClicked=false, onClick=false, chatsStatus, ChatI
           setChatsImage(currentChatsImage=>{
             return [...currentChatsImage, {chatID:ChatID, src:info.msg}]
           })
+        }else if(Type == "G"){
+          setPhotoSrc(`${import.meta.env.VITE_FRONTEND_APP_URL}group.webp`)
+          setChatsImage(currentChatsImage=>[...currentChatsImage, {chatID:ChatID, src:`${import.meta.env.VITE_FRONTEND_APP_URL}group.webp`}])
+        }else{
+          setPhotoSrc(`${import.meta.env.VITE_FRONTEND_APP_URL}user.webp`)
+          setChatsImage(currentChatsImage=>[...currentChatsImage, {chatID:ChatID, src:`${import.meta.env.VITE_FRONTEND_APP_URL}user.webp`}])
         }
       }else if(info.state == 500){
         if(Type == "G"){
-          setPhotoSrc(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
-          setChatsImage(currentChatsImage=>[...currentChatsImage, {chatID:ChatID, src:`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`}])
+          setPhotoSrc(`${import.meta.env.VITE_FRONTEND_APP_URL}group.webp`)
+          setChatsImage(currentChatsImage=>[...currentChatsImage, {chatID:ChatID, src:`${import.meta.env.VITE_FRONTEND_APP_URL}group.webp`}])
         }else{
-          setPhotoSrc(`${import.meta.env.VITE_FRONTEND_APP_URL}user.png`)
-          setChatsImage(currentChatsImage=>[...currentChatsImage, {chatID:ChatID, src:`${import.meta.env.VITE_FRONTEND_APP_URL}user.png`}])
+          setPhotoSrc(`${import.meta.env.VITE_FRONTEND_APP_URL}user.webp`)
+          setChatsImage(currentChatsImage=>[...currentChatsImage, {chatID:ChatID, src:`${import.meta.env.VITE_FRONTEND_APP_URL}user.webp`}])
         }
       }
     })
@@ -88,7 +94,13 @@ function Chat({className="", setClicked=false, onClick=false, chatsStatus, ChatI
     <a onClick={onClick ? ()=>onClick(ChatID) : ()=>OpenChat()} className={'chat-box '+className}>
         <div className='chat-content'>
             <div className='chat-data'>
-                <img className="chat-image" src={photoSrc}/>
+                <img className="chat-image" src={photoSrc}   onLoad={() => {
+                  try{
+                    setIsImageCount((prevCount) => prevCount + 1);
+                  }catch{
+                    //
+                  }
+                }}/>
                 <div className='chat-text'>
                     <p className="chat-name">{Name}</p>
                     <p className="last-message">{Description}</p>

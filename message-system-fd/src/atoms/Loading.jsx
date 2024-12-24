@@ -3,7 +3,7 @@ import './Loading.css'
 function Loading() {
   return (
     <div className='loading-container'>
-        <img src="Loading.png" alt="Loading" />
+        <img src="Loading.webp" alt="Loading" />
     </div>
   )
 }

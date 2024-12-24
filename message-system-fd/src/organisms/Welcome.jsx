@@ -1,6 +1,10 @@
+import { useEffect } from 'react'
 import './Welcome.css'
 
-function Welcome() {
+function Welcome({ setBox2Loaded }) {
+  useEffect(()=>{
+    setBox2Loaded(true)
+  }, [])
   return (
     <div className='welcome-container'>
         <img src="/icon.svg" alt="Text message system logo" />

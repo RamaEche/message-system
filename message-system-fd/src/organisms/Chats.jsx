@@ -3,10 +3,9 @@ import Chat from '../molecules/Chat'
 import {useContext, useEffect, useState, useRef} from 'react'
 import {BoxesContext, UserIdContext} from '../pages/Home'
 import Cookies from 'js-cookie'
-import Loading from "../atoms/Loading.jsx"
 import NoMoreUsers from "../atoms/NoMoreUsers.jsx"
 
-function Chats({ socket, oneBoxeMode, chatsStatus, setSearchType, chats, setChats, chatsImage, setChatsImage}) {
+function Chats({ socket, boxLoaded, oneBoxeMode, chatsStatus, setSearchType, chats, setChats, chatsImage, setChatsImage}) {
   const [token] = useState(Cookies.get('JwtToken'))
   const [boxes, setBoxes] = useContext(BoxesContext)
   const [, setUserId] = useContext(UserIdContext)
@@ -14,6 +13,7 @@ function Chats({ socket, oneBoxeMode, chatsStatus, setSearchType, chats, setChat
   const clickedRef = useRef(clicked);
   const oneBoxeModeRef = useRef(oneBoxeMode);
   const boxesRef = useRef(boxes);
+  const [isImageCount, setIsImageCount] = useState(0)
 
   const SearchChat = ()=>{
     setSearchType("knownUsers")
@@ -34,7 +34,6 @@ function Chats({ socket, oneBoxeMode, chatsStatus, setSearchType, chats, setChat
   }
 
   useEffect(()=>{
-
     //socket.emit('authenticateUser', {authorization:`Barrer ${token}`})
     socket.emit('getUserChats', {authorization:`Barrer ${token}`})
     socket.on('authenticateUser', data=>{
@@ -95,6 +94,19 @@ function Chats({ socket, oneBoxeMode, chatsStatus, setSearchType, chats, setChat
     boxesRef.current = boxes;
   }, [boxes]);
 
+  useEffect(() => {
+    boxLoaded(1)
+    if(chats != null && isImageCount == chats.length){
+      boxLoaded(1)
+    }
+  }, [isImageCount]);
+
+  useEffect(()=>{
+    if(chats != null && chats.length == 0){
+      boxLoaded(1)
+    }
+  }, [chats])
+
   return (
     <div className='chats-box'>
       <div className="bar">
@@ -113,18 +125,13 @@ function Chats({ socket, oneBoxeMode, chatsStatus, setSearchType, chats, setChat
         </div>
       </div>
       <div className="chats">
-        {chats == null ?
-        (
-          <div className='chats-loading'>
-            <Loading/>
-          </div>
-        ): chats == 0 ?
+        {chats != null && chats == 0 ?
         (
           <NoMoreUsers/>
-        ):
+        ): chats != null &&
         (
           chats.map((chat, i)=>{
-            return <Chat key={i} setClicked={setClicked} chatsImage={chatsImage} setChatsImage={setChatsImage} chatsStatus={chatsStatus} ChatID={chat.id} Type={chat.Type} Name={chat.Name} Description={chat.Description} IgnoredMessageCounter={chat.IgnoredMessageCounter}/>
+            return <Chat key={i} setClicked={setClicked} setIsImageCount={setIsImageCount} chatsImage={chatsImage} setChatsImage={setChatsImage} chatsStatus={chatsStatus} ChatID={chat.id} Type={chat.Type} Name={chat.Name} Description={chat.Description} IgnoredMessageCounter={chat.IgnoredMessageCounter}/>
           })
         )}
       </div>

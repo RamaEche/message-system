@@ -40,7 +40,7 @@ function AboutMessage({ webSocket, chatsImage}) {
   return (
     <div className='about-message-container'>
       <div className='about-message-bar'>
-        <a className='about-message-go-back-arrow' onClick={()=>MessageBox()}><img src='arrow.png'/></a>
+        <a className='about-message-go-back-arrow' onClick={()=>MessageBox()}><img src='arrow.webp'/></a>
         <h1 className='about-message-outstanding-logo'>Text Message System</h1>
       </div>
       <div className='about-message-bar-bg'>

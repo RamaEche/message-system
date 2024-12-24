@@ -7,14 +7,14 @@ import errorManager from  '../controllers/errorManager.js'
 import socketIOClient from 'socket.io-client';
 import GoBackArrow from '../atoms/GoBackArrow.jsx'
 
-function UserOptions({ setWebSocket }) {
+function UserOptions({ setWebSocket, boxLoaded }) {
   const { register, handleSubmit, formState, watch, setValue } = useForm()
   let files = [];
   let err = formState.errors;
   const [formError, setFormError] = useState(false)
   const form = useRef(null)
   const [originalData, setOriginalData] = useState({photoSrc:null, userName:null, description:null})
-  const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}user.png`)
+  const [photoSrc, setPhotoSrc] = useState(null)
   const [openConfirmation1, setOpenConfirmation1] = useState(false)
   const [openConfirmation2, setOpenConfirmation2] = useState(false)
   const [token] = useState(Cookies.get('JwtToken'))
@@ -34,6 +34,7 @@ function UserOptions({ setWebSocket }) {
       }
     })
     .then((res)=>{
+      console.log(res)
       if(res.statusText == 'OK'){
         return res.json()
       }else{
@@ -41,11 +42,18 @@ function UserOptions({ setWebSocket }) {
       }
     })
     .then((info)=>{
+      console.log(info.msg)
       if(info.msg){
         setPhotoSrc(info.msg)
         setOriginalData(infoSrc=>({
           ...infoSrc,
           photoSrc: info.msg
+        }))
+      }else{
+        setPhotoSrc(`${import.meta.env.VITE_FRONTEND_APP_URL}user.webp`)
+        setOriginalData(infoSrc=>({
+          ...infoSrc,
+          photoSrc: `${import.meta.env.VITE_FRONTEND_APP_URL}user.webp`
         }))
       }
     })
@@ -54,7 +62,7 @@ function UserOptions({ setWebSocket }) {
 
   const onSubmit = (e)=>{
     const formData = new FormData();
-    photoSrc != `${import.meta.env.VITE_FRONTEND_APP_URL}user.png` ? formData.append('ProfileImage', e.ProfileImage[0]) : formData.append('ProfileImage', "none")
+    photoSrc != `${import.meta.env.VITE_FRONTEND_APP_URL}user.webp` ? formData.append('ProfileImage', e.ProfileImage[0]) : formData.append('ProfileImage', "none")
     formData.append('UserName', e.UserName)
     formData.append('Description', e.Description)
 
@@ -93,14 +101,14 @@ function UserOptions({ setWebSocket }) {
     const CurrentUserName = watch('UserName')
     const CurrentDescription = watch('Description')
     form.current.reset();
-    setPhotoSrc(`${import.meta.env.VITE_FRONTEND_APP_URL}user.png`)
+    setPhotoSrc(`${import.meta.env.VITE_FRONTEND_APP_URL}user.webp`)
     setValue('UserName', CurrentUserName);
     setValue('Description', CurrentDescription);
   }
 
   const resetForm = ()=>{
     form.current.reset();
-    setPhotoSrc(originalData.photoSrc != null ? originalData.photoSrc : `${import.meta.env.VITE_FRONTEND_APP_URL}user.png`)
+    setPhotoSrc(originalData.photoSrc != null ? originalData.photoSrc : `${import.meta.env.VITE_FRONTEND_APP_URL}user.webp`)
     setValue('UserName', originalData.userName);
     setValue('Description', originalData.description);
   }
@@ -134,8 +142,10 @@ function UserOptions({ setWebSocket }) {
   useEffect(()=>{
     setWebSocket(socket)
 
+    console.log("solo entro: ", token)
     socket.emit('getUserOptions', {authorization:`Barrer ${token}`})
     socket.on('getUserOptions', data => {
+      console.log("aaaaaaaaaaaaaaaaaaaaaa: ", data)
       setValue('UserName', data.info.userName);
       setValue('Description', data.info.description);
       getUserPhotoById(data.info.id)
@@ -146,6 +156,10 @@ function UserOptions({ setWebSocket }) {
       }))
     });
   }, [])
+
+  useEffect(()=>{
+    console.log(photoSrc)
+  }, [photoSrc])
 
   return (
     <div className='user-option-container'>
@@ -165,7 +179,7 @@ function UserOptions({ setWebSocket }) {
               <p>Profile photo error.</p>
             </div>
           }
-          <img className='user-options-image-selector' src={photoSrc}/>
+          <img className='user-options-image-selector' src={photoSrc} onLoad={()=>{boxLoaded(1)}}/>
           <div className='image-selector-buttons'>
             <input type='button' onClick={()=>deletePhoto()} className='link' value='Delete photo'/>
             <div className='sing-in-image-selector link'>

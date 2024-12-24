@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import Cookies from 'js-cookie'
 import GoBackArrow from '../atoms/GoBackArrow'
 
-function ChatOption({ webSocket, chatsImage }) {
+function ChatOption({ webSocket, setBox2Loaded, chatsImage }) {
   const [token] = useState(Cookies.get('JwtToken'))
   const { register, handleSubmit, formState, watch, setValue } = useForm()
   const [currentChat] = useContext(CurrentChatContext)
@@ -13,7 +13,7 @@ function ChatOption({ webSocket, chatsImage }) {
   let err = formState.errors;
   const form = useRef(null)
   const [formError] = useState(false)
-  const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
+  const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.webp`)
 
   watch('Name', '');
 
@@ -24,6 +24,7 @@ function ChatOption({ webSocket, chatsImage }) {
     });
     webSocket.on("getChatOptionData", info=>{
       setServerDataGeted(info)
+      setBox2Loaded(true)
     })
   }
 

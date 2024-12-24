@@ -17,7 +17,7 @@ function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId, chatsImage 
   let files = [];
   const form = useRef(null)
   const [formError, setFormError] = useState(false)
-  const [chatImage, setChatImage] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`);
+  const [chatImage, setChatImage] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.webp`);
   const [openConfirmation1, setOpenConfirmation1] = useState(false)
   const [openConfirmation2, setOpenConfirmation2] = useState(false)
 
@@ -57,7 +57,7 @@ function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId, chatsImage 
   //Reset form with the existing name.
   const resetForm = ()=>{
     form.current.reset();
-    setChatImage(serverDataGeted.chatImage != null ? serverDataGeted.chatImage : `${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
+    setChatImage(serverDataGeted.chatImage != null ? serverDataGeted.chatImage : `${import.meta.env.VITE_FRONTEND_APP_URL}group.webp`)
     setValue('Name', serverDataGeted.name);
     setValue('Description', serverDataGeted.description);
     const chatsImageIndex = chatsImage.findIndex(i=>i.chatID == currentChat.chatId)
@@ -71,7 +71,7 @@ function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId, chatsImage 
     const CurrentName = watch('Name')
     const CurrentDescription = watch('Description')
     form.current.reset();
-    setChatImage(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
+    setChatImage(`${import.meta.env.VITE_FRONTEND_APP_URL}group.webp`)
     setValue('Name', CurrentName);
     setValue('Description', CurrentDescription);
   }
@@ -91,7 +91,7 @@ function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId, chatsImage 
     const formData = new FormData();
     formData.append('Name', e.Name)
     formData.append('Description', e.Description)
-    chatImage != `${import.meta.env.VITE_FRONTEND_APP_URL}group.png` ? formData.append('ChatImage', e.ChatImage[0]) : formData.append('ChatImage', "none")
+    chatImage != `${import.meta.env.VITE_FRONTEND_APP_URL}group.webp` ? formData.append('ChatImage', e.ChatImage[0]) : formData.append('ChatImage', "none")
 
     fetch(`${import.meta.env.VITE_SERVER_API_URL}UpdateGroup`, {
       method: 'POST',
@@ -175,7 +175,7 @@ function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId, chatsImage 
   return (
     <div className='group-option-container'>
       <div className='group-option-bar'>
-          <a className='group-option-go-back-arrow' onClick={()=>MessageBox()}><img src='arrow.png'/></a>
+          <a className='group-option-go-back-arrow' onClick={()=>MessageBox()}><img src='arrow.webp'/></a>
         <h1 className='group-option-outstanding-logo'>Text Message System</h1>
       </div>
       <div className='group-option-content'>

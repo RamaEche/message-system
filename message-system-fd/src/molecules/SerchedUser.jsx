@@ -6,7 +6,7 @@ import {BoxesContext} from '../pages/Home'
 
 function SerchedUser( { id, userName, userDescription, setNewUserToAdd } ){
     const [boxes, setBoxes] = useContext(BoxesContext)
-    const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}user.png`)
+    const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}user.webp`)
     const [token] = useState(Cookies.get('JwtToken'))
     
     const AddUser = ()=>{

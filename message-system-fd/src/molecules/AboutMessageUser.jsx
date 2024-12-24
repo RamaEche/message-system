@@ -4,7 +4,7 @@ import {CurrentChatContext} from "../pages/Home"
 
 function AboutMessageUser({id, focusedChat, chatsImage}) {
   const [currentChat] = useContext(CurrentChatContext)
-  const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}user.png`)
+  const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}user.webp`)
   //const [messageStateText, setMessageStateText] = useState()
   //const [fileStateText, setFileStateText] = useState()
   const [name, setName] = useState("")

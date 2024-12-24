@@ -34,7 +34,7 @@ function RestorePassword() {
   return (
     <div className='restore-password-page'>
       <h1 className='outstanding-logo'>Text Message System</h1>
-      <a href={import.meta.env.VITE_FRONTEND_APP_URL}><img className='restore-password-go-back-arrow' src='arrow.png'/></a>
+      <a href={import.meta.env.VITE_FRONTEND_APP_URL}><img className='restore-password-go-back-arrow' src='arrow.webp'/></a>
       <form className='restore-password-container' onSubmit={handleSubmit((data)=>onSubmit(data))}>
         <h2 className='restore-password-title'>Restore password</h2>
         {formError &&

@@ -6,16 +6,17 @@ import Message from '../molecules/Message'
 import { useForm } from 'react-hook-form'
 import FileSelectorOption from '../atoms/FileSelectorOption'
 
-  function MessageBox({ webSocket, chatsImage, chatsStatus, messageBoxGoBackArrow }) {
+  function  MessageBox({ webSocket, setBox2Loaded, chatsImage, chatsStatus, messageBoxGoBackArrow }) {
   const [messageInputFileButton, setMessageInputFileButton] = useState('close')
   const [boxes, setBoxes] = useContext(BoxesContext)
   const [currentChat, setCurrentChat] = useContext(CurrentChatContext)
   const [messages, setMessages] = useState([])
   const [token] = useState(Cookies.get('JwtToken'))
   const [userId] = useContext(UserIdContext)
-  const [userData, setUserData] = useState({ name:"Chat", state:false, src:`${import.meta.env.VITE_FRONTEND_APP_URL}group.png` })
+  const [userData, setUserData] = useState({ name:"Chat", state:false, src:null })
   const textA = useRef(null)
   const lastDate = useRef(false)
+  const [contentLoaded, setContentLoaded] = useState(0)
 
   const LazyLoadedComponent = lazy(() => import('emoji-picker-react')); // The import: import EmojiPicker from 'emoji-picker-react';
 
@@ -27,9 +28,9 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
 
    const ChatOption = ()=>{
     if(currentChat.chatType == "U"){
-      setBoxes({box1:boxes.box1, box2:"ChatOption"})
+      setBoxes({box1:boxes.box1, box2:"ChatOption", currentBox:2})
     }else{
-      setBoxes({box1:boxes.box1, box2:"GroupOption"})
+      setBoxes({box1:boxes.box1, box2:"GroupOption", currentBox:2})
     }
   }
 
@@ -153,6 +154,7 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
           messageState
           )
       }
+      setContentLoaded(current => current = current + 1)
       webSocket.emit('postChatRead', {authorization: `Barrer ${token}`, chatId:currentChat.chatId})
     })
 
@@ -197,7 +199,7 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
       }else{
         setUserData(CUserData=>({
           ...CUserData,
-          src:`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`,
+          src:`${import.meta.env.VITE_FRONTEND_APP_URL}group.webp`,
           name: data.name
         }))
       }
@@ -208,10 +210,18 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
     textA.current.value = textA.current.value+String.fromCodePoint(parseInt(emojiData.unified, 16))
   }
 
+  useEffect(()=>{
+    
+    if(contentLoaded == 1){
+      setBox2Loaded(true)
+      setContentLoaded(0)
+    }
+  }, [contentLoaded])
+
   return (
     <div className='message-box'>
       <div className="message-box-bar-container">
-        <div className={messageBoxGoBackArrow ? 'message-box-go-back-arrow-container' : 'message-box-go-back-arrow-container none'} onClick={()=>Chats()}><a className='message-box-go-back-arrow'><img src='arrow.png'/></a></div> {/* This fragment is a modification of the GoBackArrow component */}
+        <div className={messageBoxGoBackArrow ? 'message-box-go-back-arrow-container' : 'message-box-go-back-arrow-container none'} onClick={()=>Chats()}><a className='message-box-go-back-arrow'><img src='arrow.webp'/></a></div> {/* This fragment is a modification of the GoBackArrow component */}
         <div className="message-box-bar" onClick={()=>ChatOption()}>
           <div className='message-box-profile-data'>
             <div className='message-box-profile-photo'>
@@ -222,7 +232,7 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
                 <div>{userData.state == true && "Online"}</div>
             </div>
           </div>
-          <img src='options.png' className='message-box-profile-options'/>
+          <img src='options.webp' className='message-box-profile-options'/>
         </div>
       </div>
       <div className='message-box-messages'>

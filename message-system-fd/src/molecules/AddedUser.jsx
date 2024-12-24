@@ -2,7 +2,7 @@ import './AddedUser.css'
 import {useEffect, useState} from 'react'
 
 function AddedUser( { Name, id, onClick, chatsImage } ){
-  const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.png`)
+  const [photoSrc, setPhotoSrc] = useState(`${import.meta.env.VITE_FRONTEND_APP_URL}group.webp`)
 
   useEffect(()=>{
     let imgIndx = chatsImage.findIndex(i=>i.chatID == id)
@@ -12,7 +12,7 @@ function AddedUser( { Name, id, onClick, chatsImage } ){
   return (
     <>
       <div className='added-user-container-curtain-remove' onClick={()=>onClick(id)}>
-        <img className="added-user-close" src={`${import.meta.env.VITE_FRONTEND_APP_URL}close.png`}/>
+        <img className="added-user-close" src={`${import.meta.env.VITE_FRONTEND_APP_URL}close.webp`}/>
       </div>
       <div className='added-user-container'>
         <img className="added-user-chat-image" src={photoSrc}/>
