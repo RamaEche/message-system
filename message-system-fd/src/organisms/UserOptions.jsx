@@ -34,15 +34,13 @@ function UserOptions({ setWebSocket, boxLoaded }) {
       }
     })
     .then((res)=>{
-      console.log(res)
-      if(res.statusText == 'OK'){
+      if(res.ok){
         return res.json()
       }else{
         console.error("No image")
       }
     })
     .then((info)=>{
-      console.log(info.msg)
       if(info.msg){
         setPhotoSrc(info.msg)
         setOriginalData(infoSrc=>({
@@ -57,7 +55,7 @@ function UserOptions({ setWebSocket, boxLoaded }) {
         }))
       }
     })
-    .catch((err)=>console.log(err))
+    .catch((err)=>console.error(err))
   }
 
   const onSubmit = (e)=>{
@@ -141,11 +139,8 @@ function UserOptions({ setWebSocket, boxLoaded }) {
 
   useEffect(()=>{
     setWebSocket(socket)
-
-    console.log("solo entro: ", token)
     socket.emit('getUserOptions', {authorization:`Barrer ${token}`})
     socket.on('getUserOptions', data => {
-      console.log("aaaaaaaaaaaaaaaaaaaaaa: ", data)
       setValue('UserName', data.info.userName);
       setValue('Description', data.info.description);
       getUserPhotoById(data.info.id)
@@ -156,10 +151,6 @@ function UserOptions({ setWebSocket, boxLoaded }) {
       }))
     });
   }, [])
-
-  useEffect(()=>{
-    console.log(photoSrc)
-  }, [photoSrc])
 
   return (
     <div className='user-option-container'>

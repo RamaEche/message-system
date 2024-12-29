@@ -25,7 +25,6 @@ const validateWS = async(next, socket, data, emitTo) =>{
 		return 0;
 	}
 	let [user] = validatedData;
-
 	next(socket, data, user);
 };
 

@@ -17,7 +17,7 @@ function GroupUser({ name, roll, userId, chatsStatus, chats, CurrentUserId }) {
       }
     })
     .then((res)=>{
-      if(res.statusText == 'OK'){
+      if(res.ok){
         return res.json()
       }else{
         console.error("No image")

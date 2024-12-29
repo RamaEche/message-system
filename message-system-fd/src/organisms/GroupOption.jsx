@@ -7,7 +7,7 @@ import errorManager from  '../controllers/errorManager.js'
 import GroupUser from '../molecules/GroupUser'
 import Cookies from 'js-cookie'
 
-function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId, chatsImage }) {
+function GroupOption({ webSocket, boxLoaded, chatsStatus, chats, CurrentUserId, chatsImage }) {
   const [token] = useState(Cookies.get('JwtToken'))
   const { register, handleSubmit, formState, watch, setValue } = useForm()
   const [boxes, setBoxes] = useContext(BoxesContext)
@@ -194,7 +194,7 @@ function GroupOption({ webSocket, chatsStatus, chats, CurrentUserId, chatsImage 
                     </div>
                   }
                   <div className='group-options-profile'>
-                    <img className='group-options-profile-photo' src={chatImage}/>
+                    <img className='group-options-profile-photo' src={chatImage} onLoad={()=>{boxLoaded(2)}}/>
                     <div className='group-options-profile-data'>
                       <input type='button' onClick={()=>deletePhoto()} className='link' value='Delete photo'/>
                       <div className='sing-in-image-selector link'>

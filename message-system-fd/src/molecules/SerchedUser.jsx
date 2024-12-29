@@ -24,7 +24,7 @@ function SerchedUser( { id, userName, userDescription, setNewUserToAdd } ){
           }
         })
         .then((res)=>{
-            if(res.statusText == 'OK'){
+            if(res.ok){
               return res.json()
             }else{
               console.error("No image")

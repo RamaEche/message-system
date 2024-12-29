@@ -34,7 +34,6 @@ function Chats({ socket, boxLoaded, oneBoxeMode, chatsStatus, setSearchType, cha
   }
 
   useEffect(()=>{
-    //socket.emit('authenticateUser', {authorization:`Barrer ${token}`})
     socket.emit('getUserChats', {authorization:`Barrer ${token}`})
     socket.on('authenticateUser', data=>{
       if(data.status == 401){

@@ -1,4 +1,4 @@
 Copy message-system-bd and message-system-fd to build folder.
 Change .env of message-system-fd and message-system-bd to the same port of the bd (among others).
 Make frontend build (npm run dev). Uncomment part of the code "Embedded client //--//" in index.js of bakend.
-Start node.js
+Start node.js. Remember to put the dist in the client folder inside message-system-bd and add the "nothing" file to uploads.

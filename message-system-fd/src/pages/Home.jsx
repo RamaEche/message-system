@@ -22,6 +22,7 @@ export { BoxesContext, UserIdContext, CurrentChatContext }
 
 function Home() {
   const [boxes, setBoxes] = useState({box1:'Chats', box2:'Welcome', currentBox:1})
+  const [lastBoxes, setLastBoxes] = useState({box1:'null', box2:'null', currentBox:0})
   const [oneBoxeMode, setOneBoxeMode] = useState(null)
   const [webSocket, setWebSocket] = useState(null)
   const [userId, setUserId] = useState(null)
@@ -31,7 +32,7 @@ function Home() {
   const [searchType, setSearchType] = useState("error")
   const box1 = useRef(null)
   const box2 = useRef(null)
-  const loadingBox2 = useRef(null)
+  const loadingBox = useRef(null)
   const [chatsStatus, setChatsStatus] = useState([])
   const [chatsImage, setChatsImage] = useState([])
   const lastWSize = useRef(null)
@@ -80,7 +81,7 @@ function Home() {
     oneBoxeMode == null && handleResize()
     if(!oneBoxeMode){
       try{
-        loadingBox2.current.classList.remove("home-box2-loading-w-850")
+        loadingBox.current.classList.remove("home-box2-loading-w-850")
       }catch{
         //
       }
@@ -93,31 +94,33 @@ function Home() {
   };
 
   useEffect(()=>{
-    if(boxes.currentBox == 1){
-      setBox1Loaded(false)
-    }
-    if(boxes.currentBox == 2){
-      setBox2Loaded(false)
-    }
-
     if(oneBoxeMode){
+      if(boxes.currentBox == 1 && lastBoxes.box1 != boxes.box1){
+        setBox1Loaded(false)
+      }
+      if(boxes.currentBox == 2 && lastBoxes.box2 != boxes.box2){
+        setBox2Loaded(false)
+      }
+      
       if(boxes.currentBox == 1){
         box2.current.classList.add("none")
-        loadingBox2.current.classList.remove("home-box2-loading-w-850")
         box1.current.classList.remove("none")
       }
   
       if(boxes.currentBox == 2){
         box1.current.classList.add("none")
-        loadingBox2.current.classList.add("home-box2-loading-w-850")
         box2.current.classList.remove("none")
       }
+    }else{
+      if(boxes.currentBox == 1){
+        setBox1Loaded(false)
+      }
+      if(boxes.currentBox == 2){
+        setBox2Loaded(false)
+      }
     }
+    setLastBoxes(boxes)
   }, [boxes])
-
-  useEffect(()=>{
-    console.log("box1Loaded: ", box1Loaded)
-  },[box1Loaded])
 
   return (
     <CurrentChatContext.Provider value={[currentChat, setCurrentChat]}>
@@ -149,7 +152,7 @@ function Home() {
             </div>
             <div ref={box2} className='box2'>
               {!box2Loaded &&
-                <div ref={loadingBox2} className='home-box2-loading'>
+                <div ref={loadingBox} className='home-box2-loading'>
                   <Loading/>
                 </div>
               }
@@ -158,7 +161,7 @@ function Home() {
                 ) : boxes.box2 == 'MessageBox' ? (
                   <MessageBox setBox2Loaded={setBox2Loaded} chatsStatus={chatsStatus} webSocket={webSocket} chatsImage={chatsImage} messageBoxGoBackArrow={messageBoxGoBackArrow}/>
                 ) : boxes.box2 == 'GroupOption' ? (
-                  <GroupOption webSocket={webSocket} setBox2Loaded={setBox2Loaded} chatsImage={chatsImage} chatsStatus={chatsStatus} chats={chats} CurrentUserId={userId}/>
+                  <GroupOption webSocket={webSocket} boxLoaded={boxLoaded} chatsImage={chatsImage} chatsStatus={chatsStatus} chats={chats} CurrentUserId={userId}/>
                 ) : boxes.box2 == 'ChatOption' ? (
                   <ChatOption webSocket={webSocket} setBox2Loaded={setBox2Loaded} chatsImage={chatsImage}/>
                 ) : boxes.box2 == 'aboutMessage' && (
