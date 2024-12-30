@@ -12,7 +12,7 @@ const cors = require("cors");
 
 const storage = multer.diskStorage({
 	destination: function (req, file, cb) {
-		cb(null, "uploads/");
+		cb(null, process.env.TMPDIR);
 	},
 	filename: function (req, file, cb) {
 		const fileExtencion = file.mimetype.substring(file.mimetype.indexOf("/")+1, file.mimetype.length);

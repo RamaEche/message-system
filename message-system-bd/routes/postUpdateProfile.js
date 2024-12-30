@@ -42,14 +42,14 @@ const updateProfile = async(req, res)=>{
 				const url = currentUser.PrivateData.ProfilePhotoPath;
 				await deleteFile(url, "mediaFiles/mediaFiles/users/");
 
-				const cloudRes = await uploadFile(path.join(process.env.UPLOADS_FILES, req.file.filename), `mediaFiles/mediaFiles/users/user-ID${req.user.id}`);
+				const cloudRes = await uploadFile(path.join(process.env.TMPDIR, req.file.filename), `mediaFiles/mediaFiles/users/user-ID${req.user.id}`);
 				await Users.updateOne({_id:req.user.id}, {$set:{"PrivateData.ProfilePhotoPath":cloudRes}});
 			};
 
-			Imgbuffer = await fs.readFile(path.join(process.env.UPLOADS_FILES, req.file.filename));
+			Imgbuffer = await fs.readFile(path.join(process.env.TMPDIR, req.file.filename));
 			const ImgType = imageType(Imgbuffer);
 			if(!(ImgType && ImgType.mime === "image/jpeg")){
-				rmSync(path.join(process.env.UPLOADS_FILES, req.file.filename));
+				rmSync(path.join(process.env.TMPDIR, req.file.filename));
 				throw new Error("{ \"ok\":false, \"status\":400, \"err\":\"invalidInputs\"}");
 			}
 

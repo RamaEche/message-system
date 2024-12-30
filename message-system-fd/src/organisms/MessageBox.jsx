@@ -138,7 +138,10 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
       })
       for (let i = 0; i < data.messages.length; i++) {
         let date = new Date(data.messages[i].PublicationTime)
-        let name = data.chatData.users.filter(usr => data.messages[i].SentById == usr.userId)[0].name
+        let name = "Ghost-user"
+        try{name = data.chatData.users.filter(usr => data.messages[i].SentById == usr.userId)[0].name}catch{
+          //
+        }
         let messageState = "seen"
         if (chatData.type == 'G') messageState = "mixed"
         createMessage(

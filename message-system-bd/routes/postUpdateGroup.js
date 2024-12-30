@@ -49,14 +49,14 @@ const postUpdateGroup = async(req, res)=>{
 				const url = currentChat.PhotoPath;
 				await deleteFile(url, "mediaFiles/mediaFiles/chats/");
 
-				const cloudRes = await uploadFile(path.join(process.env.UPLOADS_FILES, req.file.filename), `mediaFiles/mediaFiles/chats/chat-ID${req.headers["chatid"]}`);
+				const cloudRes = await uploadFile(path.join(process.env.TMPDIR, req.file.filename), `mediaFiles/mediaFiles/chats/chat-ID${req.headers["chatid"]}`);
 				await Chats.updateOne({_id:req.headers["chatid"]}, {$set:{"PhotoPath":cloudRes}});
 			};
 
-			Imgbuffer = await fs.readFile(path.join(process.env.UPLOADS_FILES, req.file.filename));
+			Imgbuffer = await fs.readFile(path.join(process.env.TMPDIR, req.file.filename));
 			const ImgType = imageType(Imgbuffer);
 			if(!(ImgType && ImgType.mime === "image/jpeg")){
-				rmSync(path.join(process.env.UPLOADS_FILES, req.file.filename));
+				rmSync(path.join(process.env.TMPDIR, req.file.filename));
 				throw new Error("{ \"ok\":false, \"status\":400, \"err\":\"invalidInputs\"}");
 			}
 

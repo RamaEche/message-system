@@ -12,10 +12,10 @@ const uploadFile = require("../controllers/uploadFile.js");
 const singIn = async(req, res)=>{
 	try{
 		if(req.file){
-			const Imgbuffer = await fs.readFile(path.join(process.env.UPLOADS_FILES, req.file.filename));
+			const Imgbuffer = await fs.readFile(path.join(process.env.TMPDIR, req.file.filename));
 			const ImgType = imageType(Imgbuffer);
 			if(!(ImgType && ImgType.mime === "image/jpeg")){
-				await rmSync(path.join(process.env.UPLOADS_FILES, req.file.filename));
+				await rmSync(path.join(process.env.TMPDIR, req.file.filename));
 				throw new Error("{ \"ok\":false, \"status\":400, \"err\":\"invalidInputs\"}");
 			}
 		}
@@ -67,7 +67,7 @@ const singIn = async(req, res)=>{
     
 		if(req.file){
 			const userID = newUserRes.UserID;
-			const cloudRes = await uploadFile(path.join(process.env.UPLOADS_FILES, req.file.filename), `mediaFiles/mediaFiles/users/user-ID${userID}`);
+			const cloudRes = await uploadFile(path.join(process.env.TMPDIR, req.file.filename), `mediaFiles/mediaFiles/users/user-ID${userID}`);
 			await Users.updateOne({_id:userID}, {$set:{"PrivateData.ProfilePhotoPath":cloudRes}});
 		}
 		res.status(201).json(newUserRes.serverRes);
