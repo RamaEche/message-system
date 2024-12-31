@@ -17,6 +17,7 @@ function AddUser({ webSocket, newUserToAdd }) {
       name:e.name
     });
     webSocket.on("postAddUser", info=>{
+      console.log(info)
       if(info.ok){
         location.href = import.meta.env.VITE_FRONTEND_APP_URL;
       }else{

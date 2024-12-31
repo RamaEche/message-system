@@ -28,6 +28,9 @@ const errorManager = (info, setError)=>{
         case "impossibleRemoveAccount":
           setError("Impossible remove account.")
           break;
+        case "LastPasswordOrUsernameIncorrect":
+          setError("The last password or username is incorrect.")
+          break;
         default:
           setError("Unknown error, try later.")
           console.error("Unknown error")

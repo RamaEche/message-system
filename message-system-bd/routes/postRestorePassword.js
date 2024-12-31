@@ -3,6 +3,7 @@ const Users = require("../models/Users.js");
 const createToken = require("../controllers/createToken.js");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const ValidateUserRegistredByUserName = require("../controllers/ValidateUserRegistredByUserName.js");
 
 const restorePassword = async(req, res)=>{
 	try {
@@ -14,6 +15,10 @@ const restorePassword = async(req, res)=>{
 		}
 
 		if(!(req.body.NewPassword !== req.body.LastPassword)){ throw new Error("{ \"ok\":false, \"status\":400, \"err\":\"samePassword\"}");}
+
+		const validRes = await ValidateUserRegistredByUserName(req.body.UserName, req.body.LastPassword);
+		if(!validRes.state){ throw new Error("{ \"ok\":false, \"status\":400, \"err\":\"LastPasswordOrUsernameIncorrect\"}");}
+
 		const token = req.headers.authorization.split(" ")[1];
 		await jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, decoded) => {
 			let isModified;

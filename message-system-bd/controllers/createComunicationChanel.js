@@ -2,8 +2,6 @@ require("dotenv").config();
 
 const Users = require("../models/Users.js");
 const Chats = require("../models/Chats.js");
-const fs = require("fs/promises");
-const path = require("path");
 
 //chatGroupImagePath is commented out because currently the client cannot select an image when creating the group.
 const createComunicationChanel = async({type, name, description, usersID, /* chatGroupImagePath,  */nameOfOtherUser}, mainUserID)=>{  
@@ -54,19 +52,10 @@ const createComunicationChanel = async({type, name, description, usersID, /* cha
 		};
 	}
   
-	const newCC = await Chats.create(CCData);
-  
-	const mediaFilesChatsMedia = path.join(process.env.MEDIA_FILES, "chats", `chat-ID${newCC.id}`, "media");
-	const mediaFilesChats = path.join(process.env.MEDIA_FILES, "chats", `chat-ID${newCC.id}`);
-	await fs.mkdir(mediaFilesChatsMedia, { recursive: true });
-  
+	const newCC = await Chats.create(CCData);  
 	if(newCC.Type == "G"){
-		await Chats.updateOne({_id:newCC.id}, {$set:{ "PhotoPath":null/*path.join(process.env.MEDIA_FILES, "chats", `chat-ID${newCC.id}`, chatGroupImagePath)*/, "MediaFolderPath":mediaFilesChats}});
+		await Chats.updateOne({_id:newCC.id}, {$set:{ "PhotoPath":null}});
 	}
-	else {
-		await Chats.updateOne({_id:newCC.id}, {$set:{"MediaFolderPath":mediaFilesChats}});
-	}
-    
   
 	//Add to half time to remove in db
   
