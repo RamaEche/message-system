@@ -3,7 +3,6 @@ require("dotenv").config();
 const Users = require("../models/Users.js");
 const Chats = require("../models/Chats.js");
 const fs = require("fs/promises");
-const path = require("path");
 
 const postRemoveUser = async(req, res)=>{
 	try{
@@ -27,13 +26,6 @@ const postRemoveUser = async(req, res)=>{
 				await Chats.deleteOne({_id:ids[i]});
 			}else if(currentChat.Type == "G"){
 				if(currentChat.Users.length == 1){
-					//Delete chat folder.
-					try{
-						const mediaFiles = path.join(process.env.MEDIA_FILES, "chats", `chat-ID${ids[i]}`);
-						await fs.rm(mediaFiles, { recursive: true });
-					}catch{
-						//
-					}
 					await Chats.deleteOne({_id:ids[i]});
 				}else{
 					let newUsers = [];

@@ -52,6 +52,7 @@ function GroupOption({ webSocket, boxLoaded, chatsStatus, chats, CurrentUserId, 
         })) 
       }
     })
+    console.log(currentChat, CurrentUserId)
   }, [])
 
   //Reset form with the existing name.

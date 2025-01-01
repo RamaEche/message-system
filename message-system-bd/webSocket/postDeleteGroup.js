@@ -1,14 +1,12 @@
 const Users = require("../models/Users.js");
 const Chats = require("../models/Chats.js");
-const fs = require("fs/promises");
-const path = require("path");
 
 const postDeleteGroup = async (socket, data, user) => {
 	try {
 		const currentChat = await Chats.findById(data.chatId).exec();
 		let chatUsers = currentChat.Users;
 
-		if(currentChat.Users.find(i=>i.UserId == user.id).Roll != "A"){
+		if(currentChat.Users && currentChat.Users.find(i=>i.UserId == user.id).Roll != "A"){
 			socket.emit("postDeleteGroup", { status:400, error: "Invalid acction." });
 			return 0;
 		}
@@ -25,10 +23,6 @@ const postDeleteGroup = async (socket, data, user) => {
 		}
 
 		await Chats.deleteOne({_id: data.chatId});
-
-		//Delete chat folder.
-		const mediaFiles = path.join(process.env.MEDIA_FILES, "chats", `chat-ID${data.chatId}`);
-		await fs.rm(mediaFiles, { recursive: true });
 
 		socket.emit("postDeleteGroup", { status:200, ok:true });
 	} catch (err) {

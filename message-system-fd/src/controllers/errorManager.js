@@ -23,7 +23,7 @@ const errorManager = (info, setError)=>{
           setError("The server could not modify the password, try again later.")
           break;
         case "invalidCredentials":
-          setError("The username, new password or last password are not correct.")
+          setError("The inputs are not correct.")
           break;
         case "impossibleRemoveAccount":
           setError("Impossible remove account.")
