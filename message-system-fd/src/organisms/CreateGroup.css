@@ -73,7 +73,9 @@
 }
 
 .create-group-files input{
-    width: -webkit-fill-available;
+    width: -webkit-fill-available; /* Chrome, Safari */
+    width: -moz-available;        /* Firefox */
+    width: fill-available;        /* Propiedad estándar */
 }
 
 .create-group-img-container{

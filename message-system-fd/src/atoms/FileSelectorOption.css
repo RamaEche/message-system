@@ -71,11 +71,11 @@
 
 .FileSelector-emojis{
     display: flex;
-    transform:translateX(-10px) translateY(-1px);
+    transform:translateX(-10.5px) translateY(-2.5px);
 }
 
 .FileSelector-emoji{
-    width: 70%;
+    width: 38px;
     margin: auto;
     padding-top: 4px;
 }
