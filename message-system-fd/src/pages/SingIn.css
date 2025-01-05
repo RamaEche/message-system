@@ -93,13 +93,13 @@
   margin: 10px auto 0 auto;
 }
 
-@media (max-height: 700px){
+@media (max-height: 750px){
   .sing-in-container{
     display: flex;
   }
 
   .sing-in-title {
-    margin-top: 100px;
+    margin-top: 50px;
   }
 
   .sing-in-page {

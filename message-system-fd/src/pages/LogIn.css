@@ -60,9 +60,9 @@
   padding: 10px 0;
 }
 
-@media (max-height: 700px){
+@media (max-height: 400px){
   .log-in-title {
-    margin-top: 100px;
+    margin-top: 60px;
   }
 
   .log-in-page {

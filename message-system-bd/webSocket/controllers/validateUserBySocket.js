@@ -1,7 +1,7 @@
 let WSclients = []; 
 
-const validateUserBySocket = (userId)=>{
-	const currentClientIndex = WSclients.findIndex(client => client.userId == userId);
+const validateUserBySocket = (socket)=>{
+	const currentClientIndex = WSclients.findIndex(client => client.socket == socket);
 	if(currentClientIndex != -1){
 		return WSclients[currentClientIndex];
 	}else{

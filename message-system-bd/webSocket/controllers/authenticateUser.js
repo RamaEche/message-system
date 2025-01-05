@@ -24,7 +24,7 @@ const authenticateUser = async (socket, emitTo, data, WSclients, user)=>{
 				setTimeout(() => {
 					validateRes.socket.emit("updateUserChatCurrentStatus", { state:true, chatId:userChatId });
 					socket.emit("updateUserChatCurrentStatus", { state:true, chatId:userChatId });
-				}, 1000);
+				}, 100);
 			}
 
 		});

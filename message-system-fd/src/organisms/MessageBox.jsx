@@ -39,7 +39,6 @@ import FileSelectorOption from '../atoms/FileSelectorOption'
       reset();
       return 0
     }
-
     let name = currentChat.chatData.users.filter(usr => userId == usr.userId)[0].name
     createMessage(
       undefined,

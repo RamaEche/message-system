@@ -6,7 +6,7 @@ const validateInWSSystem = async (socket, emitTo, data, WSclients)=>{
 	try{
 		const user = await validateToken(data);
 		if(!user.id) return 0;
-		if(user.id && !validateUserBySocket(user.id)){
+		if(user.id && !validateUserBySocket(socket)){
 			authenticateUser(socket, emitTo, data, WSclients, user);
 		}
 		return [user, user.id];
